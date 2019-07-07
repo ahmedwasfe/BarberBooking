@@ -35,9 +35,9 @@
     <string name="phone_salon">+970 59-243-5704</string>
     <string name="confirm_booking">Confirm Booking</string>
     
-    <string name="address_bullet">\u2022 Address </string>
-    <string name="time_bullet">\u2022 Time </string>
-    <string name="stylelist_bullet">\u2022 Style List </string>
+    <string name="address_bullet">\u2022 Address: </string>
+    <string name="time_bullet">\u2022 Time: </string>
+    <string name="stylelist_bullet">\u2022 StyleList: </string>
     <string name="bullet">\u2022</string>
 
 </resources>

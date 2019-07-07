@@ -277,15 +277,15 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @Override
     public void onBookingInfoLoadSuccess(BookingInformation bookingInfo) {
 
-        mTxtAddressSalon.setText(bookingInfo.getSalonAddress());
-        mTxtTime.setText(bookingInfo.getTime());
-        mTxtSalonBarber.setText(bookingInfo.getBarberName());
+        mTxtAddressSalon.setText(" " + bookingInfo.getSalonAddress());
+        mTxtTime.setText(" " + bookingInfo.getTime());
+        mTxtSalonBarber.setText(" " + bookingInfo.getBarberName());
 
         String dateRemain = DateUtils.getRelativeTimeSpanString(
                 Long.valueOf(bookingInfo.getTimestamp().toDate().getTime()),
                 Calendar.getInstance().getTimeInMillis(), 0).toString();
 
-        mTxtTimeRemain.setText(dateRemain);
+        mTxtTimeRemain.setText(" " + dateRemain);
 
         mCardBookingInfo.setVisibility(View.VISIBLE);
 
