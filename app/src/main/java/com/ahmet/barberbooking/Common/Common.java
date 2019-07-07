@@ -1,12 +1,15 @@
 package com.ahmet.barberbooking.Common;
 
 import com.ahmet.barberbooking.Model.Barber;
+import com.ahmet.barberbooking.Model.BookingInformation;
 import com.ahmet.barberbooking.Model.Salon;
 import com.ahmet.barberbooking.Model.TimeSlot;
 import com.ahmet.barberbooking.Model.User;
+import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class Common {
 
@@ -21,7 +24,7 @@ public class Common {
 
     public static final int TIME_SOLT_TOTAL = 20;
     public static final Object DISABLE_TAG = "DISABLE";
-
+    public static final String EVENT_URI_CACHE = "SAVE_URI_EVENT";
 
 
     public static String IS_LOGIN = "IsLogin";
@@ -29,14 +32,18 @@ public class Common {
     public static User currentUser;
     public static Salon currentSalon;
     public static Barber currentBarber;
+    public static BookingInformation currentBooking;
+
+    public static String city = "";
+    public static String currentBookingId = "";
 
     public static int setp = 0; // init first setp is 0
     public static int currentTimeSlot = -1;
 
-    public static String city = "";
     public static Calendar bookingDate = Calendar.getInstance();
     // only user when need foemat key
     public static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
+
 
 
     public static String convertTimeSoltToString(int solt) {
@@ -87,5 +94,11 @@ public class Common {
                 return "Closed";
         }
 
+    }
+
+    public static String convertTimestampToKey(Timestamp timestamp) {
+        Date date = timestamp.toDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
+        return simpleDateFormat.format(date);
     }
 }

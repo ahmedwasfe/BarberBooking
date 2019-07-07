@@ -48,6 +48,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
+import io.paperdb.Paper;
 
 public class BookingConfirmFragment extends Fragment {
 
@@ -103,6 +104,7 @@ public class BookingConfirmFragment extends Fragment {
         // Create booking information
         BookingInformation bookingInfo = new BookingInformation();
 
+        bookingInfo.setCityBooking(Common.city);
         bookingInfo.setTimestamp(timestamp);
         // Always FALSE, because i will use this fieldto filter for display on user
         bookingInfo.setDone(false);
@@ -160,9 +162,19 @@ public class BookingConfirmFragment extends Fragment {
                 .document(Common.currentUser.getPhoneNumber())
                 .collection("Booking");
 
+        // Get current data
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE,0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+
+        Timestamp toDayTimeStamp = new Timestamp(calendar.getTime());
+
         // Check if exist document in this collection
         // If any document with field done = false
-        mUserBookingReference.whereEqualTo("done", false)
+        mUserBookingReference.whereGreaterThanOrEqualTo("timestamp", toDayTimeStamp)
+                .whereEqualTo("done", false)
+                .limit(1)  // Only take 1
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -292,8 +304,11 @@ public class BookingConfirmFragment extends Fragment {
                 calendaersUri = Uri.parse("content://com.android.calendar/events");
 
             // Add to Content Resolver
-            getActivity().getContentResolver().insert(calendaersUri, contentEvent);
+            Uri saveUriOfCalendaer = getActivity().getContentResolver().insert(calendaersUri, contentEvent);
 
+            // Save to cache
+            Paper.init(getActivity());
+            Paper.book().write(Common.EVENT_URI_CACHE, saveUriOfCalendaer.toString());
         } catch (ParseException e) {
 
         }

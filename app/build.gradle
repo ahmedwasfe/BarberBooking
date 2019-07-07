@@ -66,4 +66,7 @@ dependencies {
 
     // Permission
     implementation 'com.karumi:dexter:5.0.0'
+
+    // paperdb
+    implementation 'io.paperdb:paperdb:2.6'
 }

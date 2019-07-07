@@ -1,7 +1,9 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +27,11 @@ import com.ahmet.barberbooking.Service.LoadingImageService;
 import com.facebook.accountkit.AccountKit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -47,6 +51,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.paperdb.Paper;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
@@ -77,6 +82,101 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @OnClick(R.id.card_booking)
     void booking(){
         startActivity(new Intent(getActivity(), BookingActivity.class));
+    }
+
+    @OnClick(R.id.btn_delete_booking)
+    void deleteBooking(){
+
+        deleteBookingFromBarber();
+    }
+
+    private void deleteBookingFromBarber() {
+
+        /* To delete booking
+          * First we need delete from Barber collections
+          * Aftar that , We will delete from user booking collections
+          * And final , delete event
+          *
+          * We need load Common.currentBooking because we need some data from BookingInformation
+         */
+        
+        if (Common.currentBooking != null){
+
+            // Get booking information in barber object
+            DocumentReference mBarberBookingInfoRef = FirebaseFirestore.getInstance()
+                    .collection("AllSalon")
+                    .document(Common.currentBooking.getCityBooking())
+                    .collection("Branch")
+                    .document(Common.currentBooking.getSalonID())
+                    .collection("Barber")
+                    .document(Common.currentBooking.getBarberID())
+                    .collection(Common.convertTimestampToKey(Common.currentBooking.getTimestamp()))
+                    .document(Common.currentBooking.getTimeSlot().toString());
+
+            // When we have document, just delete it
+            mBarberBookingInfoRef
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            /*
+                                *After delete on barber done
+                                * We will start delete from User
+                            */
+                            deleteBookingFromUser();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else {
+            Toast.makeText(getActivity(), "Current Booking must not be null", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void deleteBookingFromUser() {
+
+        // First , we need get information from user object
+        if (!TextUtils.isEmpty(Common.currentBookingId)){
+
+            DocumentReference mUserBookingInfoRef = FirebaseFirestore.getInstance()
+                    .collection("User")
+                    .document(Common.currentUser.getPhoneNumber())
+                    .collection("Booking")
+                    .document(Common.currentBookingId);
+
+            // Delete
+            mUserBookingInfoRef
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            /*
+                             *Aftar delete from user , just delete from calendar
+                             *First , we need get save uri of event we just add
+                             */
+                            Paper.init(getActivity());
+                            Uri eventUri = Uri.parse(Paper.book().read(Common.EVENT_URI_CACHE).toString());
+                            getActivity().getContentResolver().delete(eventUri,null,null);
+                            Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
+
+                            //Refresh
+                            loadUserBooking();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            
+        } else {
+            Toast.makeText(getActivity(), "Booking information Id must not be empty", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -142,7 +242,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                                 for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
 
                                     BookingInformation bookingInfo = documentSnapshot.toObject(BookingInformation.class);
-                                    mIBookingInfoLoadListener.onBookingInfoLoadSuccess(bookingInfo);
+                                    mIBookingInfoLoadListener.onBookingInfoLoadSuccess(bookingInfo, documentSnapshot.getId());
                                     // Exit loop as soon as
                                 }
 
@@ -275,17 +375,20 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     }
 
     @Override
-    public void onBookingInfoLoadSuccess(BookingInformation bookingInfo) {
+    public void onBookingInfoLoadSuccess(BookingInformation bookingInfo, String bookingId) {
+
+        Common.currentBooking = bookingInfo;
+        Common.currentBookingId = bookingId;
 
         mTxtAddressSalon.setText(" " + bookingInfo.getSalonAddress());
         mTxtTime.setText(" " + bookingInfo.getTime());
         mTxtSalonBarber.setText(" " + bookingInfo.getBarberName());
 
-        String dateRemain = DateUtils.getRelativeTimeSpanString(
+        String timeRemain = DateUtils.getRelativeTimeSpanString(
                 Long.valueOf(bookingInfo.getTimestamp().toDate().getTime()),
                 Calendar.getInstance().getTimeInMillis(), 0).toString();
 
-        mTxtTimeRemain.setText(" " + dateRemain);
+        mTxtTimeRemain.setText(" " + timeRemain);
 
         mCardBookingInfo.setVisibility(View.VISIBLE);
 

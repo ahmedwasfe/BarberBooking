@@ -206,7 +206,7 @@
             app:cardCornerRadius="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -308,6 +308,38 @@
                         android:text=" time remain"
                         android:textStyle="bold"
                         android:fontFamily="@font/bellerose"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_margin="@dimen/margin8">
+
+                    <Button
+                        android:id="@+id/btn_delete_booking"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/change"
+                        android:textColor="@color/colorBlack"
+                        android:textAllCaps="true"
+                        android:fontFamily="@font/bellerose"
+                        android:layout_marginEnd="@dimen/margin4"
+                        android:background="@drawable/btn_delete_change_bg"/>
+                    <Button
+                        android:id="@+id/btn_change_booking"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/delete"
+                        android:textColor="@color/colorBlack"
+                        android:textAllCaps="true"
+                        android:fontFamily="@font/bellerose"
+                        android:layout_marginStart="@dimen/margin4"
+                        android:background="@drawable/btn_delete_change_bg"/>
 
                 </LinearLayout>
 
