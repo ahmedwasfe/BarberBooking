@@ -287,7 +287,7 @@ public class BookingConfirmFragment extends Fragment {
             Uri calendaersUri;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-                calendaersUri = Uri.parse("content://com.android.calendar/calendars");
+                calendaersUri = Uri.parse("content://com.android.calendar/events");
             else
                 calendaersUri = Uri.parse("content://com.android.calendar/events");
 
