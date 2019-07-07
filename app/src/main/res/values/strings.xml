@@ -1,0 +1,43 @@
+<resources>
+
+    <!-- App Name -->
+    <string name="app_name">Barber Booking</string>
+
+    <!-- Facebook API -->
+    <string name="FACEBOOK_APP_ID">2070377613085786</string>
+    <string name="ACCOUNT_KIT_CLIENT_TOKEN">a22c6a988d5088efe30a7af3bf9ef5c5</string>
+
+    <!-- Main Activity -->
+    <string name="just_skip">Just Skip</string>
+    <string name="login">Login</string>
+
+    <!-- Home Activity -->
+    <string name="home">Home</string>
+    <string name="shopping">Shopping</string>
+
+    <!-- Dialog Sheet -->
+    <string name="update">Update</string>
+
+    <!-- Home Fragment -->
+    <string name="notification">notification</string>
+    <string name="booking">Booking</string>
+    <string name="cart">Cart</string>
+    <string name="history">History</string>
+    <string name="look_book">Look Book</string>
+
+
+    <!-- Booking Activity -->
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="thank_for_booking">Thank you for booking our services !</string>
+    <string name="booking_information">Booking information</string>
+    <string name="website_salon">https://www.facebook.com/Ahmet.Mandil</string>
+    <string name="phone_salon">+970 59-243-5704</string>
+    <string name="confirm_booking">Confirm Booking</string>
+    
+    <string name="address_bullet">\u2022 Address</string>
+    <string name="time_bullet">\u2022 Time</string>
+    <string name="stylelist_bullet">\u2022 Style List</string>
+    <string name="bullet">\u2022</string>
+
+</resources>
