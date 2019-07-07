@@ -116,8 +116,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         CollectionReference mUserBookingReference = FirebaseFirestore.getInstance()
                 .collection("User")
                 .document(Common.currentUser.getPhoneNumber())
-                .collection("Booking")
-                .document("");
+                .collection("Booking");
 
         // Get current data
         Calendar calendar = Calendar.getInstance();

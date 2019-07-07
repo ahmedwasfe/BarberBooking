@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.LayoutInflater;
@@ -283,7 +284,12 @@ public class BookingConfirmFragment extends Fragment {
             String timeZone = TimeZone.getDefault().getID();
             contentEvent.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone);
 
-            Uri calendaersUri = Uri.parse("content://com.android.calendar/calendars");
+            Uri calendaersUri;
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                calendaersUri = Uri.parse("content://com.android.calendar/calendars");
+            else
+                calendaersUri = Uri.parse("content://com.android.calendar/events");
 
             // Add to Content Resolver
             getActivity().getContentResolver().insert(calendaersUri, contentEvent);
