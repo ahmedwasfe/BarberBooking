@@ -339,6 +339,7 @@
                         android:textAllCaps="true"
                         android:fontFamily="@font/bellerose"
                         android:layout_marginStart="@dimen/margin4"
+
                         android:background="@drawable/btn_delete_change_bg"/>
 
                 </LinearLayout>

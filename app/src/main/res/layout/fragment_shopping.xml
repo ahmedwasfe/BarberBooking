@@ -2,19 +2,95 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="8dp"
+    android:background="@color/colorHomeBackground">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+    <View
+        android:id="@+id/view_top"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorBlack"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chip_group"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Shoppinge Fragment"
-        android:textSize="30sp"
+        android:paddingTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/view_top">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_wax"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wax"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/colorWhite"
+            app:chipBackgroundColor="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_spray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Spray"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/colorWhite"
+            app:chipBackgroundColor="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_hair_care"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hair Care"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/colorWhite"
+            app:chipBackgroundColor="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_body_care"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Body Care"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/colorWhite"
+            app:chipBackgroundColor="@color/colorPrimary"
+            style="@style/Widget.MaterialComponents.Chip.Choice"/>
+
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <View
+        android:id="@+id/view_bottom"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorBlack"
+        app:layout_constraintTop_toBottomOf="@id/chip_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_shopping_items"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/view_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
