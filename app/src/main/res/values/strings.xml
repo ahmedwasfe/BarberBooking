@@ -42,4 +42,11 @@
     <string name="change">Change</string>
     <string name="delete">Delete</string>
 
+    <string name="message_welcome">Hey!</string>
+    <string name="message_change_booking">
+        "Do you want to change booking information ?"
+         "\nBecause we will delete your old booking information"
+         "\nJust confirm"
+    </string>
+
 </resources>

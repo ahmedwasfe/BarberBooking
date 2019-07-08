@@ -1,6 +1,7 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import com.ahmet.barberbooking.Adapter.LookBookAdapter;
 import com.ahmet.barberbooking.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IBannerLoadListener;
+import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
 import com.ahmet.barberbooking.Interface.ILookBookLoadListener;
 import com.ahmet.barberbooking.Model.Banner;
@@ -57,7 +59,7 @@ import io.paperdb.Paper;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
-public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener {
+public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener, IBookingInfoChangeListener {
 
     private Unbinder mUnbinder;
 
@@ -83,6 +85,15 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @BindView(R.id.txt_time_remain)
     TextView mTxtTimeRemain;
 
+    // FireStore
+    private CollectionReference mReferenceBanner, mReferenceLookBook;
+
+    // Interface
+    private IBannerLoadListener mIBannerLoadListener;
+    private ILookBookLoadListener mILookBookLoadListener;
+    private IBookingInfoLoadListener mIBookingInfoLoadListener;
+    private IBookingInfoChangeListener mIBookingInfoChangeListener;
+
     @OnClick(R.id.card_booking)
     void booking(){
         startActivity(new Intent(getActivity(), BookingActivity.class));
@@ -91,10 +102,39 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @OnClick(R.id.btn_delete_booking)
     void deleteBooking(){
 
-        deleteBookingFromBarber();
+        deleteBookingFromBarber(false);
     }
 
-    private void deleteBookingFromBarber() {
+    @OnClick(R.id.btn_change_booking)
+    void changeBooking(){
+
+        changeBookingFromUser();
+    }
+
+    private void changeBookingFromUser() {
+
+        androidx.appcompat.app.AlertDialog.Builder mChangeDialog
+                = new androidx.appcompat.app.AlertDialog.Builder(getActivity())
+                .setCancelable(false)
+                .setTitle(getString(R.string.message_welcome))
+                .setMessage(getString(R.string.message_change_booking))
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //  True because we call we will button change
+                        deleteBookingFromBarber(true);
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        mChangeDialog.show();
+
+    }
+
+    private void deleteBookingFromBarber(boolean isChange) {
 
         /* To delete booking
           * First we need delete from Barber collections
@@ -129,7 +169,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                                 *After delete on barber done
                                 * We will start delete from User
                             */
-                            deleteBookingFromUser();
+                            deleteBookingFromUser(isChange);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -143,7 +183,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         }
     }
 
-    private void deleteBookingFromUser() {
+    private void deleteBookingFromUser(boolean isChange) {
 
         // First , we need get information from user object
         if (!TextUtils.isEmpty(Common.currentBookingId)){
@@ -169,9 +209,14 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                             getActivity().getContentResolver().delete(eventUri,null,null);
                             Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
 
-
                             //Refresh
                             loadUserBooking();
+
+                            // Check id isChange -> call from change button , we have will fired interface
+                            if (isChange)
+                                mIBookingInfoChangeListener.onBookingInfoChange();
+
+                            mDialog.dismiss();
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -182,18 +227,13 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
             });
             
         } else {
+
+            mDialog.dismiss();
+
             Toast.makeText(getActivity(), "Booking information Id must not be empty", Toast.LENGTH_SHORT).show();
         }
     }
 
-
-    // FireStore
-    private CollectionReference mReferenceBanner, mReferenceLookBook;
-
-    // Interface
-    private IBannerLoadListener mIBannerLoadListener;
-    private ILookBookLoadListener mILookBookLoadListener;
-    private IBookingInfoLoadListener mIBookingInfoLoadListener;
 
     public HomeFragment() {
 
@@ -209,6 +249,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         mIBannerLoadListener = this;
         mILookBookLoadListener = this;
         mIBookingInfoLoadListener = this;
+        mIBookingInfoChangeListener = this;
 
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
@@ -419,5 +460,10 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @Override
     public void onBookingInfoLoadEmpty() {
         mCardBookingInfo.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onBookingInfoChange() {
+        startActivity(new Intent(getActivity(), BookingActivity.class));
     }
 }
