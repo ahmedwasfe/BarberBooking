@@ -169,8 +169,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                             getActivity().getContentResolver().delete(eventUri,null,null);
                             Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
 
-                            if (mDialog.isShowing())
-                                mDialog.dismiss();
+
                             //Refresh
                             loadUserBooking();
 
@@ -405,6 +404,9 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         mTxtTimeRemain.setText(" " + timeRemain);
 
         mCardBookingInfo.setVisibility(View.VISIBLE);
+
+        if (mDialog.isShowing())
+            mDialog.dismiss();
 
 
     }
