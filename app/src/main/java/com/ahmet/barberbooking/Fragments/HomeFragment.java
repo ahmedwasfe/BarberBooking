@@ -1,5 +1,6 @@
 package com.ahmet.barberbooking.Fragments;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
@@ -58,6 +60,8 @@ import ss.com.bannerslider.Slider;
 public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener {
 
     private Unbinder mUnbinder;
+
+    private AlertDialog mDialog;
 
     @BindView(R.id.linear_user_info)
     LinearLayout mLinearUserInfo;
@@ -101,6 +105,8 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
          */
         
         if (Common.currentBooking != null){
+
+            mDialog.show();
 
             // Get booking information in barber object
             DocumentReference mBarberBookingInfoRef = FirebaseFirestore.getInstance()
@@ -163,6 +169,8 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                             getActivity().getContentResolver().delete(eventUri,null,null);
                             Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
 
+                            if (mDialog.isShowing())
+                                mDialog.dismiss();
                             //Refresh
                             loadUserBooking();
 
@@ -192,6 +200,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
         mReferenceBanner = FirebaseFirestore.getInstance().collection("Banner");
         mReferenceLookBook = FirebaseFirestore.getInstance().collection("LookBook");
+
     }
 
     @Override
@@ -201,6 +210,11 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         mIBannerLoadListener = this;
         mILookBookLoadListener = this;
         mIBookingInfoLoadListener = this;
+
+        mDialog = new SpotsDialog.Builder()
+                .setContext(getActivity())
+                .setCancelable(false)
+                .build();
     }
 
     @Override
