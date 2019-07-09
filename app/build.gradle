@@ -69,4 +69,12 @@ dependencies {
 
     // paperdb
     implementation 'io.paperdb:paperdb:2.6'
+
+    //Room database
+    implementation 'androidx.room:room-runtime:2.1.0';
+    annotationProcessor 'androidx.room:room-compiler:2.1.0'
+
+    // NOtification badge
+    implementation 'com.nex3z:notification-badge:1.0.2'
+
 }

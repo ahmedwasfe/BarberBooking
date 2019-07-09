@@ -1,6 +1,7 @@
 package com.ahmet.barberbooking.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Model.Shopping;
 import com.ahmet.barberbooking.R;
 import com.squareup.picasso.Picasso;
@@ -21,19 +23,20 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.Shoppi
 
     private Context mContext;
     private List<Shopping> mListShopping;
-    private LayoutInflater inflater;
+   // private LayoutInflater inflater;
 
     public ShoppingAdapter(Context mContext, List<Shopping> mListShopping) {
         this.mContext = mContext;
         this.mListShopping = mListShopping;
-        inflater = LayoutInflater.from(mContext);
+       // inflater = LayoutInflater.from(mContext);
     }
 
     @NonNull
     @Override
     public ShoppingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View layoutView = inflater.inflate(R.layout.raw_shopping, parent, false);
+        View layoutView = LayoutInflater.from(mContext)
+                .inflate(R.layout.raw_shopping, parent, false);
 
         return new ShoppingHolder(layoutView);
     }
@@ -41,12 +44,13 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.Shoppi
     @Override
     public void onBindViewHolder(@NonNull ShoppingHolder holder, int position) {
 
-        holder.mTxtShoppingName.setText(mListShopping.get(position).getName());
-        holder.mTxtShoppingPrice.setText(String.valueOf(mListShopping.get(position).getPrice()));
+        holder.mTxtShoppingName.setText(Common.formatShoppingName(mListShopping.get(position).getName()));
+        holder.mTxtShoppingPrice.setText(new StringBuilder("$ ").append(mListShopping.get(position).getPrice()));
         Picasso.get()
                 .load(mListShopping.get(position).getImage())
                 .placeholder(R.drawable.default_item)
                 .into(holder.mImageShoppingItem);
+
     }
 
     @Override

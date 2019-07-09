@@ -1,6 +1,7 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.ShoppingAdapter;
+import com.ahmet.barberbooking.Common.SpacesItemDecoration;
 import com.ahmet.barberbooking.Interface.IShoppingLoadListener;
 import com.ahmet.barberbooking.Model.Shopping;
 import com.ahmet.barberbooking.R;
@@ -19,7 +21,6 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
@@ -46,24 +47,44 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
     // interface
     private IShoppingLoadListener mIShoppingLoadListener;
 
-    @BindView(R.id.recycler_shopping_items)
-    RecyclerView mRecyclerShopping;
     @BindView(R.id.chip_group)
     ChipGroup mChipGroup;
+
+
     @BindView(R.id.chip_wax)
-    Chip mChipWax;
+    Chip chip_wax;
+    @OnClick(R.id.chip_wax)
+    void waxChipClick(){
+        setSelecedChip(chip_wax);
+        loadShoppingItem("Wax");
+    }
+
     @BindView(R.id.chip_spray)
-    Chip mChipSpray;
+    Chip chip_spray;
+    @OnClick(R.id.chip_spray)
+    void sprayChipClick(){
+        setSelecedChip(chip_spray);
+        loadShoppingItem("Spray");
+    }
+
     @BindView(R.id.chip_hair_care)
     Chip mChipHairCare;
+    @OnClick(R.id.chip_hair_care)
+    void chipHairCare(){
+        setSelecedChip(mChipHairCare);
+        loadShoppingItem("Hair Care");
+    }
+
     @BindView(R.id.chip_body_care)
     Chip mChipBodyCare;
-
-    @OnClick(R.id.chip_wax)
-    void chipWax(){
-        setSelecedChip(mChipWax);
-        loadShoppingItem(mChipWax.getText().toString());
+    @OnClick(R.id.chip_body_care)
+    void chipBodyCare(){
+        setSelecedChip(mChipBodyCare);
+        loadShoppingItem("Body Care");
     }
+
+    @BindView(R.id.recycler_shopping_items)
+    RecyclerView mRecyclerShopping;
 
     private void loadShoppingItem(String itemMenu) {
 
@@ -72,9 +93,15 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
                 .document(itemMenu)
                 .collection("Items");
 
-        // Get data for shoping
+        // Get data for shopping
         mShoppingReference
                 .get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        mIShoppingLoadListener.onShoppingLoadFailed(e.getMessage());
+                    }
+                })
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -87,13 +114,11 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
                             }
                             mIShoppingLoadListener.onShoppingLoadSuccess(mListShopping);
                         }
+//                        else {
+//                            Log.d("TASKEXCEPTION", task.getException().getMessage());
+//                        }
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mIShoppingLoadListener.onShoppingLoadFailed(e.getMessage());
-            }
-        });
+                });
     }
 
 
@@ -101,6 +126,7 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
 
         // Set color
         for (int x = 0; x < mChipGroup.getChildCount(); x++){
+
             Chip mChipItem = (Chip) mChipGroup.getChildAt(x);
             // If not selected
             if (mChipItem.getId() != chip.getId()){
@@ -120,9 +146,6 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRecyclerShopping.setHasFixedSize(true);
-        mRecyclerShopping.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL));
-
         mIShoppingLoadListener = this;
     }
 
@@ -134,8 +157,17 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
 
         mUnbinder = ButterKnife.bind(this, layoutView);
 
+        initRecyclerView();
+
+        //loadShoppingItem("Wax");
 
         return layoutView;
+    }
+
+    private void initRecyclerView() {
+        mRecyclerShopping.setHasFixedSize(true);
+        mRecyclerShopping.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL));
+        mRecyclerShopping.addItemDecoration(new SpacesItemDecoration(8));
     }
 
     @Override
