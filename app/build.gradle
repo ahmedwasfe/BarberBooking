@@ -64,9 +64,6 @@ dependencies {
     // Calender
     implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
 
-    // Permission
-    implementation 'com.karumi:dexter:5.0.0'
-
     // paperdb
     implementation 'io.paperdb:paperdb:2.6'
 

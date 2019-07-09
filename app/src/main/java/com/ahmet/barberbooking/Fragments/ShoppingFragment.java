@@ -110,6 +110,8 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
                             List<Shopping> mListShopping = new ArrayList<>();
                             for (DocumentSnapshot documentSnapshot : task.getResult()){
                                 Shopping shopping = documentSnapshot.toObject(Shopping.class);
+                                // Remember add it if you dont want to get null referance
+                                shopping.setId(documentSnapshot.getId());
                                 mListShopping.add(shopping);
                             }
                             mIShoppingLoadListener.onShoppingLoadSuccess(mListShopping);

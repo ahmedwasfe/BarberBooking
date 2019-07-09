@@ -18,9 +18,12 @@ import com.ahmet.barberbooking.Adapter.HomeSliderAdapter;
 import com.ahmet.barberbooking.Adapter.LookBookAdapter;
 import com.ahmet.barberbooking.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Databse.CartDatabse;
+import com.ahmet.barberbooking.Databse.DatabaseUtils;
 import com.ahmet.barberbooking.Interface.IBannerLoadListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
+import com.ahmet.barberbooking.Interface.ICountItemInCartListener;
 import com.ahmet.barberbooking.Interface.ILookBookLoadListener;
 import com.ahmet.barberbooking.Model.Banner;
 import com.ahmet.barberbooking.Model.BookingInformation;
@@ -38,6 +41,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.nex3z.notificationbadge.NotificationBadge;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,9 +63,12 @@ import io.paperdb.Paper;
 import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
-public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener, IBookingInfoChangeListener {
+public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener, IBookingInfoChangeListener, ICountItemInCartListener {
 
     private Unbinder mUnbinder;
+
+    // local database
+    private CartDatabse mCartDatabse;
 
     private AlertDialog mDialog;
 
@@ -73,6 +80,8 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     Slider mSliderBanner;
     @BindView(R.id.recycler_look_book)
     RecyclerView mRecyclerLookBook;
+    @BindView(R.id.notification_badget_cart)
+    NotificationBadge mNotificationBadge;
 
     @BindView(R.id.card_booking_information)
     CardView mCardBookingInfo;
@@ -251,6 +260,9 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         mIBookingInfoLoadListener = this;
         mIBookingInfoChangeListener = this;
 
+        // init cart database
+        mCartDatabse = CartDatabse.getInstance(getActivity());
+
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
                 .setCancelable(false)
@@ -262,6 +274,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         super.onResume();
 
         loadUserBooking();
+        countItemsCart();
     }
 
     private void loadUserBooking() {
@@ -350,10 +363,16 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                // loadBanner();
                // loadLookBook();
                 loadUserBooking();
+                countItemsCart();
             //}
 
         }
 
+    }
+
+    private void countItemsCart() {
+
+        DatabaseUtils.countItemsInCart(mCartDatabse, this);
     }
 
     private void loadLookBook() {
@@ -465,5 +484,10 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @Override
     public void onBookingInfoChange() {
         startActivity(new Intent(getActivity(), BookingActivity.class));
+    }
+
+    @Override
+    public void onCountItemCartSuccess(int count) {
+        mNotificationBadge.setText(String.valueOf(count));
     }
 }
