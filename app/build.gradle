@@ -47,7 +47,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-firestore:18.1.0'
+    implementation 'com.google.firebase:firebase-firestore:20.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
 
     // Facebook Kit
