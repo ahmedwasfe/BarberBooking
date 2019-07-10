@@ -34,6 +34,8 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
 
     private CartDatabase mCartDatabase;
 
+    private Long finalPrice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +52,9 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, LinearLayout.VERTICAL);
         mRecyclerCart.setLayoutManager(staggeredGridLayoutManager);
         mRecyclerCart.addItemDecoration(new DividerItemDecoration(this, staggeredGridLayoutManager.getOrientation()));
+
+        finalPrice = Long.valueOf(0);
+        mTxtTotalPrice.setText(new StringBuilder("$ ").append(finalPrice));
     }
 
     @Override
@@ -71,6 +76,7 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
     @Override
     public void onSumCartSuccess(Long value) {
 
-        mTxtTotalPrice.setText(new StringBuilder("$ ").append(value));
+        finalPrice = value;
+        mTxtTotalPrice.setText(new StringBuilder("$ ").append(finalPrice));
     }
 }
