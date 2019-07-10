@@ -7,17 +7,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 @Database(version = 1, entities = CartItem.class, exportSchema = false)
-public abstract class CartDatabse extends RoomDatabase {
+public abstract class CartDatabase extends RoomDatabase {
 
-    private static CartDatabse instance;
+    private static CartDatabase instance;
 
     public abstract CartDAO cartDAO();
 
-    public static CartDatabse getInstance(Context mContext){
+    public static CartDatabase getInstance(Context mContext){
         if (instance == null){
 
             instance = Room
-                    .databaseBuilder(mContext,CartDatabse.class, "BarBer")
+                    .databaseBuilder(mContext, CartDatabase.class, "BarBer")
                     .build();
         }
 

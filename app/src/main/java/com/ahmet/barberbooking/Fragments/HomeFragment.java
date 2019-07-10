@@ -17,8 +17,9 @@ import android.widget.Toast;
 import com.ahmet.barberbooking.Adapter.HomeSliderAdapter;
 import com.ahmet.barberbooking.Adapter.LookBookAdapter;
 import com.ahmet.barberbooking.BookingActivity;
+import com.ahmet.barberbooking.CartActivity;
 import com.ahmet.barberbooking.Common.Common;
-import com.ahmet.barberbooking.Databse.CartDatabse;
+import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
 import com.ahmet.barberbooking.Interface.IBannerLoadListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
@@ -46,7 +47,6 @@ import com.nex3z.notificationbadge.NotificationBadge;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.function.LongFunction;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,7 +60,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
-import ss.com.bannerslider.ImageLoadingService;
 import ss.com.bannerslider.Slider;
 
 public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener, IBookingInfoChangeListener, ICountItemInCartListener {
@@ -68,7 +67,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     private Unbinder mUnbinder;
 
     // local database
-    private CartDatabse mCartDatabse;
+    private CartDatabase mCartDatabase;
 
     private AlertDialog mDialog;
 
@@ -106,6 +105,11 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @OnClick(R.id.card_booking)
     void booking(){
         startActivity(new Intent(getActivity(), BookingActivity.class));
+    }
+
+    @OnClick(R.id.card_cart)
+    void openCartActivity(){
+        startActivity(new Intent(getActivity(), CartActivity.class));
     }
 
     @OnClick(R.id.btn_delete_booking)
@@ -261,7 +265,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         mIBookingInfoChangeListener = this;
 
         // init cart database
-        mCartDatabse = CartDatabse.getInstance(getActivity());
+        mCartDatabase = CartDatabase.getInstance(getActivity());
 
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
@@ -372,7 +376,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
     private void countItemsCart() {
 
-        DatabaseUtils.countItemsInCart(mCartDatabse, this);
+        DatabaseUtils.countItemsInCart(mCartDatabase, this);
     }
 
     private void loadLookBook() {

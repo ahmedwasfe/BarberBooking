@@ -32,6 +32,10 @@ public interface CartDAO {
     @Update(onConflict = OnConflictStrategy.ABORT)
     void update(CartItem cart);
 
+    // Sum Price
+    @Query("SELECT SUM(productPrice*productQuantity) FROM Cart WHERE userPhone=:userPhone")
+    long sumPrice(String userPhone);
+
     // Delete from database
     @Delete
     void delete(CartItem cartItem);

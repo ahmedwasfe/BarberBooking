@@ -1,7 +1,6 @@
 package com.ahmet.barberbooking.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ahmet.barberbooking.Common.Common;
-import com.ahmet.barberbooking.Databse.CartDatabse;
+import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.CartItem;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
 import com.ahmet.barberbooking.Interface.IRecyclerItemSelectedListener;
@@ -29,13 +28,13 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.Shoppi
     private Context mContext;
     private List<Shopping> mListShopping;
    // private LayoutInflater inflater;
-    private CartDatabse cartDatabse;
+    private CartDatabase cartDatabase;
 
     public ShoppingAdapter(Context mContext, List<Shopping> mListShopping) {
         this.mContext = mContext;
         this.mListShopping = mListShopping;
        // inflater = LayoutInflater.from(mContext);
-        cartDatabse = CartDatabse.getInstance(mContext);
+        cartDatabase = CartDatabase.getInstance(mContext);
     }
 
     @NonNull
@@ -72,7 +71,7 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.Shoppi
                 cartItem.setUserPhone(Common.currentUser.getPhoneNumber());
 
                 // Insert to database
-                DatabaseUtils.insertToCart(cartDatabse, cartItem);
+                DatabaseUtils.insertToCart(cartDatabase, cartItem);
                 Toast.makeText(mContext, "Added To Cart", Toast.LENGTH_SHORT).show();
             }
 
