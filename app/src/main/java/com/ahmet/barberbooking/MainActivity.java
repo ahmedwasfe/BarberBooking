@@ -1,5 +1,6 @@
 package com.ahmet.barberbooking;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
@@ -25,6 +26,11 @@ import com.facebook.accountkit.AccountKitLoginResult;
 import com.facebook.accountkit.ui.AccountKitActivity;
 import com.facebook.accountkit.ui.AccountKitConfiguration;
 import com.facebook.accountkit.ui.LoginType;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
@@ -76,10 +82,39 @@ public class MainActivity extends AppCompatActivity {
 
                 AccessToken accessToken = AccountKit.getCurrentAccessToken();
                 if (accessToken != null){  // If already logged
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                    intent.putExtra(Common.IS_LOGIN, true);
-                    startActivity(intent);
-                    finish();
+
+                    FirebaseInstanceId.getInstance()
+                            .getInstanceId()
+                            .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                                   if (task.isSuccessful()){
+
+                                       Common.updateToken(task.getResult().getToken());
+                                       Log.d("TOKEN", task.getResult().getToken());
+
+                                       Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                       intent.putExtra(Common.IS_LOGIN, true);
+                                       startActivity(intent);
+                                       finish();
+                                   }
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+
+                            Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            intent.putExtra(Common.IS_LOGIN, true);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+
+
                 }else {
                     setContentView(R.layout.activity_main);
                     ButterKnife.bind(MainActivity.this);
@@ -111,10 +146,36 @@ public class MainActivity extends AppCompatActivity {
             }else if (loginResult.wasCancelled()){
                 Toast.makeText(this, "Login cancelled", Toast.LENGTH_SHORT).show();
             }else {
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                intent.putExtra(Common.IS_LOGIN, true);
-                startActivity(intent);
-                finish();
+                FirebaseInstanceId.getInstance()
+                        .getInstanceId()
+                        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                                if (task.isSuccessful()){
+
+                                    Common.updateToken(task.getResult().getToken());
+                                    Log.d("TOKEN", task.getResult().getToken());
+
+                                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                    intent.putExtra(Common.IS_LOGIN, true);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                                Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                                intent.putExtra(Common.IS_LOGIN, true);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
             }
         }
     }

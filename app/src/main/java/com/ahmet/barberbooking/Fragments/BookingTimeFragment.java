@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.ahmet.barberbooking.Adapter.TimeSoltAdapter;
+import com.ahmet.barberbooking.Adapter.TimeSlotAdapter;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
-import com.ahmet.barberbooking.Interface.ITimeSoltLoadListener;
+import com.ahmet.barberbooking.Interface.iTimeSlotLoadListener;
 import com.ahmet.barberbooking.Model.TimeSlot;
 import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,7 +48,7 @@ import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 import dmax.dialog.SpotsDialog;
 
-public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListener {
+public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListener {
 
 
     private Unbinder unbinder;
@@ -60,7 +60,7 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
 
     private DocumentReference mDocReferenceBarber;
 
-    private ITimeSoltLoadListener iTimeSoltLoadLitener;
+    private iTimeSlotLoadListener iTimeSlotLoadListener;
 
     private AlertDialog mDialog;
 
@@ -77,7 +77,7 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
             Calendar date = Calendar.getInstance();
             date.add(Calendar.DATE, 0);  // Add current date
 
-            loadAvailableTimeSoltOfBarber(Common.currentBarber.getBarberID(),
+            loadAvailableTimeSlotOfBarber(Common.currentBarber.getBarberID(),
                                           mSimpleDateFormat.format(date.getTime()));
         }
     };
@@ -98,7 +98,7 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        iTimeSoltLoadLitener = this;
+        iTimeSlotLoadListener = this;
 
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
         mLocalBroadcastManager.registerReceiver(displayTimeSolt, new IntentFilter(Common.KEY_DISPLAY_TIME_SLOT));
@@ -129,7 +129,7 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
     }
 
 
-    private void loadAvailableTimeSoltOfBarber(String barberID, String date) {
+    private void loadAvailableTimeSlotOfBarber(String barberID, String bookingDate) {
 
         mDialog.show();
 
@@ -162,7 +162,7 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
                                         .document(Common.currentSalon.getSalonID())
                                         .collection("Barber")
                                         .document(barberID)
-                                        .collection(date);  // book date is date simpleformat with dd_MM_yyyy == 27_06_2019
+                                        .collection(bookingDate);  // book date is date simpleformat with dd_MM_yyyy == 27_06_2019
 
                                 mReferenceDate.get()
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -174,21 +174,21 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
                                                     QuerySnapshot querySnapshot = task.getResult();
                                                     if (querySnapshot.isEmpty()){  // If do not have any appoment
 
-                                                        iTimeSoltLoadLitener.onTimeSoltLoadEmpty();
+                                                        iTimeSlotLoadListener.onTimeSoltLoadEmpty();
                                                     }else {
                                                         // If have appoiment
                                                         List<TimeSlot> mListTimeSlot = new ArrayList<>();
                                                         for (QueryDocumentSnapshot snapshot : task.getResult())
                                                             mListTimeSlot.add(snapshot.toObject(TimeSlot.class));
 
-                                                        iTimeSoltLoadLitener.onTimeSoltLoadSuccess(mListTimeSlot);
+                                                        iTimeSlotLoadListener.onTimeSoltLoadSuccess(mListTimeSlot);
                                                     }
                                                 }
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        iTimeSoltLoadLitener.onTimeSoltLoadFailed(e.getMessage());
+                                        iTimeSlotLoadListener.onTimeSoltLoadFailed(e.getMessage());
                                     }
                                 });
                             }
@@ -229,7 +229,7 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
 
                 if (Common.bookingDate.getTimeInMillis() != date.getTimeInMillis()){
                     Common.bookingDate = date;  // this code will not load again you selecte day same with day selected
-                    loadAvailableTimeSoltOfBarber(Common.currentBarber.getBarberID(),
+                    loadAvailableTimeSlotOfBarber(Common.currentBarber.getBarberID(),
                             mSimpleDateFormat.format(date.getTime()));
                 }
             }
@@ -242,15 +242,15 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
 
 //        Toast.makeText(getActivity(), Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
 
-//        loadAvailableTimeSoltOfBarber(Common.currentBarber.getBarberID(),
+//        loadAvailableTimeSlotOfBarber(Common.currentBarber.getBarberID(),
 //                                       mSimpleDateFormat.format(selectedDate.getTime()));
     }
 
     @Override
     public void onTimeSoltLoadSuccess(List<TimeSlot> mListTimeSlot) {
 
-        TimeSoltAdapter mTimeSoltAdapter = new TimeSoltAdapter(getActivity(), mListTimeSlot);
-        mRecyclerTimeSolt.setAdapter(mTimeSoltAdapter);
+        TimeSlotAdapter mTimeSlotAdapter = new TimeSlotAdapter(getActivity(), mListTimeSlot);
+        mRecyclerTimeSolt.setAdapter(mTimeSlotAdapter);
 
         mDialog.dismiss();
     }
@@ -264,8 +264,8 @@ public class BookingTimeFragment extends Fragment implements ITimeSoltLoadListen
     @Override
     public void onTimeSoltLoadEmpty() {
 
-        TimeSoltAdapter mTimeSoltAdapter = new TimeSoltAdapter(getActivity());
-        mRecyclerTimeSolt.setAdapter(mTimeSoltAdapter);
+        TimeSlotAdapter mTimeSlotAdapter = new TimeSlotAdapter(getActivity());
+        mRecyclerTimeSolt.setAdapter(mTimeSlotAdapter);
 
         mDialog.dismiss();
     }

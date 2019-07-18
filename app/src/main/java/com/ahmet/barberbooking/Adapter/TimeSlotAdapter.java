@@ -2,7 +2,6 @@ package com.ahmet.barberbooking.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,7 @@ import com.ahmet.barberbooking.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TimeSoltAdapter extends RecyclerView.Adapter<TimeSoltAdapter.TimeSoltHolder> {
+public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSoltHolder> {
 
     private Context mContext;
 
@@ -32,7 +31,7 @@ public class TimeSoltAdapter extends RecyclerView.Adapter<TimeSoltAdapter.TimeSo
 
     private LocalBroadcastManager mLocalBroadcastManager;
 
-    public TimeSoltAdapter(Context mContext) {
+    public TimeSlotAdapter(Context mContext) {
 
         this.mContext = mContext;
 
@@ -44,7 +43,7 @@ public class TimeSoltAdapter extends RecyclerView.Adapter<TimeSoltAdapter.TimeSo
         this.mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
-    public TimeSoltAdapter(Context mContext, List<TimeSlot> mListTimeSlot) {
+    public TimeSlotAdapter(Context mContext, List<TimeSlot> mListTimeSlot) {
 
         this.mContext = mContext;
 
@@ -160,7 +159,7 @@ public class TimeSoltAdapter extends RecyclerView.Adapter<TimeSoltAdapter.TimeSo
 
     @Override
     public int getItemCount() {
-        return Common.TIME_SOLT_TOTAL;
+        return Common.TIME_SLOT_TOTAL;
     }
 
 

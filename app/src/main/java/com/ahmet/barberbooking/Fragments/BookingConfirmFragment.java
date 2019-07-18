@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Model.BookingInformation;
+import com.ahmet.barberbooking.Model.Notification;
 import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -189,15 +191,44 @@ public class BookingConfirmFragment extends Fragment {
                                         @Override
                                         public void onSuccess(Void aVoid) {
 
-                                            if (mDialog.isShowing())
-                                                mDialog.dismiss();
 
-                                            addToCalendar(Common.bookingDate,
-                                                            Common.convertTimeSoltToString(Common.currentTimeSlot));
+                                            Notification notification = new Notification();
+                                            notification.setUuid(UUID.randomUUID().toString());
+                                            notification.setTitle("New Booking");
+                                            notification.setContent("You have a new appoiment for customer hair care!");
+                                            // We will onl filter notification with 'read' is false on Staff App
+                                            notification.setRead(false);
 
-                                            resetStaticData();
-                                            getActivity().finish();;
-                                            Toast.makeText(getActivity(), "SuccessFully !", Toast.LENGTH_SHORT).show();
+                                            // Submit Notification to 'Notifications' collection of Barber
+                                            FirebaseFirestore.getInstance()
+                                                    .collection("AllSalon")
+                                                    .document(Common.city)
+                                                    .collection("Branch")
+                                                    .document(Common.currentSalon.getSalonID())
+                                                    .collection("Barber")
+                                                    .document(Common.currentBarber.getBarberID())
+                                                    .collection("Notifications") // If it not available , it will be crate automaticlly
+                                                    .document(notification.getUuid()) // Create Uniqe key
+                                                    .set(notification)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                            if (mDialog.isShowing())
+                                                                mDialog.dismiss();
+
+                                                            addToCalendar(Common.bookingDate,
+                                                                    Common.convertTimeSoltToString(Common.currentTimeSlot));
+
+                                                            resetStaticData();
+                                                            getActivity().finish();;
+                                                            Toast.makeText(getActivity(), "SuccessFully !", Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    });
+
+
+
 
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
