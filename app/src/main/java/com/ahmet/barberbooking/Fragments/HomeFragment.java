@@ -218,8 +218,21 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                              *First , we need get save uri of event we just add
                              */
                             Paper.init(getActivity());
-                            Uri eventUri = Uri.parse(Paper.book().read(Common.EVENT_URI_CACHE).toString());
-                            getActivity().getContentResolver().delete(eventUri,null,null);
+
+                            if (Paper.book().read(Common.EVENT_URI_CACHE) != null){
+
+                                String event = Paper.book().read(Common.EVENT_URI_CACHE).toString();
+                                Uri eventUri = null;
+
+                                if (event != null && !TextUtils.isEmpty(event))
+                                    eventUri = Uri.parse(event);
+
+                                if (eventUri != null)
+                                    getActivity().getContentResolver().delete(eventUri,null,null);
+                            }
+
+
+
                             Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
 
                             //Refresh

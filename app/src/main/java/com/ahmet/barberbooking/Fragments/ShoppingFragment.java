@@ -49,34 +49,35 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
 
     @BindView(R.id.chip_group)
     ChipGroup mChipGroup;
-
-
     @BindView(R.id.chip_wax)
     Chip chip_wax;
+    @BindView(R.id.chip_spray)
+    Chip chip_spray;
+    @BindView(R.id.chip_hair_care)
+    Chip mChipHairCare;
+    @BindView(R.id.chip_body_care)
+    Chip mChipBodyCare;
+
     @OnClick(R.id.chip_wax)
     void waxChipClick(){
         setSelecedChip(chip_wax);
         loadShoppingItem("Wax");
     }
 
-    @BindView(R.id.chip_spray)
-    Chip chip_spray;
     @OnClick(R.id.chip_spray)
     void sprayChipClick(){
         setSelecedChip(chip_spray);
         loadShoppingItem("Spray");
     }
 
-    @BindView(R.id.chip_hair_care)
-    Chip mChipHairCare;
+
     @OnClick(R.id.chip_hair_care)
     void chipHairCare(){
         setSelecedChip(mChipHairCare);
         loadShoppingItem("Hair Care");
     }
 
-    @BindView(R.id.chip_body_care)
-    Chip mChipBodyCare;
+
     @OnClick(R.id.chip_body_care)
     void chipBodyCare(){
         setSelecedChip(mChipBodyCare);
@@ -161,7 +162,7 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
 
         initRecyclerView();
 
-        //loadShoppingItem("Wax");
+        loadShoppingItem("Wax");
 
         return layoutView;
     }

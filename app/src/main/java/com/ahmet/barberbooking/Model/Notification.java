@@ -1,9 +1,12 @@
 package com.ahmet.barberbooking.Model;
 
+import com.google.firebase.firestore.FieldValue;
+
 public class Notification {
 
     private String uuid, title, content;
     private boolean read;
+    private FieldValue serverTimestamp;
 
     public Notification() {}
 
@@ -37,5 +40,13 @@ public class Notification {
 
     public void setRead(boolean read) {
         this.read = read;
+    }
+
+    public FieldValue getServerTimestamp() {
+        return serverTimestamp;
+    }
+
+    public void setServerTimestamp(FieldValue serverTimestamp) {
+        this.serverTimestamp = serverTimestamp;
     }
 }

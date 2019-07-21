@@ -81,6 +81,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
             holder.mTxtTimeSolt.setTextColor(
                     mContext.getResources().getColor(R.color.colorBlack));
+            holder.mCardTimeSolt.setEnabled(true);
 
 
         }else {  // If have position full (booked)
@@ -105,6 +106,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
                     holder.mTxtTimeSolt.setTextColor(
                             mContext.getResources().getColor(R.color.colorWhite));
+                    holder.mCardTimeSolt.setEnabled(false);
                 }
             }
         }

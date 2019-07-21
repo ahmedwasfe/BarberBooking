@@ -147,7 +147,7 @@ public class Common {
 
                     Token mToken = new Token();
                     mToken.setToken(token);
-                    mToken.setUser(account.getPhoneNumber().toString());
+                    mToken.setUserPhone(account.getPhoneNumber().toString());
                     mToken.setTokenType(TOKEN_TYPE.CLIENT);
 
                     FirebaseFirestore.getInstance()
@@ -198,8 +198,8 @@ public class Common {
         }
         Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL)
-                .setContentTitle(title)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL);
+        builder.setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(false)
                 .setSound(sound)
