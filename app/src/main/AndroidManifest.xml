@@ -22,7 +22,8 @@
 
         </service>
 
-        <activity android:name=".CartActivity" />
+        <activity android:name=".CartActivity"
+            android:parentActivityName=".HomeActivity"/>
         <activity android:name=".BookingActivity" />
         <activity android:name=".HomeActivity" />
 

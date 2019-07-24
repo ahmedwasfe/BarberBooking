@@ -16,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IRecyclerItemSelectedListener;
 import com.ahmet.barberbooking.Model.Barber;
+import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
 import com.ahmet.barberbooking.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
     private LayoutInflater inflater;
     private List<CardView> mListCard;
 
-    LocalBroadcastManager mLocalBroadcastManager;
+  //  LocalBroadcastManager mLocalBroadcastManager;
 
     public BarberAdapter(Context mContext, List<Barber> mListBarbers) {
         this.mContext = mContext;
@@ -38,7 +41,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
 
         mListCard = new ArrayList<>();
 
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+    //    mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
     @NonNull
@@ -54,7 +57,12 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
     public void onBindViewHolder(@NonNull BarberHolder holder, int position) {
 
         holder.mTxtBarberName.setText(mListBarbers.get(position).getName());
-        holder.mRatingBarber.setRating((float) mListBarbers.get(position).getRating());
+
+        if (mListBarbers.get(position).getRatingTimes() !=null)
+                 holder.mRatingBarber.setRating( mListBarbers.get(position).getRating().floatValue() /
+                                        mListBarbers.get(position).getRatingTimes());
+        else
+            holder.mRatingBarber.setRating(0);
 
         if (!mListCard.contains(holder.mCardBarber))
             mListCard.add(holder.mCardBarber);
@@ -73,11 +81,17 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
                 holder.mCardBarber.setCardBackgroundColor(
                         mContext.getResources().getColor(R.color.colorPrimary));
 
-                // Send Broadcast to enable button next
-                Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
-                intent.putExtra(Common.KEY_BARBER_SELECTED, mListBarbers.get(position));
-                intent.putExtra(Common.KEY_STEP, 2);
-                mLocalBroadcastManager.sendBroadcast(intent);
+                /*
+                * Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
+                * intent.putExtra(Common.KEY_BARBER_SELECTED, mListBarbers.get(position));
+                * intent.putExtra(Common.KEY_STEP, 2);
+                * mLocalBroadcastManager.sendBroadcast(intent);
+                */
+
+                // Send Event Bus to enable button next
+                // Event Bus
+                EventBus.getDefault()
+                        .postSticky(new EnableNextButton(2, mListBarbers.get(position)));
             }
 
             @Override

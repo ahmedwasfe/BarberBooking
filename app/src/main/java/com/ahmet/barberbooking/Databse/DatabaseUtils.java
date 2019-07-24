@@ -4,6 +4,8 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.ICartItemLoadListener;
 import com.ahmet.barberbooking.Interface.ICountItemInCartListener;
@@ -51,6 +53,19 @@ public class DatabaseUtils {
         task.execute();
     }
 
+    // Delete item from cart
+    public static void deleteItemFromCart(@NonNull CartDatabase db, CartItem cartItem){
+
+        DeleteFromCartAsync task = new DeleteFromCartAsync(db);
+        task.execute(cartItem);
+
+    }
+
+    public static void clearCart(CartDatabase db){
+
+        ClearCartAsync task = new ClearCartAsync(db);
+        task.execute();
+    }
 
     /*
     * ===========================================================
@@ -187,6 +202,42 @@ public class DatabaseUtils {
         private int countItemsInCartRun(CartDatabase databse) {
 
             return databse.cartDAO().countItemInCart(Common.currentUser.getPhoneNumber());
+        }
+    }
+
+    // Async Task To Delete Item from database
+    private static class DeleteFromCartAsync extends AsyncTask<CartItem, Void, Void>{
+
+        private final CartDatabase databse;
+
+        public DeleteFromCartAsync(CartDatabase databse) {
+            this.databse = databse;
+        }
+
+        @Override
+        protected Void doInBackground(CartItem... cartItems) {
+            databse.cartDAO().delete(cartItems[0]);
+            return null;
+        }
+    }
+
+    // Async Task To clear all Item from database
+    private static class ClearCartAsync extends AsyncTask<Void, Void, Void>{
+
+        private final CartDatabase databse;
+
+        public ClearCartAsync(CartDatabase databse) {
+            this.databse = databse;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            clearAllItemFromCart(databse);
+            return null;
+        }
+
+        private void clearAllItemFromCart(CartDatabase databse){
+            databse.cartDAO().clearCart(Common.currentUser.getPhoneNumber());
         }
     }
 }

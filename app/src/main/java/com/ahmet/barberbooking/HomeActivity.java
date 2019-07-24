@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import dmax.dialog.SpotsDialog;
+import io.paperdb.Paper;
 
 import android.app.AlertDialog;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -34,10 +37,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
+
+import java.util.Map;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -53,7 +60,6 @@ public class HomeActivity extends AppCompatActivity {
     ProgressBar mProgressBar;
 
     private CollectionReference mCollectionUser;
-
 
 
     @Override
@@ -86,6 +92,11 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Account account) {
                         if (account != null){
+
+                            // Save user phone by Paper
+                            Paper.init(HomeActivity.this);
+                            Paper.book().write(Common.KEY_LOGGED, account.getPhoneNumber().toString());
+
                             DocumentReference mCurrentUser = mCollectionUser.document(account.getPhoneNumber().toString());
                             mCurrentUser.get()
                                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -103,6 +114,8 @@ public class HomeActivity extends AppCompatActivity {
                                                 if (mDialog.isShowing())
                                                     mDialog.dismiss();
                                                 mProgressBar.setVisibility(View.GONE);
+
+                                               // checkRatingDialog();
                                             }
                                         }
                                     });
@@ -113,6 +126,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void onError(AccountKitError accountKitError) {
                         Toast.makeText(HomeActivity.this, ""+
                                 accountKitError.getErrorType().getMessage(), Toast.LENGTH_SHORT).show();
+
                     }
                 });
             }
@@ -136,7 +150,34 @@ public class HomeActivity extends AppCompatActivity {
         //loadFragmemt(new HomeFragment());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+        checkRatingDialog();
+    }
+
+    private void checkRatingDialog() {
+
+        Paper.init(this);
+        String dataSerialized = Paper.book().read(Common.KEY_RATING_INFORMATION, "");
+        // If not null
+        if (!TextUtils.isEmpty(dataSerialized)){
+
+            Map<String, String> mMapRecivedData = new Gson()
+                    .fromJson(dataSerialized,
+                            new TypeToken<Map<String, String>>(){}.getType());
+
+            if (mMapRecivedData != null){
+
+                Common.showRatingDialog(this,
+                        mMapRecivedData.get(Common.KEY_RATING_CITY),
+                        mMapRecivedData.get(Common.KEY_RATING_SALON_ID),
+                        mMapRecivedData.get(Common.KEY_RATING_SALON_NAME),
+                        mMapRecivedData.get(Common.KEY_RATING_BARBER_ID));
+            }
+        }
+    }
 
     private boolean loadFragmemt(Fragment fragment) {
         if (fragment != null){

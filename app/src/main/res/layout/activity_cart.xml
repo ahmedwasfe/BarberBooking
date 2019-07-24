@@ -37,10 +37,10 @@
             android:layout_alignParentStart="true"/>
 
         <Button
-            android:id="@+id/btn_submit_cart"
+            android:id="@+id/btn_clear_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Place"
+            android:text="Clear"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"/>
 

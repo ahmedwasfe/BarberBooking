@@ -1,6 +1,9 @@
 package com.ahmet.barberbooking.Model;
 
+import com.ahmet.barberbooking.Databse.CartItem;
 import com.google.firebase.Timestamp;
+
+import java.util.List;
 
 public class BookingInformation {
 
@@ -10,6 +13,7 @@ public class BookingInformation {
     private Long timeSlot;
     private Timestamp timestamp;
     private boolean done;
+    private List<CartItem> mListCart;
 
     public BookingInformation() {}
 
@@ -107,5 +111,13 @@ public class BookingInformation {
 
     public void setCityBooking(String cityBooking) {
         this.cityBooking = cityBooking;
+    }
+
+    public List<CartItem> getmListCart() {
+        return mListCart;
+    }
+
+    public void setmListCart(List<CartItem> mListCart) {
+        this.mListCart = mListCart;
     }
 }

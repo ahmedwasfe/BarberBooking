@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.nex3z.notificationbadge.NotificationBadge;
@@ -102,6 +106,9 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     private IBookingInfoLoadListener mIBookingInfoLoadListener;
     private IBookingInfoChangeListener mIBookingInfoChangeListener;
 
+    private ListenerRegistration listenerUserBooking = null;
+    EventListener<QuerySnapshot> eventUserBooking = null;
+
     @OnClick(R.id.card_booking)
     void booking(){
         startActivity(new Intent(getActivity(), BookingActivity.class));
@@ -126,8 +133,8 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
     private void changeBookingFromUser() {
 
-        androidx.appcompat.app.AlertDialog.Builder mChangeDialog
-                = new androidx.appcompat.app.AlertDialog.Builder(getActivity())
+        androidx.appcompat.app.AlertDialog.Builder mChangeDialog =
+                new androidx.appcompat.app.AlertDialog.Builder(getActivity())
                 .setCancelable(false)
                 .setTitle(getString(R.string.message_welcome))
                 .setMessage(getString(R.string.message_change_booking))
@@ -188,6 +195,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
                 }
             });
 
@@ -249,6 +257,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                 @Override
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Log.d("ERROR", e.getMessage());
                 }
             });
             
@@ -312,7 +321,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
         // Select booking information from firebase database with done = false timestamp greater today
         mUserBookingReference.whereGreaterThanOrEqualTo("timestamp", toDayTimeStamp)
-                .whereEqualTo("done", false)
+                .whereEqualTo("updateDone", false)
                 .limit(1)  // Only take 1
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -337,13 +346,30 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                         }
 
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                })
+                .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
 
                 mIBookingInfoLoadListener.onBookingInfoLoadFailed(e.getMessage());
             }
         });
+
+        // Here, after userBooking has been assign data (collections)
+        // we will make realtime listener here
+
+        // If eventUserBooking alerdy init
+        if (eventUserBooking != null){
+
+            // only add if listenerUserBooking == null
+            if (listenerUserBooking == null) {
+
+                // That mean we just add one time
+                listenerUserBooking = mUserBookingReference
+                        .addSnapshotListener(eventUserBooking);
+            }
+        }
+
 
     }
 
@@ -379,12 +405,31 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                 loadUserInfo();
                // loadBanner();
                // loadLookBook();
+            //  Need declare above loadUserBooking
+                initRealtimeUserBooking();
                 loadUserBooking();
                 countItemsCart();
             //}
 
         }
 
+    }
+
+    private void initRealtimeUserBooking() {
+
+        // We only init event if event is null
+        if (eventUserBooking != null){
+
+            eventUserBooking = new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                    // In this event, when it fired, we will call loadUserBooking
+                    // to reload all booking information
+                    loadUserBooking();
+                }
+            };
+
+        }
     }
 
     private void countItemsCart() {
@@ -491,6 +536,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @Override
     public void onBookingInfoLoadFailed(String error) {
         Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+        Log.d("ERROR", error);
     }
 
     @Override
@@ -506,5 +552,12 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @Override
     public void onCountItemCartSuccess(int count) {
         mNotificationBadge.setText(String.valueOf(count));
+    }
+
+    @Override
+    public void onDestroy() {
+        if (listenerUserBooking != null)
+            listenerUserBooking.remove();
+        super.onDestroy();
     }
 }

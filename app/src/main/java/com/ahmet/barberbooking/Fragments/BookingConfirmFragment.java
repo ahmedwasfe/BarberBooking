@@ -1,12 +1,9 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -20,7 +17,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Databse.CartDatabase;
+import com.ahmet.barberbooking.Databse.CartItem;
+import com.ahmet.barberbooking.Databse.DatabaseUtils;
+import com.ahmet.barberbooking.Interface.ICartItemLoadListener;
 import com.ahmet.barberbooking.Model.BookingInformation;
+import com.ahmet.barberbooking.Model.EventBus.ConfirmBookingEvent;
 import com.ahmet.barberbooking.Model.FCMResponse;
 import com.ahmet.barberbooking.Model.FCMSendData;
 import com.ahmet.barberbooking.Model.Notification;
@@ -46,11 +48,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -67,11 +74,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class BookingConfirmFragment extends Fragment {
+public class BookingConfirmFragment extends Fragment implements ICartItemLoadListener {
 
     private SimpleDateFormat mSimpleDateFormat;
 
-    private LocalBroadcastManager mLocalBroadcastManager;
+   // private LocalBroadcastManager mLocalBroadcastManager;
 
     private Unbinder mUnbinder;
 
@@ -101,78 +108,9 @@ public class BookingConfirmFragment extends Fragment {
 
         mDialog.show();
 
-        // Process Timestamp
-        // I will use Timestamp to filter all booking with date is greater today
-        // For only display all future booking
-        String startTime  = Common.convertTimeSoltToString(Common.currentTimeSlot);
-        // Split ex : 9:00 - 10:00
-        String[] convertTime = startTime.split("-");
-        // Get start time get : 9:00
-        String[] startTimeConvert = convertTime[0].split(":");
-        // I get 9
-        int startHour = Integer.parseInt(startTimeConvert[0].trim());
-        // I get 00
-        int startMinute = Integer.parseInt(startTimeConvert[1].trim());
+        DatabaseUtils.getAllItemFromCart(CartDatabase.getInstance(getActivity()), this);
 
-        Calendar bookingDateWithHourHouse = Calendar.getInstance();
-        bookingDateWithHourHouse.setTimeInMillis(Common.bookingDate.getTimeInMillis());
-        bookingDateWithHourHouse.set(Calendar.HOUR_OF_DAY, startHour);
-        bookingDateWithHourHouse.set(Calendar.MINUTE, startMinute);
 
-        // Create Timestamp object and apply to booking information
-        Timestamp timestamp = new Timestamp(bookingDateWithHourHouse.getTime());
-
-        // Create booking information
-        BookingInformation bookingInfo = new BookingInformation();
-
-        bookingInfo.setCityBooking(Common.city);
-        bookingInfo.setTimestamp(timestamp);
-        // Always FALSE, because i will use this fieldto filter for display on user
-        bookingInfo.setDone(false);
-
-        bookingInfo.setBarberID(Common.currentBarber.getBarberID());
-        bookingInfo.setBarberName(Common.currentBarber.getName());
-
-        bookingInfo.setCustomerName(Common.currentUser.getName());
-        bookingInfo.setCustomerPhone(Common.currentUser.getPhoneNumber());
-
-        bookingInfo.setSalonID(Common.currentSalon.getSalonID());
-        bookingInfo.setSalonAddress(Common.currentSalon.getAddress());
-        bookingInfo.setSalonName(Common.currentSalon.getName());
-
-        bookingInfo.setTime(new StringBuilder(Common.convertTimeSoltToString(Common.currentTimeSlot))
-                            .append(" at ")
-                            .append(mSimpleDateFormat.format(bookingDateWithHourHouse.getTime())).toString());
-
-        bookingInfo.setTimeSlot(Long.valueOf(Common.currentTimeSlot));
-
-        // submit to barbber document
-        DocumentReference mBookingReference =  FirebaseFirestore.getInstance()
-                .collection("AllSalon")
-                .document(Common.city)
-                .collection("Branch")
-                .document(Common.currentSalon.getSalonID())
-                .collection("Barber")
-                .document(Common.currentBarber.getBarberID())
-                .collection(Common.mSimpleDateFormat.format(Common.bookingDate.getTime()))
-                .document(String.valueOf(Common.currentTimeSlot));
-        // Write information
-        mBookingReference.set(bookingInfo)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                        // Here i can write an function to check
-                        // If already exist an booking , i will prevent new booking
-                        addToUserBooking(bookingInfo);
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getActivity(), ""  + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void addToUserBooking(BookingInformation bookingInfo) {
@@ -459,7 +397,7 @@ public class BookingConfirmFragment extends Fragment {
         Common.bookingDate.add(Calendar.DATE, 0);
     }
 
-
+/*
     BroadcastReceiver confirmBookingReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -467,6 +405,31 @@ public class BookingConfirmFragment extends Fragment {
             loadDateBooking();
         }
     };
+*/
+    // ---------------------------------------------------------------------
+    // Start Event Bus
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void setDataBooking(ConfirmBookingEvent event){
+        if (event.isConfirm())
+            loadDateBooking();
+    }
+
+    // ---------------------------------------------------------------------
+
 
     private void loadDateBooking() {
 
@@ -502,8 +465,10 @@ public class BookingConfirmFragment extends Fragment {
         // Apply format for date display on confirm
         mSimpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        mLocalBroadcastManager.registerReceiver(confirmBookingReceiver, new IntentFilter(Common.KEY_CONFIRM_BOOKING));
+        /*
+          * mLocalBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
+          * mLocalBroadcastManager.registerReceiver(confirmBookingReceiver, new IntentFilter(Common.KEY_CONFIRM_BOOKING));
+        */
 
         mDialog = new SpotsDialog
                 .Builder()
@@ -530,8 +495,91 @@ public class BookingConfirmFragment extends Fragment {
 
     @Override
     public void onDestroy() {
-        mLocalBroadcastManager.unregisterReceiver(confirmBookingReceiver);
+       // mLocalBroadcastManager.unregisterReceiver(confirmBookingReceiver);
         mCompositeDisposable.clear();;
         super.onDestroy();
+    }
+
+    @Override
+    public void onLoadAllItemInCartSuccess(List<CartItem> mListCartItem) {
+
+        // Here we will have all item on cart
+
+        // Process Timestamp
+        // I will use Timestamp to filter all booking with date is greater today
+        // For only display all future booking
+        String startTime  = Common.convertTimeSoltToString(Common.currentTimeSlot);
+        // Split ex : 9:00 - 10:00
+        String[] convertTime = startTime.split("-");
+        // Get start time get : 9:00
+        String[] startTimeConvert = convertTime[0].split(":");
+        // I get 9
+        int startHour = Integer.parseInt(startTimeConvert[0].trim());
+        // I get 00
+        int startMinute = Integer.parseInt(startTimeConvert[1].trim());
+
+        Calendar bookingDateWithHourHouse = Calendar.getInstance();
+        bookingDateWithHourHouse.setTimeInMillis(Common.bookingDate.getTimeInMillis());
+        bookingDateWithHourHouse.set(Calendar.HOUR_OF_DAY, startHour);
+        bookingDateWithHourHouse.set(Calendar.MINUTE, startMinute);
+
+        // Create Timestamp object and apply to booking information
+        Timestamp timestamp = new Timestamp(bookingDateWithHourHouse.getTime());
+
+        // Create booking information
+        BookingInformation bookingInfo = new BookingInformation();
+
+        bookingInfo.setCityBooking(Common.city);
+        bookingInfo.setTimestamp(timestamp);
+        // Always FALSE, because i will use this fieldto filter for display on user
+        bookingInfo.setDone(false);
+
+        bookingInfo.setBarberID(Common.currentBarber.getBarberID());
+        bookingInfo.setBarberName(Common.currentBarber.getName());
+
+        bookingInfo.setCustomerName(Common.currentUser.getName());
+        bookingInfo.setCustomerPhone(Common.currentUser.getPhoneNumber());
+
+        bookingInfo.setSalonID(Common.currentSalon.getSalonID());
+        bookingInfo.setSalonAddress(Common.currentSalon.getAddress());
+        bookingInfo.setSalonName(Common.currentSalon.getName());
+
+        bookingInfo.setTime(new StringBuilder(Common.convertTimeSoltToString(Common.currentTimeSlot))
+                .append(" at ")
+                .append(mSimpleDateFormat.format(bookingDateWithHourHouse.getTime())).toString());
+
+        bookingInfo.setTimeSlot(Long.valueOf(Common.currentTimeSlot));
+
+        bookingInfo.setmListCart(mListCartItem);
+
+        // submit to barbber document
+        DocumentReference mBookingReference =  FirebaseFirestore.getInstance()
+                .collection("AllSalon")
+                .document(Common.city)
+                .collection("Branch")
+                .document(Common.currentSalon.getSalonID())
+                .collection("Barber")
+                .document(Common.currentBarber.getBarberID())
+                .collection(Common.mSimpleDateFormat.format(Common.bookingDate.getTime()))
+                .document(String.valueOf(Common.currentTimeSlot));
+        // Write information
+        mBookingReference.set(bookingInfo)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        // Here i can write an function to check
+                        // If already exist an booking , i will prevent new booking
+                        // aftert add success booking information just clear cart
+                        DatabaseUtils.clearCart(CartDatabase.getInstance(getActivity()));
+                        addToUserBooking(bookingInfo);
+
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), ""  + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

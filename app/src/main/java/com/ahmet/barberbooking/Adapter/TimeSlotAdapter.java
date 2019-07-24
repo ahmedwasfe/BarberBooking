@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IRecyclerItemSelectedListener;
+import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
 import com.ahmet.barberbooking.Model.TimeSlot;
 import com.ahmet.barberbooking.R;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
     private LayoutInflater inflater;
 
-    private LocalBroadcastManager mLocalBroadcastManager;
+   // private LocalBroadcastManager mLocalBroadcastManager;
 
     public TimeSlotAdapter(Context mContext) {
 
@@ -40,7 +43,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
         inflater = LayoutInflater.from(mContext);
 
-        this.mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+     //   this.mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
     public TimeSlotAdapter(Context mContext, List<TimeSlot> mListTimeSlot) {
@@ -52,7 +55,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
         inflater = LayoutInflater.from(mContext);
 
-        this.mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+      //  this.mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
     @NonNull
@@ -138,13 +141,19 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
                 holder.mTxtTimeSoltDescription.setTextColor(
                         mContext.getResources().getColor(R.color.colorWhite));
 
-                // After that send broadcast to enable button next
-                Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
-                // Put index of time slot i have selected
-                intent.putExtra(Common.KEY_TIME_SLOT, position);
-                // Go to step 3
-                intent.putExtra(Common.KEY_STEP, 3);
-                mLocalBroadcastManager.sendBroadcast(intent);
+
+                /*
+                * Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
+                * Put index of time slot i have selected
+                * intent.putExtra(Common.KEY_TIME_SLOT, position);
+                * Go to step 3
+                * intent.putExtra(Common.KEY_STEP, 3);
+                * mLocalBroadcastManager.sendBroadcast(intent);
+                */
+
+                // // After that send Event Bus to enable button next
+                // Event Bus
+                EventBus.getDefault().postSticky(new EnableNextButton(3, position));
             }
 
             @Override

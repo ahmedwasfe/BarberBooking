@@ -2,7 +2,6 @@ package com.ahmet.barberbooking;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -10,12 +9,7 @@ import butterknife.OnClick;
 import dmax.dialog.SpotsDialog;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.Toast;
@@ -24,6 +18,10 @@ import com.ahmet.barberbooking.Adapter.ViewPagerAdapter;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.NonSwipeViewPager;
 import com.ahmet.barberbooking.Model.Barber;
+import com.ahmet.barberbooking.Model.EventBus.BarberDoneEvent;
+import com.ahmet.barberbooking.Model.EventBus.ConfirmBookingEvent;
+import com.ahmet.barberbooking.Model.EventBus.DisplayTimeSlotEvent;
+import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -32,6 +30,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.shuhart.stepview.StepView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,7 @@ public class BookingActivity extends AppCompatActivity {
     @BindView(R.id.btn_next_step)
     Button mBtnNextStep;
 
-    private LocalBroadcastManager mLocalBroadcastManager;
+   // private LocalBroadcastManager mLocalBroadcastManager;
 
     private AlertDialog mDialog;
     private CollectionReference mReferenceBarbers;
@@ -101,17 +103,29 @@ public class BookingActivity extends AppCompatActivity {
 
     private void confirmBooking() {
 
-        // Send broadcast to Confirm Fragment
-        Intent intent = new Intent(Common.KEY_CONFIRM_BOOKING);
-        mLocalBroadcastManager.sendBroadcast(intent);
+        /* Old Code
+        *
+        * Send broadcast to Confirm Fragment
+//      * Intent intent = new Intent(Common.KEY_CONFIRM_BOOKING);
+//      * mLocalBroadcastManager.sendBroadcast(intent);
+        */
+
+        EventBus.getDefault()
+                .postSticky(new ConfirmBookingEvent(true));
     }
 
     private void loadTimeSoltOfBarber(String barberID) {
 
-        // Send Broadcast to Fragment Time
-        Intent intent = new Intent(Common.KEY_DISPLAY_TIME_SLOT);
-//        Common.currentSalon.getSalonID();
-        mLocalBroadcastManager.sendBroadcast(intent);
+        /* Old Code
+         *
+        * Send Broadcast to Fragment Time
+        * Intent intent = new Intent(Common.KEY_DISPLAY_TIME_SLOT);
+        * Common.currentSalon.getSalonID();
+        * mLocalBroadcastManager.sendBroadcast(intent);
+        */
+
+        EventBus.getDefault().
+                postSticky(new DisplayTimeSlotEvent(true));
     }
 
     // Select all barber of salon
@@ -145,10 +159,16 @@ public class BookingActivity extends AppCompatActivity {
 
                                 mListBarber.add(barber);
                             }
-                            // Send Broadcast to barber Fragment loadAllBaber
-                            Intent intent = new Intent(Common.KEY_BARBER_LOAD_DONE);
-                            intent.putParcelableArrayListExtra(Common.KEY_BARBER_LOAD_DONE, (ArrayList<? extends Parcelable>) mListBarber);
-                            mLocalBroadcastManager.sendBroadcast(intent);
+
+                            /* Old Code
+                            * Send Broadcast to barber Fragment loadAllBaber
+                            * Intent intent = new Intent(Common.KEY_BARBER_LOAD_DONE);
+                            * intent.putParcelableArrayListExtra(Common.KEY_BARBER_LOAD_DONE, (ArrayList<? extends Parcelable>) mListBarber);
+                            * mLocalBroadcastManager.sendBroadcast(intent);
+                            */
+
+                            EventBus.getDefault()
+                                    .postSticky(new BarberDoneEvent(mListBarber));
 
                             mDialog.dismiss();
 
@@ -165,6 +185,7 @@ public class BookingActivity extends AppCompatActivity {
 
     }
 
+    /*
     // Broadcast Recevier
     private BroadcastReceiver enableBtnNextRecevier = new BroadcastReceiver() {
         @Override
@@ -184,6 +205,45 @@ public class BookingActivity extends AppCompatActivity {
             setColorStepButton();
         }
     };
+*/
+
+    // ---------------------------------------------------------------------
+    // Start Event Bus
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    // Event Bus convert
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void enableBtnNext(EnableNextButton event){
+
+        int step = event.getStep();
+
+        if (step == 1)
+            Common.currentSalon = event.getSalon();
+        else if (step == 2)
+            Common.currentBarber = event.getBarber();
+        else if (step == 3)
+            Common.currentTimeSlot = event.getTimeSlot();
+
+//            Common.currentSalon = intent.getParcelableExtra(Common.KEY_SALON_STORE);
+        mBtnNextStep.setEnabled(true);
+        setColorStepButton();
+
+    }
+
+    // ---------------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,9 +254,12 @@ public class BookingActivity extends AppCompatActivity {
 
         mDialog = new SpotsDialog.Builder().setContext(this).setCancelable(false).build();
 
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
-        mLocalBroadcastManager.registerReceiver(enableBtnNextRecevier,
-                new IntentFilter(Common.KEY_ENABLE_BUTTON_NEXT));
+        /* Old Code
+         *
+         * mLocalBroadcastManager = LocalBroadcastManager.getInstance(this);
+         * mLocalBroadcastManager.registerReceiver(enableBtnNextRecevier,
+         *       new IntentFilter(Common.KEY_ENABLE_BUTTON_NEXT));
+         */
 
         setupStepView();
         setColorStepButton();
@@ -258,10 +321,10 @@ public class BookingActivity extends AppCompatActivity {
         mStepView.setSteps(mListStep);
     }
 
-    @Override
-    protected void onDestroy() {
-        mLocalBroadcastManager.unregisterReceiver(enableBtnNextRecevier);
-        super.onDestroy();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        mLocalBroadcastManager.unregisterReceiver(enableBtnNextRecevier);
+//        super.onDestroy();
+//    }
 
 }

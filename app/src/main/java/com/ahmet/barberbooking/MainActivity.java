@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
                                    if (task.isSuccessful()){
 
-                                       Common.updateToken(task.getResult().getToken());
+                                       Common.updateToken(MainActivity.this, task.getResult().getToken());
                                        Log.d("TOKEN", task.getResult().getToken());
 
                                        Intent intent = new Intent(MainActivity.this, HomeActivity.class);
@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 if (task.isSuccessful()){
 
-                                    Common.updateToken(task.getResult().getToken());
+                                    Common.updateToken(MainActivity.this, task.getResult().getToken());
                                     Log.d("TOKEN", task.getResult().getToken());
 
                                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);

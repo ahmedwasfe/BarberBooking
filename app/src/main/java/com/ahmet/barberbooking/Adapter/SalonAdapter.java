@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IRecyclerItemSelectedListener;
+import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
 import com.ahmet.barberbooking.Model.Salon;
 import com.ahmet.barberbooking.R;
 
@@ -20,6 +21,8 @@ import androidx.cardview.widget.CardView;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonHolder> {
 
     private Context mContext;
@@ -27,7 +30,7 @@ public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonHolder>
     private List<CardView> mListCard;
     private LayoutInflater inflater;
 
-    LocalBroadcastManager mLocalBroadcastManager;
+   // LocalBroadcastManager mLocalBroadcastManager;
 
     public SalonAdapter(Context mContext, List<Salon> mListSalon) {
         this.mContext = mContext;
@@ -35,7 +38,7 @@ public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonHolder>
         inflater = LayoutInflater.from(mContext);
         mListCard = new ArrayList<>();
 
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
+     //   mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
     @NonNull
@@ -85,11 +88,17 @@ public class SalonAdapter extends RecyclerView.Adapter<SalonAdapter.SalonHolder>
                             .getColor(R.color.colorBlack));
                 }
 
-                // Send Broadcastto to tell Booking activity enable Button Next
-                Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
-                intent.putExtra(Common.KEY_SALON_STORE, mListSalon.get(position));
-                intent.putExtra(Common.KEY_STEP, 1);
-                mLocalBroadcastManager.sendBroadcast(intent);
+                /*
+                 * Send Broadcastto
+                * Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
+                * intent.putExtra(Common.KEY_SALON_STORE, mListSalon.get(position));
+                * intent.putExtra(Common.KEY_STEP, 1);
+                * mLocalBroadcastManager.sendBroadcast(intent);
+                */
+
+                // Send Event Bus to tell Booking activity enable Button Next
+                // Event Bus
+                EventBus.getDefault().postSticky(new EnableNextButton(1, mListSalon.get(position)));
             }
 
             @Override

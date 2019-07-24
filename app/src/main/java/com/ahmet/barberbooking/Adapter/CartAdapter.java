@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.CartItem;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
@@ -49,7 +50,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
     @Override
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
 
-        holder.mTxtCartNameItem.setText(mListCartItem.get(position).getProductName());
+        holder.mTxtCartNameItem.setText(Common.formatShoppingName(mListCartItem.get(position).getProductName()));
         holder.mTxtCartPriceItem.setText(new StringBuilder("$ ").append(mListCartItem.get(position).getProductPrice()));
         holder.mTxtCartQuantityItem.setText(new StringBuilder(String.valueOf(mListCartItem.get(position).getProductQuantity())));
         Picasso.get()
@@ -70,7 +71,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
                                               .get(position)
                                               .getProductQuantity() - 1);
                         DatabaseUtils.updateCart(mCartDatabase, mListCartItem.get(position));
+
+                        holder.mTxtCartQuantityItem.setText(new StringBuilder(String.valueOf(mListCartItem.get(position).getProductQuantity())));
+
+                    } else if (mListCartItem.get(position).getProductQuantity() == 0){
+
+                        DatabaseUtils.deleteItemFromCart(mCartDatabase, mListCartItem.get(position));
+                        mListCartItem.remove(position);
+                        notifyItemRemoved(position);
+                       // notifyDataSetChanged();
+
                     }
+
                 } else {
 
                     if (mListCartItem.get(position).getProductQuantity() < 99) {
@@ -79,14 +91,25 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
                                         .get(position)
                                         .getProductQuantity() + 1);
                         DatabaseUtils.updateCart(mCartDatabase, mListCartItem.get(position));
+
+                        holder.mTxtCartQuantityItem.setText(new StringBuilder(String.valueOf(mListCartItem.get(position).getProductQuantity())));
                     }
                 }
-                holder.mTxtCartQuantityItem.setText(new StringBuilder(String.valueOf(mListCartItem.get(position).getProductQuantity())));
+
                 iCartItemUpdateListener.onCartItemUpdateSuccess();
 
             }
         });
 
+        holder.mImgDeleteFromCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseUtils.deleteItemFromCart(mCartDatabase, mListCartItem.get(position));
+                mListCartItem.remove(position);
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -96,7 +119,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
 
     static class CartHolder extends RecyclerView.ViewHolder{
 
-        ImageView mImageCartItem, mImgIncreaseQuantity, mImgDecreaseQuantity;
+        ImageView mImageCartItem, mImgIncreaseQuantity, mImgDecreaseQuantity, mImgDeleteFromCart;
         TextView mTxtCartNameItem, mTxtCartPriceItem, mTxtCartQuantityItem;
 
         IImageListener listener;
@@ -107,6 +130,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
             mImageCartItem = itemView.findViewById(R.id.img_item_cart);
             mImgIncreaseQuantity = itemView.findViewById(R.id.img_increase);
             mImgDecreaseQuantity = itemView.findViewById(R.id.img_decrease);
+            mImgDeleteFromCart = itemView.findViewById(R.id.delete_from_cart);
 
             mTxtCartNameItem = itemView.findViewById(R.id.txt_name_item_cart);
             mTxtCartPriceItem = itemView.findViewById(R.id.txt_price_item_cart);

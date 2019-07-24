@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.CartAdapter;
 import com.ahmet.barberbooking.Databse.CartDatabase;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CartActivity extends AppCompatActivity implements ICartItemLoadListener, ICartItemUpdateListener, ISumCartListener {
 
@@ -29,8 +31,17 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
     RecyclerView mRecyclerCart;
     @BindView(R.id.txt_total_price)
     TextView mTxtTotalPrice;
-    @BindView(R.id.btn_submit_cart)
-    Button mBtnSubmitCart;
+    @BindView(R.id.btn_clear_cart)
+    Button mBtnClearCart;
+
+    @OnClick(R.id.btn_clear_cart)
+    void clearCart(){
+
+        DatabaseUtils.clearCart(mCartDatabase);
+        // Update adaoter
+        DatabaseUtils.getAllItemFromCart(mCartDatabase, this);
+        Toast.makeText(this, "Cart empty", Toast.LENGTH_SHORT).show();
+    }
 
     private CartDatabase mCartDatabase;
 
@@ -40,6 +51,10 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Cart");
+
 
         ButterKnife.bind(this);
 

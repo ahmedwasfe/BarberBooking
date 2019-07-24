@@ -1,10 +1,6 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +12,7 @@ import com.ahmet.barberbooking.Adapter.TimeSlotAdapter;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
 import com.ahmet.barberbooking.Interface.iTimeSlotLoadListener;
+import com.ahmet.barberbooking.Model.EventBus.DisplayTimeSlotEvent;
 import com.ahmet.barberbooking.Model.TimeSlot;
 import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -31,9 +28,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,12 +64,13 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
 
     private AlertDialog mDialog;
 
-    private LocalBroadcastManager mLocalBroadcastManager;
+   // private LocalBroadcastManager mLocalBroadcastManager;
 
     // private Calendar selectedDate;
     private SimpleDateFormat mSimpleDateFormat;
 
 
+    /* old Code
     BroadcastReceiver displayTimeSolt = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -81,7 +82,38 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
                                           mSimpleDateFormat.format(date.getTime()));
         }
     };
+*/
+    // ---------------------------------------------------------------------
+    // Start Event Bus
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void loadAllTimeSlotAvailable(DisplayTimeSlotEvent event){
+
+        if (event.isDisplay()){
+
+            // In Booking Activity we need have pass this event with isDisplay = true
+            Calendar date = Calendar.getInstance();
+            date.add(Calendar.DATE, 0);  // Add current date
+
+            loadAvailableTimeSlotOfBarber(Common.currentBarber.getBarberID(),
+                    mSimpleDateFormat.format(date.getTime()));
+        }
+    }
+
+    // ---------------------------------------------------------------------
 
     static BookingTimeFragment instance;
 
@@ -100,8 +132,10 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
 
         iTimeSlotLoadListener = this;
 
-        mLocalBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
-        mLocalBroadcastManager.registerReceiver(displayTimeSolt, new IntentFilter(Common.KEY_DISPLAY_TIME_SLOT));
+        /* old Code
+          *  mLocalBroadcastManager = LocalBroadcastManager.getInstance(getActivity());
+           * mLocalBroadcastManager.registerReceiver(displayTimeSolt, new IntentFilter(Common.KEY_DISPLAY_TIME_SLOT));
+        */
 
         mSimpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");  // 27_06_2019 (this is key)
 
@@ -270,11 +304,9 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         mDialog.dismiss();
     }
 
-    @Override
-    public void onDestroy() {
-
-        mLocalBroadcastManager.unregisterReceiver(displayTimeSolt);
-
-        super.onDestroy();
-    }
+//    @Override
+//    public void onDestroy() {
+//        mLocalBroadcastManager.unregisterReceiver(displayTimeSolt);
+//        super.onDestroy();
+//    }
 }
