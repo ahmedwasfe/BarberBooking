@@ -3,221 +3,257 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorHomeBackground"
+    android:padding="@dimen/margin12"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:visibility="visible"
-        android:id="@+id/img_logo"
+    <TextView
+        android:id="@+id/txt_title_confirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"
+        android:text="Confirm Booking"
+        android:textColor="@color/colorWhite"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:background="@drawable/txt_select_booking"
+        android:padding="20dp"
+        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_dialog"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_logo"
-        app:layout_constraintVertical_bias="0.0">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/bellerose"
-            android:text="@string/thank_for_booking"
-            android:textAllCaps="true"
-            android:textColor="@color/colorWhite"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bellerose"
-            android:text="@string/booking_information"
-            android:textAllCaps="true"
-            android:textStyle="bold" />
+        app:layout_constraintTop_toBottomOf="@id/txt_title_confirm">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:src="@drawable/ic_event_note" />
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/margin12"
+            android:background="@drawable/rounded_dialog"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txt_time_confirm_booking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/bellerose"
-                android:text="10:00 at 06/07/2019"
-                android:textSize="14sp" />
+                android:layout_gravity="center_horizontal"
+                android:text="@string/thank_for_booking"
+                android:textAllCaps="false"
+                android:textColor="@color/colorButton"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:padding="@dimen/margin8"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/booking_information"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/colorButton"
+                android:padding="@dimen/margin8"
+                android:layout_marginTop="10dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin12">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/ic_event_note" />
+
+                <TextView
+                    android:id="@+id/txt_time_confirm_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:padding="4dp"
+                    android:text="10:00 at 06/07/2019"
+                    android:textSize="16sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin12">
+
+                <ImageView
+                    android:id="@+id/img_barber_confirm"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/salon_men" />
+
+                <TextView
+                    android:id="@+id/txt_barber_name_confirm_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:padding="4dp"
+                    android:text="Barber Name"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin4"
+                android:background="@color/colorPrimaryDark"
+                android:layout_margin="@dimen/margin8"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/salon_information"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/colorButton"
+                android:padding="@dimen/margin8"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/txt_salon_name_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/bellerose"
+                android:text="Salon Name"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:layout_marginStart="@dimen/margin16"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin12">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/ic_web" />
+
+                <TextView
+                    android:id="@+id/txt_salon_website_confirm_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:padding="@dimen/margin4"
+                    android:text="@string/website_salon"
+                    android:textSize="14sp"
+                    android:textColor="@color/colorBlue"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin12">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/ic_phone" />
+
+                <TextView
+                    android:id="@+id/txt_salon_phone_confirm_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:padding="@dimen/margin4"
+                    android:text="@string/phone_salon"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin12">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/ic_access_time" />
+
+                <TextView
+                    android:id="@+id/txt_salon_open_hours_confirm_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:padding="@dimen/margin4"
+                    android:text="9:00 - 19:00"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin8"
+                android:layout_marginStart="@dimen/margin12"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:src="@drawable/ic_my_location" />
+
+                <TextView
+                    android:id="@+id/txt_salon_address_confirm_booking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:padding="@dimen/margin4"
+                    android:text="Address of salon #1"
+                    android:textSize="14sp" />
+
+
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/btn_confirm_booking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:text="Confirm Booking"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:textSize="16dp"
+                android:padding="14dp"
+                android:layout_margin="30dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/btn_bg" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:src="@drawable/ic_barber" />
-
-            <TextView
-                android:id="@+id/txt_barber_name_confirm_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/bellerose"
-                android:text="Barber Name"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/margin4"
-            android:background="@color/colorBlack" />
-
-        <TextView
-            android:id="@+id/txt_salon_name_confirm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/bellerose"
-            android:text="Salon #1"
-            android:textAllCaps="true"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:src="@drawable/ic_web" />
-
-            <TextView
-                android:id="@+id/txt_salon_website_confirm_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/bellerose"
-                android:text="@string/website_salon"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:src="@drawable/ic_phone" />
-
-            <TextView
-                android:id="@+id/txt_salon_phone_confirm_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/bellerose"
-                android:text="@string/phone_salon"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:src="@drawable/ic_access_time" />
-
-            <TextView
-                android:id="@+id/txt_salon_open_hours_confirm_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/bellerose"
-                android:text="9:00 - 19:00"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:src="@drawable/ic_my_location" />
-
-            <TextView
-                android:id="@+id/txt_salon_address_confirm_booking"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/bellerose"
-                android:text="Address of salon #1"
-                android:textSize="14sp" />
-
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_confirm_booking"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/confirm_booking"
-            android:textColor="@color/colorWhite"
-            android:fontFamily="@font/bellerose"
-            android:background="@drawable/btn_enable_bg"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/margin8"
-            android:layout_marginEnd="@dimen/margin4" />
-
-    </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

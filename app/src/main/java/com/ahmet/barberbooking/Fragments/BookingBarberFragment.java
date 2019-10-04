@@ -1,15 +1,25 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.BarberAdapter;
+import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
+import com.ahmet.barberbooking.Model.Barber;
 import com.ahmet.barberbooking.Model.EventBus.BarberDoneEvent;
 import com.ahmet.barberbooking.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +31,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -103,6 +116,8 @@ public class BookingBarberFragment extends Fragment {
 
         initView();
 
+      //  loadBarbersBySalon();
+
         return layoutView;
     }
 
@@ -115,15 +130,64 @@ public class BookingBarberFragment extends Fragment {
         mRecyclerBarbers.addItemDecoration(new SpacesItemDecoration(4));
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
-    // Old Code
-//    @Override
-//    public void onDestroy() {
-//        mLocalBroadcastManager.unregisterReceiver(barberDoneReceiver);
-//        super.onDestroy();
-//    }
+    private void loadBarbersBySalon() {
+
+        //mDialog.show();
+
+        if (!TextUtils.isEmpty(Common.currentSalon.getSalonID())){
+
+            FirebaseFirestore.getInstance()
+                    .collection("AllSalon")
+                    .document(Common.currentSalon.getSalonID())
+                    .collection("Barber")
+            // Query query = mReferenceBarbers.orderBy("name", Query.Direction.ASCENDING);
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            List<Barber> mListBarber = new ArrayList<>();
+
+
+                            for (QueryDocumentSnapshot snapshot : task.getResult()){
+                                Barber barber = snapshot.toObject(Barber.class);
+                                barber.setPassword(""); // remove password because in Clinte app ||
+                                barber.setBarberID(snapshot.getId());
+
+                                mListBarber.add(barber);
+                            }
+
+                            /* Old Code
+                             * Send Broadcast to barber Fragment loadAllBaber
+                             * Intent intent = new Intent(Common.KEY_BARBER_LOAD_DONE);
+                             * intent.putParcelableArrayListExtra(Common.KEY_BARBER_LOAD_DONE, (ArrayList<? extends Parcelable>) mListBarber);
+                             * mLocalBroadcastManager.sendBroadcast(intent);
+                             */
+
+                            BarberAdapter mBarberAdapter = new BarberAdapter(getActivity(), mListBarber);
+                            mRecyclerBarbers.setAdapter(mBarberAdapter);
+
+                            EventBus.getDefault()
+                                    .postSticky(new BarberDoneEvent(mListBarber));
+
+
+
+
+
+                           // mDialog.dismiss();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                   // mDialog.dismiss();
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
+
+
+    }
 }

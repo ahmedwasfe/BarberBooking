@@ -5,13 +5,17 @@ import android.os.Parcelable;
 
 public class Salon implements Parcelable {
 
-    private String name, address,website, phone, openHour, salonID;
+    private String name,email, address, website, phone, openHour, salonType, salonID;
 
     public Salon(){}
 
-    public Salon(String name, String address, String salonID) {
+    public Salon(String name, String email, String address, String phone, String openHour, String salonType, String salonID) {
         this.name = name;
+        this.email = email;
         this.address = address;
+        this.phone = phone;
+        this.openHour = openHour;
+        this.salonType = salonType;
         this.salonID = salonID;
     }
 
@@ -23,6 +27,14 @@ public class Salon implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getAddress() {
@@ -65,13 +77,23 @@ public class Salon implements Parcelable {
         this.openHour = openHour;
     }
 
+    public String getSalonType() {
+        return salonType;
+    }
+
+    public void setSalonType(String salonType) {
+        this.salonType = salonType;
+    }
+
     protected Salon(Parcel in) {
         name = in.readString();
+        email = in.readString();
         address = in.readString();
         salonID = in.readString();
         website = in.readString();
         phone = in.readString();
         openHour = in.readString();
+        salonType = in.readString();
     }
 
     public static final Creator<Salon> CREATOR = new Creator<Salon>() {
@@ -94,10 +116,12 @@ public class Salon implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
+        dest.writeString(email);
         dest.writeString(address);
         dest.writeString(salonID);
         dest.writeString(website);
         dest.writeString(phone);
         dest.writeString(openHour);
+        dest.writeString(salonType);
     }
 }

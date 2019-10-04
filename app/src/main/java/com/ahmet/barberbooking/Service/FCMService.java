@@ -1,8 +1,5 @@
 package com.ahmet.barberbooking.Service;
 
-import android.app.Service;
-import android.content.Intent;
-import android.os.IBinder;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -43,7 +40,7 @@ public class FCMService extends FirebaseMessagingService {
 
         // mMapSendData.put("updateDone", "true");
         if (remoteMessage.getData() != null){
-            if (remoteMessage.getData().get("updateDone") != null){
+            if (remoteMessage.getData().get("done") != null){
 
                 updateLastBooking();
 
@@ -68,7 +65,7 @@ public class FCMService extends FirebaseMessagingService {
 
     private void updateLastBooking() {
 
-        // Here we need get current user login
+        // Here we need get current salon_men login
         // Because app mayce run on background so we need get from Paper
 
         CollectionReference mCollectionRefUserBooking;
@@ -130,13 +127,7 @@ public class FCMService extends FirebaseMessagingService {
                             Map<String, Object> mMapUpdateData = new HashMap<>();
                             mMapUpdateData.put("done", true);
                             mDocumentRefUserBooking.update(mMapUpdateData)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-
-
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
+                                    .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     Toast.makeText(FCMService.this, e.getMessage(), Toast.LENGTH_SHORT).show();

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class FCMResponse {
 
-    private int multicastId;
+    private long multicastId;
     private int success;
     private int failure;
     private int canonicalIds;
@@ -12,11 +12,11 @@ public class FCMResponse {
 
     public FCMResponse() {}
 
-    public int getMulticastId() {
+    public long getMulticastId() {
         return multicastId;
     }
 
-    public void setMulticastId(int multicastId) {
+    public void setMulticastId(long multicastId) {
         this.multicastId = multicastId;
     }
 

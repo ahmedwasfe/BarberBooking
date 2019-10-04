@@ -142,6 +142,7 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
                 .setCancelable(false)
+                .setMessage("Please wait...")
                 .build();
 
 //        selectedDate = Calendar.getInstance();
@@ -170,8 +171,6 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         // /AllSalon/Gaza/Branch/AFXjgtlJwztf7cLFumNT/Barber/utQmhc07WVjaZdr9tbRB
         mDocReferenceBarber = FirebaseFirestore.getInstance()
                 .collection("AllSalon")
-                .document(Common.city)
-                .collection("Branch")
                 .document(Common.currentSalon.getSalonID())
                 .collection("Barber")
                 .document(barberID);
@@ -191,8 +190,6 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
                                 // If not created return empty
                                 CollectionReference mReferenceDate =  FirebaseFirestore.getInstance()
                                         .collection("AllSalon")
-                                        .document(Common.city)
-                                        .collection("Branch")
                                         .document(Common.currentSalon.getSalonID())
                                         .collection("Barber")
                                         .document(barberID)
@@ -268,16 +265,6 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
                 }
             }
         });
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-//        Toast.makeText(getActivity(), Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
-
-//        loadAvailableTimeSlotOfBarber(Common.currentBarber.getBarberID(),
-//                                       mSimpleDateFormat.format(selectedDate.getTime()));
     }
 
     @Override

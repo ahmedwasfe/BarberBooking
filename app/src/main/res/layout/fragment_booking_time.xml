@@ -5,6 +5,8 @@
     android:padding="@dimen/margin8"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+
     <devs.mulham.horizontalcalendar.HorizontalCalendarView
         android:id="@+id/calender_time_solt"
         android:layout_width="0dp"

@@ -22,6 +22,7 @@ import com.ahmet.barberbooking.CartActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
+import com.ahmet.barberbooking.HistoryActivity;
 import com.ahmet.barberbooking.Interface.IBannerLoadListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
@@ -79,6 +80,8 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     LinearLayout mLinearUserInfo;
     @BindView(R.id.txt_user_name)
     TextView mTxtUserName;
+    @BindView(R.id.txt_user_phone)
+    TextView mTxtUserPhone;
     @BindView(R.id.slider_banner)
     Slider mSliderBanner;
     @BindView(R.id.recycler_look_book)
@@ -117,6 +120,11 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @OnClick(R.id.card_cart)
     void openCartActivity(){
         startActivity(new Intent(getActivity(), CartActivity.class));
+    }
+
+    @OnClick(R.id.card_history)
+    void openHistoryActivity(){
+        startActivity(new Intent(getActivity(), HistoryActivity.class));
     }
 
     @OnClick(R.id.btn_delete_booking)
@@ -158,7 +166,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
         /* To delete booking
           * First we need delete from Barber collections
-          * Aftar that , We will delete from user booking collections
+          * Aftar that , We will delete from salon_men booking collections
           * And final , delete event
           *
           * We need load Common.currentBooking because we need some data from BookingInformation
@@ -171,8 +179,6 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
             // Get booking information in barber object
             DocumentReference mBarberBookingInfoRef = FirebaseFirestore.getInstance()
                     .collection("AllSalon")
-                    .document(Common.currentBooking.getCityBooking())
-                    .collection("Branch")
                     .document(Common.currentBooking.getSalonID())
                     .collection("Barber")
                     .document(Common.currentBooking.getBarberID())
@@ -206,7 +212,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
     private void deleteBookingFromUser(boolean isChange) {
 
-        // First , we need get information from user object
+        // First , we need get information from salon_men object
         if (!TextUtils.isEmpty(Common.currentBookingId)){
 
             DocumentReference mUserBookingInfoRef = FirebaseFirestore.getInstance()
@@ -222,7 +228,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                         @Override
                         public void onSuccess(Void aVoid) {
                             /*
-                             *Aftar delete from user , just delete from calendar
+                             *Aftar delete from salon_men , just delete from calendar
                              *First , we need get save uri of event we just add
                              */
                             Paper.init(getActivity());
@@ -292,6 +298,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
                 .setCancelable(false)
+                .setMessage("Please wait...")
                 .build();
     }
 
@@ -321,7 +328,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
         // Select booking information from firebase database with done = false timestamp greater today
         mUserBookingReference.whereGreaterThanOrEqualTo("timestamp", toDayTimeStamp)
-                .whereEqualTo("updateDone", false)
+                .whereEqualTo("done", false)
                 .limit(1)  // Only take 1
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -391,6 +398,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
         mLinearUserInfo.setVisibility(View.VISIBLE);
         mTxtUserName.setText(Common.currentUser.getName());
+        mTxtUserPhone.setText(Common.currentUser.getPhoneNumber());
     }
 
     @Override
@@ -401,7 +409,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
         // check if Logged ?
         if (AccountKit.getCurrentAccessToken() != null){
-            //if (user.getName() != null){
+            //if (salon_men.getName() != null){
                 loadUserInfo();
                // loadBanner();
                // loadLookBook();

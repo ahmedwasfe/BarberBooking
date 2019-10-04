@@ -40,6 +40,7 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
         DatabaseUtils.clearCart(mCartDatabase);
         // Update adaoter
         DatabaseUtils.getAllItemFromCart(mCartDatabase, this);
+        mTxtTotalPrice.setText("$ 0");
         Toast.makeText(this, "Cart empty", Toast.LENGTH_SHORT).show();
     }
 

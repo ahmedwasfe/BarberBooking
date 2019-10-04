@@ -22,8 +22,7 @@
             android:layout_height="wrap_content"
             android:text="Salon #1"
             android:textSize="@dimen/textCardSize20"
-            android:textStyle="bold"
-            android:fontFamily="@font/bellerose"
+            android:textStyle="normal"
             android:gravity="center_horizontal"/>
 
         <TextView

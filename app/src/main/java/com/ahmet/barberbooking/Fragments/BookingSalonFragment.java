@@ -9,9 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.SalonAdapter;
-import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
-import com.ahmet.barberbooking.Interface.IBranchLoadListener;
 import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Model.Salon;
 import com.ahmet.barberbooking.R;
@@ -37,8 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
 
-public class BookingSalonFragment extends Fragment implements IBranchLoadListener,
-                ISalonLoadListener {
+public class BookingSalonFragment extends Fragment implements ISalonLoadListener {
 
     @BindView(R.id.materialSpinner)
     MaterialSpinner mSpinerBranch;
@@ -51,7 +48,6 @@ public class BookingSalonFragment extends Fragment implements IBranchLoadListene
     private CollectionReference mReferenceAllSalon;
     private CollectionReference mReferenceBranch;
 
-    private IBranchLoadListener mIBranchLoadListener;
     private ISalonLoadListener mISalonLoadListener;
 
     private AlertDialog mDialog;
@@ -73,11 +69,12 @@ public class BookingSalonFragment extends Fragment implements IBranchLoadListene
         mReferenceAllSalon = FirebaseFirestore.getInstance().collection("AllSalon");
         mReferenceBranch = FirebaseFirestore.getInstance().collection("Branch");
 
-        mIBranchLoadListener = this;
         mISalonLoadListener = this;
 
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
+                .setCancelable(false)
+                .setMessage("Please wait...")
                 .build();
     }
 
@@ -91,6 +88,7 @@ public class BookingSalonFragment extends Fragment implements IBranchLoadListene
 
         // init View
         initView();
+
         loadAllSalon();
 
         return layoutView;
@@ -111,59 +109,14 @@ public class BookingSalonFragment extends Fragment implements IBranchLoadListene
         mRecyclerSalon.addItemDecoration(new SpacesItemDecoration(4));
     }
 
+
     private void loadAllSalon() {
-
-        mReferenceAllSalon.get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        List<String> mList = new ArrayList<>();
-                        mList.add("Please choose city");
-
-                        for (QueryDocumentSnapshot snapshot : task.getResult()){
-                            mList.add(snapshot.getId());
-                        }
-                        mIBranchLoadListener.onLoadAllSalonSuccess(mList);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                mIBranchLoadListener.onLoadAllSalonFailed(e.getMessage());
-            }
-        });
-
-    }
-
-    @Override
-    public void onLoadAllSalonSuccess(List<String> mListBranch) {
-
-        mSpinerBranch.setItems(mListBranch);
-
-        mSpinerBranch.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                if (position > 0){
-                    loadBranchOfCity(item.toString());
-                }else {
-                    mRecyclerSalon.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
-    private void loadBranchOfCity(String city) {
 
         mDialog.show();
 
-        Common.city = city;
-
-        mReferenceBranch = FirebaseFirestore.getInstance()
+        FirebaseFirestore.getInstance()
                 .collection("AllSalon")
-                .document(city)
-                .collection("Branch");
-
-        mReferenceBranch.get()
+                .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -186,11 +139,6 @@ public class BookingSalonFragment extends Fragment implements IBranchLoadListene
             }
         });
 
-    }
-
-    @Override
-    public void onLoadAllSalonFailed(String error) {
-        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_login)
     void loginUser(){
+
         final Intent intent = new Intent(this, AccountKitActivity.class);
         AccountKitConfiguration.AccountKitConfigurationBuilder configurationBuilder =
                 new AccountKitConfiguration.AccountKitConfigurationBuilder(LoginType.PHONE,
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 AccessToken accessToken = AccountKit.getCurrentAccessToken();
                 if (accessToken != null){  // If already logged
 
+                    // Get Token
                     FirebaseInstanceId.getInstance()
                             .getInstanceId()
                             .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
@@ -139,13 +141,20 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == APP_REQUEST_CODE){
+
             AccountKitLoginResult loginResult = data.getParcelableExtra(AccountKitLoginResult.RESULT_KEY);
+
             if (loginResult.getError() != null){
+
                 Toast.makeText(this, "" + loginResult.getError().getErrorType().getMessage()
                         , Toast.LENGTH_SHORT).show();
+
             }else if (loginResult.wasCancelled()){
+
                 Toast.makeText(this, "Login cancelled", Toast.LENGTH_SHORT).show();
+
             }else {
+
                 FirebaseInstanceId.getInstance()
                         .getInstanceId()
                         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {

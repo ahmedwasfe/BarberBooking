@@ -10,6 +10,7 @@ public class BookingInformation {
     private String customerName, customerPhone, time,
                     barberID, barberName, salonID,
                     salonName, salonAddress, cityBooking;
+
     private Long timeSlot;
     private Timestamp timestamp;
     private boolean done;

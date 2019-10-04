@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -18,6 +20,11 @@ import com.ahmet.barberbooking.Interface.IRecyclerItemSelectedListener;
 import com.ahmet.barberbooking.Model.Barber;
 import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
 import com.ahmet.barberbooking.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -55,6 +62,31 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
 
     @Override
     public void onBindViewHolder(@NonNull BarberHolder holder, int position) {
+
+        FirebaseFirestore.getInstance().collection("AllSalon")
+                .document(Common.currentSalon.getSalonID())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                        if (task.isSuccessful()){
+
+                            DocumentSnapshot snapshot = task.getResult();
+                            Toast.makeText(mContext, snapshot.get("salonType").toString(), Toast.LENGTH_SHORT).show();
+                            if (snapshot.get("salonType").equals("Men")){
+                                Picasso.get().load(R.drawable.salon_men).into(holder.mImgBarber);
+                              //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
+                            }else if (snapshot.get("salonType").equals("Women")){
+                                Picasso.get().load(R.drawable.salon_women).into(holder.mImgBarber);
+                              //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
+                            }else {
+                                Picasso.get().load(R.drawable.salon_men).into(holder.mImgBarber);
+                              //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
+                            }
+                        }
+                    }
+                });
 
         holder.mTxtBarberName.setText(mListBarbers.get(position).getName());
 
@@ -109,6 +141,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
     static class BarberHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView mTxtBarberName;
+        ImageView mImgBarber;
         RatingBar mRatingBarber;
         CardView mCardBarber;
 
@@ -118,6 +151,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
             super(itemView);
 
             mTxtBarberName = itemView.findViewById(R.id.txt_barber_name);
+            mImgBarber = itemView.findViewById(R.id.image_barber);
             mRatingBarber = itemView.findViewById(R.id.rating_barber);
             mCardBarber = itemView.findViewById(R.id.card_barber);
 

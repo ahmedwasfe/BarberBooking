@@ -1,9 +1,11 @@
 package com.ahmet.barberbooking.Fragments;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -103,6 +107,24 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
     TextView mTxtSalonOpenHours;
     @BindView(R.id.txt_salon_address_confirm_booking)
     TextView mTxtSalonAddress;
+    @BindView(R.id.img_barber_confirm)
+    ImageView mImgBarber;
+    @OnClick(R.id.txt_salon_website_confirm_booking)
+    void openWebSite(){
+        try {
+            String webSiteUrl = Common.currentSalon.getWebsite();
+            if (webSiteUrl.startsWith("https://") || webSiteUrl.startsWith("http://")) {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Common.currentSalon.getWebsite()));
+                startActivity(intent);
+            }else
+                Toast.makeText(getActivity(), "Invalid Url", Toast.LENGTH_SHORT).show();
+
+        }catch (ActivityNotFoundException e){
+            Toast.makeText(getActivity(), "No application can handle this request."
+                    + " Please install a web browser",  Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
     @OnClick(R.id.btn_confirm_booking)
     void confirmBooking(){
 
@@ -148,7 +170,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
                                         @Override
                                         public void onSuccess(Void aVoid) {
 
-
+                                            // Create Notification
                                             Notification notification = new Notification();
                                             notification.setUuid(UUID.randomUUID().toString());
                                             notification.setTitle("New Booking");
@@ -160,8 +182,6 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
                                             // Submit Notification to 'Notifications' collection of Barber
                                             FirebaseFirestore.getInstance()
                                                     .collection("AllSalon")
-                                                    .document(Common.city)
-                                                    .collection("Branch")
                                                     .document(Common.currentSalon.getSalonID())
                                                     .collection("Barber")
                                                     .document(Common.currentBarber.getBarberID())
@@ -188,7 +208,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
                                                                                 for (DocumentSnapshot documentSnapshot : task.getResult())
                                                                                     token = documentSnapshot.toObject(Token.class);
 
-                                                                                // Create datato send
+                                                                                // Create data to send
                                                                                 FCMSendData sendRequest = new FCMSendData();
 
                                                                                 Map<String, String> mMapSendData = new HashMap<>();
@@ -442,6 +462,26 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         mTxtSalonWebsite.setText(Common.currentSalon.getWebsite());
         mTxtSalonPhone.setText(Common.currentSalon.getPhone());
         mTxtSalonOpenHours.setText(Common.currentSalon.getOpenHour());
+        mTxtSalonWebsite.setText(Common.currentSalon.getWebsite());
+
+        FirebaseFirestore.getInstance().collection("AllSalon")
+                .document(Common.currentSalon.getSalonID())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+
+                            DocumentSnapshot snapshot = task.getResult();
+                            if (snapshot.get("salonType").equals("Men"))
+                                Picasso.get().load(R.drawable.salon_men).into(mImgBarber);
+                            else if (snapshot.get("salonType").equals("Women"))
+                                Picasso.get().load(R.drawable.salon_women).into(mImgBarber);
+                            else
+                                Picasso.get().load(R.drawable.salon_men).into(mImgBarber);
+                        }
+                    }
+                });
     }
 
     static BookingConfirmFragment instance;
@@ -529,9 +569,9 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         // Create booking information
         BookingInformation bookingInfo = new BookingInformation();
 
-        bookingInfo.setCityBooking(Common.city);
+       // bookingInfo.setCityBooking(Common.city);
         bookingInfo.setTimestamp(timestamp);
-        // Always FALSE, because i will use this fieldto filter for display on user
+        // Always FALSE, because i will use this fieldto filter for display on salon_men
         bookingInfo.setDone(false);
 
         bookingInfo.setBarberID(Common.currentBarber.getBarberID());
@@ -555,8 +595,6 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         // submit to barbber document
         DocumentReference mBookingReference =  FirebaseFirestore.getInstance()
                 .collection("AllSalon")
-                .document(Common.city)
-                .collection("Branch")
                 .document(Common.currentSalon.getSalonID())
                 .collection("Barber")
                 .document(Common.currentBarber.getBarberID())

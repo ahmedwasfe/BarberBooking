@@ -75,6 +75,9 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
         if (mListTimeSlot.size() == 0){  // If all position available , just show list
 
+            // If all time slot is empty all card is enable
+            holder.mCardTimeSolt.setEnabled(true);
+
             holder.mCardTimeSolt.setCardBackgroundColor(
                     mContext.getResources().getColor(R.color.colorWhite));
 
@@ -95,6 +98,8 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
                 int slot = Integer.parseInt(slotValue.getTimeSlot().toString());
 
                 if (slot == position){  // If time slot == position
+
+                    holder.mCardTimeSolt.setEnabled(false);
 
                     // I Will set tag for all time slot in full
                     // So base on tag , i can set all remain card background without change full time slot
@@ -136,10 +141,10 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
                 // Our selected card will be change color
                 holder.mCardTimeSolt.setCardBackgroundColor(
                         mContext.getResources().getColor(R.color.colorAccent));
-                holder.mTxtTimeSolt.setTextColor(
-                        mContext.getResources().getColor(R.color.colorWhite));
-                holder.mTxtTimeSoltDescription.setTextColor(
-                        mContext.getResources().getColor(R.color.colorWhite));
+//                holder.mTxtTimeSolt.setTextColor(
+//                        mContext.getResources().getColor(R.color.colorWhite));
+//                holder.mTxtTimeSoltDescription.setTextColor(
+//                        mContext.getResources().getColor(R.color.colorWhite));
 
 
                 /*

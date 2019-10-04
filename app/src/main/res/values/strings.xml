@@ -48,5 +48,6 @@
          "\nBecause we will delete your old booking information"
          "\nJust confirm"
     </string>
+    <string name="salon_information">Salon information</string>
 
 </resources>

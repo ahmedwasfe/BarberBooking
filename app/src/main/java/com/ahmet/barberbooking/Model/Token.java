@@ -9,11 +9,6 @@ public class Token {
 
     public Token() {}
 
-    public Token(String token, String userPhone, Common.TOKEN_TYPE tokenType) {
-        this.token = token;
-        this.userPhone = userPhone;
-        this.tokenType = tokenType;
-    }
 
     public String getToken() {
         return token;

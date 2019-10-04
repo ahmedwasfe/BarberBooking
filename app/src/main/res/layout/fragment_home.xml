@@ -4,17 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorHomeBackground">
+    android:layout_height="match_parent">
+
 
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/linear_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:background="@color/colorButton"
         android:orientation="horizontal"
+        android:background="@color/colorPrimaryDark"
         android:weightSum="4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         <ImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_account"/>
+            android:src="@drawable/salon_men"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,14 +37,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="ahmet"
+                android:gravity="start"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"/>
 
             <TextView
-                android:id="@+id/txt_member_type"
+                android:id="@+id/txt_user_phone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Normal"
+                android:text="+0000000000"
+                android:gravity="start"
                 android:textColor="@android:color/white"
                 android:textSize="22sp"/>
 
@@ -97,9 +99,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/bellerose"
+                        android:padding="8dp"
                         android:text="@string/booking"
-                        android:textSize="@dimen/textCardSize" />
+                        android:textSize="16dp" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -113,7 +115,7 @@
                 android:layout_weight="1"
                 app:cardCornerRadius="8dp">
 
-                <RelativeLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -122,10 +124,11 @@
                         android:id="@+id/notification_badget_cart"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_toEndOf="@id/txt_cart_title"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        app:nbMaxTextLength="2" />
+                        app:nbMaxTextLength="2"
+                        app:layout_constraintStart_toEndOf="@id/img_cart"
+                        android:layout_marginEnd="@dimen/margin8"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                     <ImageView
                         android:id="@+id/img_cart"
@@ -133,7 +136,11 @@
                         android:layout_height="50dp"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center_horizontal"
-                        android:src="@drawable/ic_shopping_cart" />
+                        android:src="@drawable/ic_shopping_cart"
+                        android:layout_marginEnd="@dimen/margin4"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <TextView
                         android:id="@+id/txt_cart_title"
@@ -142,10 +149,13 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@id/img_cart"
-                        android:fontFamily="@font/bellerose"
+                        android:padding="8dp"
                         android:text="@string/cart"
-                        android:textSize="@dimen/textCardSize" />
-                </RelativeLayout>
+                        android:textSize="16sp"
+                        app:layout_constraintTop_toBottomOf="@id/img_cart"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
 
@@ -173,9 +183,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/bellerose"
+                        android:padding="@dimen/margin8"
                         android:text="@string/history"
-                        android:textSize="@dimen/textCardSize" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -204,9 +214,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/bellerose"
+                        android:padding="@dimen/margin8"
                         android:text="@string/notification"
-                        android:textSize="@dimen/textCardSize" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

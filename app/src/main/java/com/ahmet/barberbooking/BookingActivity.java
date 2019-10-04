@@ -12,6 +12,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.ViewPagerAdapter;
@@ -44,10 +45,10 @@ public class BookingActivity extends AppCompatActivity {
     StepView mStepView;
     @BindView(R.id.view_pager_steps)
     NonSwipeViewPager mViewPagerSteps;
-    @BindView(R.id.btn_previous_step)
-    Button mBtnPreviousStep;
-    @BindView(R.id.btn_next_step)
-    Button mBtnNextStep;
+    @BindView(R.id.txt_previous)
+    TextView mPreviousStep;
+    @BindView(R.id.txt_next)
+    TextView mNextStep;
 
    // private LocalBroadcastManager mLocalBroadcastManager;
 
@@ -55,23 +56,27 @@ public class BookingActivity extends AppCompatActivity {
     private CollectionReference mReferenceBarbers;
 
     // Event
-    @OnClick(R.id.btn_previous_step)
+    @OnClick(R.id.txt_previous)
     void previousStep(){
 
         if (Common.setp == 3 || Common.setp > 0){
 
+
             Common.setp--;
             mViewPagerSteps.setCurrentItem(Common.setp);
 
+            if (Common.setp == 1)
+                loadBarbersBySalon(Common.currentSalon.getSalonID());
+
             // Always enable NEXT when step 3
             if (Common.setp < 3){
-                mBtnNextStep.setEnabled(true);
+                mNextStep.setEnabled(true);
                 setColorStepButton();
             }
         }
     }
 
-    @OnClick(R.id.btn_next_step)
+    @OnClick(R.id.txt_next)
     void nextStep(){
 
         Toast.makeText(this, "" + Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
@@ -134,12 +139,10 @@ public class BookingActivity extends AppCompatActivity {
 
         mDialog.show();
 
-        if (!TextUtils.isEmpty(Common.city)){
+        if (!TextUtils.isEmpty(Common.currentSalon.getSalonID())){
 
             mReferenceBarbers = FirebaseFirestore.getInstance()
                     .collection("AllSalon")
-                    .document(Common.city)
-                    .collection("Branch")
                     .document(salonID)
                     .collection("Barber");
            // Query query = mReferenceBarbers.orderBy("name", Query.Direction.ASCENDING);
@@ -238,7 +241,7 @@ public class BookingActivity extends AppCompatActivity {
             Common.currentTimeSlot = event.getTimeSlot();
 
 //            Common.currentSalon = intent.getParcelableExtra(Common.KEY_SALON_STORE);
-        mBtnNextStep.setEnabled(true);
+        mNextStep.setEnabled(true);
         setColorStepButton();
 
     }
@@ -252,7 +255,11 @@ public class BookingActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mDialog = new SpotsDialog.Builder().setContext(this).setCancelable(false).build();
+        mDialog = new SpotsDialog.Builder()
+                .setContext(this)
+                .setCancelable(false)
+                .setMessage("Please wait...")
+                .build();
 
         /* Old Code
          *
@@ -279,13 +286,13 @@ public class BookingActivity extends AppCompatActivity {
                 mStepView.go(position, true);
 
                 if (position == 0){
-                    mBtnPreviousStep.setEnabled(false);
+                    mPreviousStep.setEnabled(false);
                 }else{
-                    mBtnPreviousStep.setEnabled(true);
+                    mPreviousStep.setEnabled(true);
                 }
 
                 // Set disable button next here
-                mBtnNextStep.setEnabled(false);
+                mNextStep.setEnabled(false);
                 setColorStepButton();
             }
 
@@ -298,16 +305,16 @@ public class BookingActivity extends AppCompatActivity {
 
     private void setColorStepButton() {
 
-        if (mBtnNextStep.isEnabled()){
-            mBtnNextStep.setBackgroundResource(R.drawable.btn_enable_bg);
+        if (mNextStep.isEnabled()){
+            mNextStep.setTextColor(getResources().getColor(R.color.colorPrimary));
         }else {
-            mBtnNextStep.setBackgroundResource(R.drawable.btn_disable_bg);
+            mNextStep.setTextColor(getResources().getColor(R.color.colorGray));;
         }
 
-        if (mBtnPreviousStep.isEnabled()){
-            mBtnPreviousStep.setBackgroundResource(R.drawable.btn_enable_bg);
+        if (mPreviousStep.isEnabled()){
+            mPreviousStep.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }else {
-            mBtnPreviousStep.setBackgroundResource(R.drawable.btn_disable_bg);
+            mPreviousStep.setTextColor(getResources().getColor(R.color.colorGray));
         }
     }
 

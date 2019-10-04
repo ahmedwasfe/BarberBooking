@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
@@ -90,7 +91,7 @@ public class Common {
     public static int currentTimeSlot = -1;
 
     public static Calendar bookingDate = Calendar.getInstance();
-    // only user when need foemat key
+    // only salon_men when need foemat key
     public static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("dd_MM_yyyy");
 
 
@@ -169,8 +170,8 @@ public class Common {
 
                     Token mToken = new Token();
                     mToken.setToken(token);
-                    mToken.setUserPhone(account.getPhoneNumber().toString());
                     mToken.setTokenType(TOKEN_TYPE.CLIENT);
+                    mToken.setUserPhone(account.getPhoneNumber().toString());
 
                     FirebaseFirestore.getInstance()
                             .collection("Tokens")
@@ -189,6 +190,7 @@ public class Common {
 
                 }
             });
+            
         } else {
 
             Paper.init(mContext);
@@ -235,23 +237,25 @@ public class Common {
         String NOTIFICATION_CHANNEL = "sajahmet_barber_booking_client_app_channel_01";
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
 
             NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL,
-                    "SAJAHMET Barber Booking Client App", NotificationManager.IMPORTANCE_HIGH);
+                    "SAJAHMET Barber Booking Client App", NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setDescription("Barber Booking Client App");
             notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.setVibrationPattern(new long[] {0, 1000, 500, 1000});
             notificationChannel.enableVibration(true);
 
             notificationManager.createNotificationChannel(notificationChannel);
         }
-        Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
+       // Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(mContext, NOTIFICATION_CHANNEL);
         builder.setContentTitle(title)
                 .setContentText(content)
-                .setAutoCancel(false)
-                .setSound(sound)
+                .setAutoCancel(true)
+                //.setSound(sound)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setLargeIcon(BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.ic_launcher));
 

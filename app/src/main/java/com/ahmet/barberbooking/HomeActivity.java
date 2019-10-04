@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.Map;
 
@@ -51,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.btn_navigation_home)
     BottomNavigationView mNavigationView;
-
 
     private BottomSheetDialog mSheetDialog;
     private AlertDialog mDialog;
@@ -75,25 +77,27 @@ public class HomeActivity extends AppCompatActivity {
 
         // init
         mCollectionUser = FirebaseFirestore.getInstance().collection("User");
+
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setCancelable(false)
+                .setMessage("Please wait...")
                 .build();
 
         // check intent , if is login = true enable full access
-        // if is login = false , just let user around shoppingto view
+        // if is login = false , just let salon_men around shoppingto view
         if (getIntent() != null){
             boolean isLogin = getIntent().getBooleanExtra(Common.IS_LOGIN, false);
             if (isLogin){
                 mDialog.show();
-                mProgressBar.setVisibility(View.VISIBLE);
-                // check if user is exists
+                // mProgressBar.setVisibility(View.VISIBLE);
+                // check if salon_men is exists
                 AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
                     @Override
                     public void onSuccess(Account account) {
                         if (account != null){
 
-                            // Save user phone by Paper
+                            // Save salon_men phone by Paper
                             Paper.init(HomeActivity.this);
                             Paper.book().write(Common.KEY_LOGGED, account.getPhoneNumber().toString());
 
@@ -107,13 +111,12 @@ public class HomeActivity extends AppCompatActivity {
                                                 if (!userSnapshot.exists()){
                                                     showUpdateDialog(account.getPhoneNumber().toString());
                                                 }else {
-                                                    // If user alerady available in our system
+                                                    // If salon_men alerady available in our system
                                                     Common.currentUser = userSnapshot.toObject(User.class);
                                                     mNavigationView.setSelectedItemId(R.id.nav_home);
                                                 }
                                                 if (mDialog.isShowing())
                                                     mDialog.dismiss();
-                                                mProgressBar.setVisibility(View.GONE);
 
                                                // checkRatingDialog();
                                             }
@@ -143,17 +146,17 @@ public class HomeActivity extends AppCompatActivity {
                 else if (menuItem.getItemId() == R.id.nav_shopping)
                     fragment = new ShoppingFragment();
 
-                return loadFragmemt(fragment);
+                return loadFragment(fragment);
             }
         });
 
-        //loadFragmemt(new HomeFragment());
+        //loadFragment(new HomeFragment());
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+       // loadFragment(new HomeFragment());
         checkRatingDialog();
     }
 
@@ -179,7 +182,7 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private boolean loadFragmemt(Fragment fragment) {
+    private boolean loadFragment(Fragment fragment) {
         if (fragment != null){
             getSupportFragmentManager()
                     .beginTransaction()

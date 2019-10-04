@@ -12,15 +12,15 @@ import java.util.List;
 @Dao
 public interface CartDAO {
 
-    // get all items by user phone from database
+    // get all items by salon_men phone from database
     @Query("SELECT * FROM Cart WHERE userPhone=:userPhone")
     List<CartItem> getAllItemFromCart(String userPhone);
 
-    // get count items by user phone from databse
+    // get count items by salon_men phone from databse
     @Query("SELECT count(*) FROM Cart WHERE userPhone=:userPhone")
     int countItemInCart(String userPhone);
 
-    // get all items by product Id and user phone from databse
+    // get all items by product Id and salon_men phone from databse
     @Query("SELECT * FROM Cart WHERE productId=:productId AND userPhone=:userPhone")
     CartItem getproductInCart(String productId, String userPhone);
 

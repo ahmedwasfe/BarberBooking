@@ -17,7 +17,7 @@ public class DatabaseUtils {
 
     // Because all room handle need work on other thread
 
-    // get all items by user phone from database
+    // get all items by salon_men phone from database
     public static void getAllItemFromCart(CartDatabase db, ICartItemLoadListener iCartItemLoadListener){
 
         GetAllCartAsync task = new GetAllCartAsync(db, iCartItemLoadListener);
