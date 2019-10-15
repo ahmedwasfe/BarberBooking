@@ -2,6 +2,7 @@ package com.ahmet.barberbooking.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
@@ -73,7 +75,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
                         if (task.isSuccessful()){
 
                             DocumentSnapshot snapshot = task.getResult();
-                            Toast.makeText(mContext, snapshot.get("salonType").toString(), Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(mContext, snapshot.get("salonType").toString(), Toast.LENGTH_SHORT).show();
                             if (snapshot.get("salonType").equals("Men")){
                                 Picasso.get().load(R.drawable.salon_men).into(holder.mImgBarber);
                               //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
@@ -119,6 +121,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
                 * intent.putExtra(Common.KEY_STEP, 2);
                 * mLocalBroadcastManager.sendBroadcast(intent);
                 */
+
 
                 // Send Event Bus to enable button next
                 // Event Bus

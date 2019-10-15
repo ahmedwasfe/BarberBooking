@@ -335,7 +335,8 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
 
     }
 
-    private void addToDeviceCalendar(String startEventTime, String endEventTime, String title, String descroption, String address) {
+    private void addToDeviceCalendar(String startEventTime, String endEventTime,
+                                     String title, String descroption, String address) {
 
         SimpleDateFormat calendarDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
@@ -528,10 +529,6 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         return layoutView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
 
     @Override
     public void onDestroy() {
@@ -620,4 +617,5 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
             }
         });
     }
+
 }

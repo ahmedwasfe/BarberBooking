@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class Salon implements Parcelable {
 
     private String name,email, address, website, phone, openHour, salonType, salonID;
+    private double latitude, longitude;
 
     public Salon(){}
 
@@ -85,6 +86,22 @@ public class Salon implements Parcelable {
         this.salonType = salonType;
     }
 
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     protected Salon(Parcel in) {
         name = in.readString();
         email = in.readString();
@@ -94,6 +111,8 @@ public class Salon implements Parcelable {
         phone = in.readString();
         openHour = in.readString();
         salonType = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
     }
 
     public static final Creator<Salon> CREATOR = new Creator<Salon>() {
@@ -123,5 +142,7 @@ public class Salon implements Parcelable {
         dest.writeString(phone);
         dest.writeString(openHour);
         dest.writeString(salonType);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
     }
 }

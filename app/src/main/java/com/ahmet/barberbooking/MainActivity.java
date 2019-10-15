@@ -44,13 +44,13 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int APP_REQUEST_CODE = 1881;
+//
+//    @BindView(R.id.txt_skip)
+//    TextView mTxtSkip;
+//    @BindView(R.id.btn_login)
+//    Button mBtnLogin;
 
-    @BindView(R.id.txt_skip)
-    TextView mTxtSkip;
-    @BindView(R.id.btn_login)
-    Button mBtnLogin;
-
-    @OnClick(R.id.btn_login)
+    @OnClick(R.id.btn_mobile_login)
     void loginUser(){
 
         final Intent intent = new Intent(this, AccountKitActivity.class);
@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
         Dexter.withActivity(this)
                 .withPermissions(new String[]{
                     Manifest.permission.WRITE_CALENDAR,
-                    Manifest.permission.READ_CALENDAR
+                    Manifest.permission.READ_CALENDAR,
+                    Manifest.permission.ACCESS_FINE_LOCATION
                 }).withListener(new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report) {
@@ -108,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onFailure(@NonNull Exception e) {
 
                             Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+
 
                             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                             intent.putExtra(Common.IS_LOGIN, true);
@@ -178,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onFailure(@NonNull Exception e) {
 
                                 Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Log.e("Error_Connection", e.getMessage());
 
                                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                                 intent.putExtra(Common.IS_LOGIN, true);

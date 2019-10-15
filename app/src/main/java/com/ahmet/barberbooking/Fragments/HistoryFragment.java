@@ -1,20 +1,24 @@
-package com.ahmet.barberbooking;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.ahmet.barberbooking.Fragments;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ahmet.barberbooking.Adapter.HistoryAdapter;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Model.BookingInformation;
 import com.ahmet.barberbooking.Model.EventBus.UserBookingLoadEvent;
+import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -36,31 +40,52 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
 
-public class HistoryActivity extends AppCompatActivity {
+public class HistoryFragment extends Fragment {
 
-    private Unbinder mUnbinder;
+    Unbinder mUnbinder;
 
     @BindView(R.id.recycler_history)
     RecyclerView mRecyclerHistory;
-    @BindView(R.id.txt_history)
-    TextView mTxtHistory;
 
     private AlertDialog mDialog;
 
+    private static HistoryFragment instance;
+    public static HistoryFragment getInstance(){
+        if (instance == null)
+            instance = new HistoryFragment();
+        return instance;
+    }
+
+    private void initView() {
+
+        mRecyclerHistory.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerHistory.setLayoutManager(layoutManager);
+        mRecyclerHistory.addItemDecoration(new DividerItemDecoration(getActivity(), layoutManager.getOrientation()));
+    }
+
+    private void init() {
+
+        mDialog = new SpotsDialog.Builder()
+                .setContext(getActivity())
+                .setCancelable(false)
+                .build();
+    }
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_history);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("History");
+        View layoutView = inflater.inflate(R.layout.fragment_history, container, false);
 
-        mUnbinder = ButterKnife.bind(this);
+        mUnbinder = ButterKnife.bind(this, layoutView);
 
         init();
         initView();
 
         loadUserBookingInformation();
+
+        return layoutView;
     }
 
     private void loadUserBookingInformation() {
@@ -96,30 +121,14 @@ public class HistoryActivity extends AppCompatActivity {
         });
     }
 
-    private void initView() {
-
-        mRecyclerHistory.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerHistory.setLayoutManager(layoutManager);
-        mRecyclerHistory.addItemDecoration(new DividerItemDecoration(this, layoutManager.getOrientation()));
-    }
-
-    private void init() {
-
-        mDialog = new SpotsDialog.Builder()
-                .setContext(this)
-                .setCancelable(false)
-                .build();
-    }
-
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         EventBus.getDefault().unregister(this);
         super.onStop();
     }
@@ -129,17 +138,19 @@ public class HistoryActivity extends AppCompatActivity {
 
         if (event.isIsloaded()){
 
-            HistoryAdapter historyAdapter = new HistoryAdapter(this, event.getmListBookingInfo());
+            HistoryAdapter historyAdapter = new HistoryAdapter(getActivity(), event.getmListBookingInfo());
             mRecyclerHistory.setAdapter(historyAdapter);
 
-            mTxtHistory.setText(new StringBuilder("HISTORY (")
-                        .append(event.getmListBookingInfo().size())
-                        .append(")"));
+//            mTxtHistory.setText(new StringBuilder("HISTORY (")
+//                    .append(event.getmListBookingInfo().size())
+//                    .append(")"));
 
         } else {
-            Toast.makeText(this, "" + event.getError(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "" + event.getError(), Toast.LENGTH_SHORT).show();
         }
 
 
     }
+
+
 }

@@ -8,9 +8,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.ahmet.barberbooking.Adapter.SalonAdapter;
 import com.ahmet.barberbooking.Adapter.ShoppingAdapter;
+import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
+import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Interface.IShoppingLoadListener;
+import com.ahmet.barberbooking.Model.Salon;
 import com.ahmet.barberbooking.Model.Shopping;
 import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,7 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class ShoppingFragment extends Fragment implements IShoppingLoadListener {
+public class ShoppingFragment extends Fragment implements IShoppingLoadListener, ISalonLoadListener {
 
     private Unbinder mUnbinder;
 
@@ -46,6 +50,7 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
 
     // interface
     private IShoppingLoadListener mIShoppingLoadListener;
+    private ISalonLoadListener mISalonLoadListener;
 
     @BindView(R.id.chip_group)
     ChipGroup mChipGroup;
@@ -144,12 +149,15 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
         }
     }
 
+    private String salonId = "";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mIShoppingLoadListener = this;
+        mISalonLoadListener = this;
     }
 
     @Nullable
@@ -163,11 +171,14 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
         initRecyclerView();
 
         loadShoppingItem("Wax");
+      //  loadAllSalon();
+//        loadAllProducts();
 
         return layoutView;
     }
 
     private void initRecyclerView() {
+
         mRecyclerShopping.setHasFixedSize(true);
         mRecyclerShopping.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL));
         mRecyclerShopping.addItemDecoration(new SpacesItemDecoration(8));
@@ -187,6 +198,71 @@ public class ShoppingFragment extends Fragment implements IShoppingLoadListener 
 
     @Override
     public void onShoppingLoadFailed(String error) {
+        Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
+    }
+
+    private void loadAllSalon(){
+        FirebaseFirestore.getInstance().collection("AllSalon")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            List<Salon> mListSalon = new ArrayList<>();
+                            for (DocumentSnapshot snapshot : task.getResult()){
+                                Salon salon = snapshot.toObject(Salon.class);
+                                salon.setSalonID(snapshot.getId());
+                                salonId = snapshot.getId();
+                                Log.i("SALON_ID", snapshot.getId());
+                                mListSalon.add(salon);
+                            }
+                            mISalonLoadListener.onLoadSalonSuccess(mListSalon);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                mISalonLoadListener.onLoadSalonFailed(e.getMessage());
+            }
+        });
+    }
+
+    private void loadAllProducts(){
+
+        FirebaseFirestore.getInstance().collection("AllSalon")
+                .document(salonId)
+                .collection("Products")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            List<Shopping> mListShopping = new ArrayList<>();
+                            for (DocumentSnapshot snapshot : task.getResult()){
+                                Shopping shopping = snapshot.toObject(Shopping.class);
+                                shopping.setId(snapshot.getId());
+                                Log.i("PRODUCT_ID", snapshot.getId());
+                                mListShopping.add(shopping);
+                            }
+                           // mIShoppingLoadListener.onShoppingLoadSuccess(mListShopping);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+               // mIShoppingLoadListener.onShoppingLoadFailed(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onLoadSalonSuccess(List<Salon> mListSalon) {
+        SalonAdapter salonAdapter = new SalonAdapter(getActivity(), mListSalon);
+        mRecyclerShopping.setAdapter(salonAdapter);
+    }
+
+    @Override
+    public void onLoadSalonFailed(String error) {
         Toast.makeText(getActivity(), error, Toast.LENGTH_SHORT).show();
     }
 }

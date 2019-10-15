@@ -6,7 +6,7 @@ android {
     buildToolsVersion = '29.0.0'
     defaultConfig {
         applicationId "com.ahmet.barberbooking"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -40,7 +40,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
     implementation 'androidx.cardview:cardview:1.0.0-beta01'
     implementation 'com.shuhart.stepview:stepview:1.5.0'
+
+    // Spinner
     implementation 'com.jaredrummler:material-spinner:1.3.1'
+    implementation 'com.toptoche.searchablespinner:searchablespinnerlibrary:1.3.1'
 
     // Butterknife
     implementation 'com.jakewharton:butterknife:10.1.0'
@@ -50,6 +53,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:20.1.0'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-messaging:19.0.1'
+
+    // goolge map
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.0.0'
 
     // Retrofit & Rxjava
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
@@ -66,9 +74,11 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
     implementation 'com.karumi:dexter:5.0.0'
 
-    // Slider
+    // Slider - Image
     implementation 'com.ss.bannerslider:bannerslider:2.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
 
     // Calender
     implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'
@@ -83,6 +93,7 @@ dependencies {
     // NOtification badge
     implementation 'com.nex3z:notification-badge:1.0.2'
 
+    // Event Bus
     implementation 'org.greenrobot:eventbus:3.1.1'
 
 }

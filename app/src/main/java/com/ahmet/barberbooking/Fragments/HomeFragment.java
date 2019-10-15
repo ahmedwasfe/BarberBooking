@@ -22,7 +22,7 @@ import com.ahmet.barberbooking.CartActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
-import com.ahmet.barberbooking.HistoryActivity;
+import com.ahmet.barberbooking.AllBookingActivity;
 import com.ahmet.barberbooking.Interface.IBannerLoadListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
@@ -34,6 +34,11 @@ import com.ahmet.barberbooking.Model.User;
 import com.ahmet.barberbooking.R;
 import com.ahmet.barberbooking.Service.LoadingImageService;
 import com.facebook.accountkit.AccountKit;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -67,9 +72,13 @@ import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 import ss.com.bannerslider.Slider;
 
-public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener, IBookingInfoLoadListener, IBookingInfoChangeListener, ICountItemInCartListener {
+public class HomeFragment extends Fragment implements IBannerLoadListener, ILookBookLoadListener,
+        IBookingInfoLoadListener, IBookingInfoChangeListener, ICountItemInCartListener ,
+        OnMapReadyCallback {
 
     private Unbinder mUnbinder;
+
+    private GoogleMap mMap;
 
     // local database
     private CartDatabase mCartDatabase;
@@ -124,8 +133,11 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
 
     @OnClick(R.id.card_history)
     void openHistoryActivity(){
-        startActivity(new Intent(getActivity(), HistoryActivity.class));
+        startActivity(new Intent(getActivity(), AllBookingActivity.class));
     }
+
+
+
 
     @OnClick(R.id.btn_delete_booking)
     void deleteBooking(){
@@ -266,7 +278,7 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
                     Log.d("ERROR", e.getMessage());
                 }
             });
-            
+
         } else {
 
             mDialog.dismiss();
@@ -567,5 +579,18 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
         if (listenerUserBooking != null)
             listenerUserBooking.remove();
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mMap = googleMap;
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(31.3986114, 34.3376548);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Gaza"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

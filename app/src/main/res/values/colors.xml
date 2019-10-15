@@ -10,6 +10,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorGray">#AAAAAA</color>
     <color name="colorBlue">#2167F3</color>
+    <color name="colorToolbar">#F7F5F0</color>
 
     <!-- Main Activty -->
     <color name="colorButton">#373738</color>

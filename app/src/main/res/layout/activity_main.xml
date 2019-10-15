@@ -4,37 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/my_bg"
     android:padding="8dp"
     tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/img_logo_salon"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:src="@drawable/barbersalon"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
         android:id="@+id/txt_skip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/just_skip"
-        android:textSize="24sp"
-        android:fontFamily="@font/bellerose"
+        android:textSize="20sp"
+        android:textColor="@color/colorButton"
+        android:padding="@dimen/margin12"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_mobile_login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/colorButton"
-        android:text="@string/login"
-        android:textColor="@android:color/white"
-        android:textSize="22sp"
-        android:fontFamily="@font/bellerose"
-        app:layout_constraintBottom_toTopOf="@+id/txt_skip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/mobile_login"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        android:textSize="16dp"
+        android:padding="14dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/btn_bg"
+        app:layout_constraintBottom_toTopOf="@id/txt_skip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
