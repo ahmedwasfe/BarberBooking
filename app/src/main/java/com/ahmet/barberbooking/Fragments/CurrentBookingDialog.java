@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
-import com.ahmet.barberbooking.BookingActivity;
+import com.ahmet.barberbooking.SubActivity.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;

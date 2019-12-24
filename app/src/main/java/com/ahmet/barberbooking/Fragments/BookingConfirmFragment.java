@@ -195,7 +195,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
                                                             // First get Token base on Barber
                                                             FirebaseFirestore.getInstance()
                                                                     .collection("Tokens")
-                                                                    .whereEqualTo("userPhone", Common.currentBarber.getUsername())
+                                                                    .whereEqualTo("user", Common.currentBarber.getUsername())
                                                                     .limit(1)
                                                                     .get()
                                                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

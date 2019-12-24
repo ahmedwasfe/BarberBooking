@@ -11,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 
@@ -40,12 +41,15 @@ import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
 import com.ahmet.barberbooking.Interface.ICountItemInCartListener;
 import com.ahmet.barberbooking.Model.BookingInformation;
 import com.ahmet.barberbooking.Model.Salon;
-import com.ahmet.barberbooking.Model.Shopping;
 import com.ahmet.barberbooking.Model.User;
-import com.facebook.accountkit.Account;
-import com.facebook.accountkit.AccountKit;
-import com.facebook.accountkit.AccountKitCallback;
-import com.facebook.accountkit.AccountKitError;
+import com.ahmet.barberbooking.SubActivity.AllBookingActivity;
+import com.ahmet.barberbooking.SubActivity.BookingActivity;
+import com.ahmet.barberbooking.SubActivity.CartActivity;
+import com.ahmet.barberbooking.SubActivity.SettingsActivity;
+import com.ahmet.barberbooking.SubActivity.ShoppingActivity;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.GraphRequest;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -71,9 +75,12 @@ import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -85,6 +92,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.nex3z.notificationbadge.NotificationBadge;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -123,10 +134,10 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     NotificationBadge mNotificationBadge;
 
     @OnClick(R.id.img_current_booking)
-    void submitCurrentBooking(){
-       // Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+    void submitCurrentBooking() {
+        // Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
         CurrentBookingDialog bookingFragment = CurrentBookingDialog.getInstance();
-        bookingFragment.show(getSupportFragmentManager(),"Current booking");
+        bookingFragment.show(getSupportFragmentManager(), "Current booking");
     }
 
     @BindView(R.id.card_booking_information)
@@ -150,6 +161,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     private ActionBarDrawerToggle mDrawerToggle;
 
     private TextView mTextUserName;
+    CircleImageView mUserImage;
 
     private IBookingInfoLoadListener mIBookingInfoLoadListener;
     private IBookingInfoChangeListener mIBookingInfoChangeListener;
@@ -160,39 +172,38 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     private int CODE_EXCEPTION = 51;
 
     @OnClick(R.id.card_booking)
-    void booking(){
+    void booking() {
         startActivity(new Intent(HomeActivity.this, BookingActivity.class));
     }
 
     @OnClick(R.id.btn_new_booking)
-    void submitNewBooking(){
+    void submitNewBooking() {
         startActivity(new Intent(HomeActivity.this, BookingActivity.class));
     }
 
     @OnClick(R.id.card_cart)
-    void openCartActivity(){
+    void openCartActivity() {
         startActivity(new Intent(HomeActivity.this, CartActivity.class));
     }
 
     @OnClick(R.id.card_history)
-    void openHistoryActivity(){
+    void openHistoryActivity() {
         startActivity(new Intent(HomeActivity.this, AllBookingActivity.class));
     }
 
 
-
     @OnClick(R.id.btn_delete_booking)
-    void deleteBooking(){
+    void deleteBooking() {
 
         deleteBookingFromBarber(false);
     }
 
     @OnClick(R.id.btn_change_booking)
-    void changeBooking(){
+    void changeBooking() {
 
         changeBookingFromUser();
     }
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,80 +228,72 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
         showAllSalonOnMap();
-       
+
 
         // check intent , if is login = true enable full access
         // if is login = false , just let salon_men around shoppingto view
-        if (getIntent() != null){
+        if (getIntent() != null) {
             boolean isLogin = getIntent().getBooleanExtra(Common.IS_LOGIN, false);
-            if (isLogin){
+            if (isLogin) {
                 mDialog.show();
                 // mProgressBar.setVisibility(View.VISIBLE);
                 // check if salon_men is exists
-                AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-                    @Override
-                    public void onSuccess(Account account) {
-                        if (account != null){
+                FirebaseUser userAccount = FirebaseAuth.getInstance().getCurrentUser();
 
-                            // Save salon_men phone by Paper
-                            Paper.init(HomeActivity.this);
-                            Paper.book().write(Common.KEY_LOGGED, account.getPhoneNumber().toString());
+                if (userAccount != null) {
+
+                    // Save salon_men phone by Paper
+                    Paper.init(HomeActivity.this);
+                    Paper.book().write(Common.KEY_LOGGED, userAccount.getPhoneNumber());
 
 
-                            FirebaseFirestore.getInstance().collection("User")
-                                    .document(account.getPhoneNumber().toString())
-                                    .get()
-                                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                            if (task.isSuccessful()){
-                                                DocumentSnapshot userSnapshot = task.getResult();
-                                                if (!userSnapshot.exists()){
-                                                    showUpdateDialog(account.getPhoneNumber().toString());
-                                                }else {
-                                                    // If salon_men alerady available in our system
-                                                    Common.currentUser = userSnapshot.toObject(User.class);
-                                                    //mNavigationView.setSelectedItemId(R.id.nav_home);
-                                                    if (mDialog.isShowing())
-                                                        mDialog.dismiss();
-                                                    // check if Logged ?
-                                                     if (AccountKit.getCurrentAccessToken() != null){
+                    FirebaseFirestore.getInstance().collection("User")
+                            .document(userAccount.getPhoneNumber())
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot userSnapshot = task.getResult();
+                                        if (!userSnapshot.exists()) {
+                                            showUpdateDialog(userAccount.getPhoneNumber());
 
-                                                        loadUserInfo();
-                                                        //  Need declare above loadUserBooking
-                                                        initRealtimeUserBooking();
-                                                        loadUserBooking();
-                                                        countItemsCart();
+                                        } else {
+                                            // If salon_men alerady available in our system
+                                            Common.currentUser = userSnapshot.toObject(User.class);
+                                            //mNavigationView.setSelectedItemId(R.id.nav_home);
+                                            if (mDialog.isShowing())
+                                                mDialog.dismiss();
+                                            // check if Logged ?
+                                            if (userAccount != null) {
 
-                                                       }
-                                                }
-                                                if (mDialog.isShowing())
-                                                    mDialog.dismiss();
+                                                loadUserInfo();
+                                                //  Need declare above loadUserBooking
+                                                initRealtimeUserBooking();
+                                                loadUserBooking();
+                                                countItemsCart();
 
-                                               // checkRatingDialog();
                                             }
                                         }
-                                    });
-                        }
-                    }
+                                        if (mDialog.isShowing())
+                                            mDialog.dismiss();
 
-                    @Override
-                    public void onError(AccountKitError accountKitError) {
-                        Toast.makeText(HomeActivity.this, ""+
-                                accountKitError.getErrorType().getMessage(), Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+                                        // checkRatingDialog();
+                                    }
+                                }
+                            });
+                }
             }
             mDialog.dismiss();
         }
+
 
     }
 
     private void initNavigationDrawer() {
 
         setSupportActionBar(mToolbar);
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout, R.string.open, R.string.close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
@@ -301,7 +304,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
                 int id = menuItem.getItemId();
-                switch(id){
+                switch (id) {
                     case R.id.nav_booking:
                         startActivity(new Intent(HomeActivity.this, AllBookingActivity.class));
                         break;
@@ -318,7 +321,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                         Toast.makeText(HomeActivity.this, "Help", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_settings:
-                        Toast.makeText(HomeActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
                         break;
 
                 }
@@ -328,6 +331,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
         View navigationLayout = mNavigationView.getHeaderView(0);
         mTextUserName = navigationLayout.findViewById(R.id.txt_user_name);
+        mUserImage = navigationLayout.findViewById(R.id.img_user);
 
 
     }
@@ -350,36 +354,92 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     @Override
     protected void onResume() {
         super.onResume();
-       // loadFragment(new HomeFragment());
+        // loadFragment(new HomeFragment());
         checkRatingDialog();
 
-        AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-            @Override
-            public void onSuccess(Account account) {
+        FirebaseUser userAccount = FirebaseAuth.getInstance().getCurrentUser();
+        if (userAccount != null) {
+
+            FirebaseFirestore.getInstance().collection("User")
+                    .document(userAccount.getPhoneNumber())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot snapshot = task.getResult();
+                                if (snapshot.exists()) {
+                                    loadUserInfo();
+//                              loadUserBooking();
+                                    initRealtimeUserBooking();
+                                }
+                            }
+                        }
+                    });
+
+            if (AccessToken.getCurrentAccessToken() != null){
+
                 FirebaseFirestore.getInstance().collection("User")
-                        .document(account.getPhoneNumber().toString())
+                        .document(userAccount.getPhoneNumber())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
 
-                                if (task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     DocumentSnapshot snapshot = task.getResult();
-                                    if (snapshot.exists()){
+                                    if (snapshot.exists()) {
                                         loadUserInfo();
-                                        loadUserBooking();
+//                              loadUserBooking();
                                         initRealtimeUserBooking();
                                     }
                                 }
                             }
                         });
             }
+        }
 
-            @Override
-            public void onError(AccountKitError accountKitError) {
+    }
 
+
+    private void loadUserDataFromFacebook(AccessToken newAccessToken){
+
+        GraphRequest request = GraphRequest.newMeRequest(newAccessToken, (object, response) -> {
+            try {
+                String firstName = object.getString("first_name");
+                String last_name = object.getString("last_name");
+                String email = object.getString("email");
+                String id = object.getString("id");
+                String imageUrl = "https://graph.facebook.com/"+id+"/picture?type=normal";
+
+                String userData = firstName + "\n" + last_name + "\n" + email;
+                String name = firstName + "\n" + last_name;
+
+                Log.i("USER_DATA", userData);
+                User user = new User(name, "", email);
+                FirebaseFirestore.getInstance().collection("User")
+                        .document(email)
+                        .set(user)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(HomeActivity.this, "Addedd data successfully", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
+
         });
+
+        Bundle bundle = new Bundle();
+        bundle.putString("fields", "first_name,last_name,email");
+        request.setParameters(bundle);
+        request.executeAsync();
+
 
     }
 
@@ -388,13 +448,14 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         Paper.init(this);
         String dataSerialized = Paper.book().read(Common.KEY_RATING_INFORMATION, "");
         // If not null
-        if (!TextUtils.isEmpty(dataSerialized)){
+        if (!TextUtils.isEmpty(dataSerialized)) {
 
             Map<String, String> mMapRecivedData = new Gson()
                     .fromJson(dataSerialized,
-                            new TypeToken<Map<String, String>>(){}.getType());
+                            new TypeToken<Map<String, String>>() {
+                            }.getType());
 
-            if (mMapRecivedData != null){
+            if (mMapRecivedData != null) {
 
                 Common.showRatingDialog(this,
                         mMapRecivedData.get(Common.KEY_RATING_CITY),
@@ -404,17 +465,6 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
             }
         }
     }
-
-//    private boolean loadFragment(Fragment fragment) {
-//        if (fragment != null){
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .replace(R.id.frame_layout_home, fragment)
-//                    .commit();
-//            return true;
-//        }
-//        return false;
-//    }
 
     private void showUpdateDialog(String phoneNumber) {
 
@@ -506,7 +556,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
          * We need load Common.currentBooking because we need some data from BookingInformation
          */
 
-        if (Common.currentBooking != null){
+        if (Common.currentBooking != null) {
 
             mDialog.show();
 
@@ -547,7 +597,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     private void deleteBookingFromUser(boolean isChange) {
 
         // First , we need get information from salon_men object
-        if (!TextUtils.isEmpty(Common.currentBookingId)){
+        if (!TextUtils.isEmpty(Common.currentBookingId)) {
 
             DocumentReference mUserBookingInfoRef = FirebaseFirestore.getInstance()
                     .collection("User")
@@ -567,7 +617,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                              */
                             Paper.init(HomeActivity.this);
 
-                            if (Paper.book().read(Common.EVENT_URI_CACHE) != null){
+                            if (Paper.book().read(Common.EVENT_URI_CACHE) != null) {
 
                                 String event = Paper.book().read(Common.EVENT_URI_CACHE).toString();
                                 Uri eventUri = null;
@@ -576,9 +626,8 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                                     eventUri = Uri.parse(event);
 
                                 if (eventUri != null)
-                                    HomeActivity.this.getContentResolver().delete(eventUri,null,null);
+                                    HomeActivity.this.getContentResolver().delete(eventUri, null, null);
                             }
-
 
 
                             Toast.makeText(HomeActivity.this, "Success delete information booking ", Toast.LENGTH_SHORT).show();
@@ -619,7 +668,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
         // Get current data
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,0);
+        calendar.add(Calendar.DATE, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
 
@@ -634,11 +683,11 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
 
-                            if (!task.getResult().isEmpty()){
+                            if (!task.getResult().isEmpty()) {
 
-                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()){
+                                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
 
                                     BookingInformation bookingInfo = documentSnapshot.toObject(BookingInformation.class);
                                     mIBookingInfoLoadListener.onBookingInfoLoadSuccess(bookingInfo, documentSnapshot.getId());
@@ -665,7 +714,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         // we will make realtime listener here
 
         // If eventUserBooking alerdy init
-        if (eventUserBooking != null){
+        if (eventUserBooking != null) {
 
             // only add if listenerUserBooking == null
             if (listenerUserBooking == null) {
@@ -681,18 +730,18 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
     private void loadUserInfo() {
 
-    //    mLinearUserInfo.setVisibility(View.VISIBLE);
+        //    mLinearUserInfo.setVisibility(View.VISIBLE);
 //        mTxtUserName.setText(Common.currentUser.getName());
-  //      mTxtUserPhone.setText(Common.currentUser.getPhoneNumber());
+        //      mTxtUserPhone.setText(Common.currentUser.getPhoneNumber());
 //
-       // mToolbar.setTitle(Common.currentUser.getName());
+        // mToolbar.setTitle(Common.currentUser.getName());
         mTextUserName.setText(Common.currentUser.getName());
     }
-    
+
     private void initRealtimeUserBooking() {
 
         // We only init event if event is null
-        if (eventUserBooking != null){
+        if (eventUserBooking != null) {
 
             eventUserBooking = new EventListener<QuerySnapshot>() {
                 @Override
@@ -710,8 +759,6 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
         DatabaseUtils.countItemsInCart(mCartDatabase, this);
     }
-
-
 
     @Override
     public void onBookingInfoLoadSuccess(BookingInformation bookingInfo, String bookingId) {
@@ -791,7 +838,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
             @Override
             public void onFailure(@NonNull Exception e) {
 
-                if (e instanceof ResolvableApiException){
+                if (e instanceof ResolvableApiException) {
                     ResolvableApiException resolvable = (ResolvableApiException) e;
                     try {
                         resolvable.startResolutionForResult(HomeActivity.this, CODE_EXCEPTION);
@@ -808,8 +855,8 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CODE_EXCEPTION){
-            if (resultCode == RESULT_OK){
+        if (requestCode == CODE_EXCEPTION) {
+            if (resultCode == RESULT_OK) {
                 getCurrentUserLocation();
             }
         }
@@ -823,20 +870,20 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
 
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
 
                             mLastLocation = task.getResult();
-                            if (mLastLocation != null){
+                            if (mLastLocation != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                         new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
                                         DEFAULT_ZOOM));
-                            }else{
+                            } else {
                                 mLocationRequest = LocationRequest.create();
                                 mLocationRequest.setInterval(10000);
                                 mLocationRequest.setFastestInterval(5000);
                                 mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
-                                mLocationCallback = new LocationCallback(){
+                                mLocationCallback = new LocationCallback() {
                                     @Override
                                     public void onLocationResult(LocationResult locationResult) {
                                         super.onLocationResult(locationResult);
@@ -856,7 +903,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
                                 mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                             }
-                        }else {
+                        } else {
                             Toast.makeText(HomeActivity.this, "Unable to get last location", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -875,18 +922,18 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (DocumentSnapshot snapshot : task.getResult()){
+                        if (task.isSuccessful()) {
+                            for (DocumentSnapshot snapshot : task.getResult()) {
 
                                 Salon salon = snapshot.toObject(Salon.class);
                                 LatLng latLng = new LatLng(salon.getLatitude(), salon.getLongitude());
                                 mMap.addMarker(new MarkerOptions()
-                                                .position(latLng)
-                                                .title(salon.getName())
-                                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.salon_location)));
+                                        .position(latLng)
+                                        .title(salon.getName())
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.salon_location)));
 
-                                Log.i("Salon", salon.getLatitude()+"\n"+
-                                        salon.getLongitude()+"\n"+
+                                Log.i("Salon", salon.getLatitude() + "\n" +
+                                        salon.getLongitude() + "\n" +
                                         salon.getName());
 
                             }

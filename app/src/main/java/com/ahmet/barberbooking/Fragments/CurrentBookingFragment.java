@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
-import com.ahmet.barberbooking.BookingActivity;
+import com.ahmet.barberbooking.SubActivity.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
@@ -29,7 +29,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;

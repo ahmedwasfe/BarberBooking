@@ -1,4 +1,4 @@
-package com.ahmet.barberbooking;
+package com.ahmet.barberbooking.SubActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.ahmet.barberbooking.Adapter.ViewPagerAllBookingAdapter;
+import com.ahmet.barberbooking.R;
 import com.google.android.material.tabs.TabLayout;
 
 import butterknife.BindView;

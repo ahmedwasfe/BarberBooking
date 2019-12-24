@@ -17,12 +17,12 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.HomeSliderAdapter;
 import com.ahmet.barberbooking.Adapter.LookBookAdapter;
-import com.ahmet.barberbooking.BookingActivity;
-import com.ahmet.barberbooking.CartActivity;
+import com.ahmet.barberbooking.SubActivity.BookingActivity;
+import com.ahmet.barberbooking.SubActivity.CartActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
-import com.ahmet.barberbooking.AllBookingActivity;
+import com.ahmet.barberbooking.SubActivity.AllBookingActivity;
 import com.ahmet.barberbooking.Interface.IBannerLoadListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
 import com.ahmet.barberbooking.Interface.IBookingInfoLoadListener;
@@ -30,10 +30,8 @@ import com.ahmet.barberbooking.Interface.ICountItemInCartListener;
 import com.ahmet.barberbooking.Interface.ILookBookLoadListener;
 import com.ahmet.barberbooking.Model.Banner;
 import com.ahmet.barberbooking.Model.BookingInformation;
-import com.ahmet.barberbooking.Model.User;
 import com.ahmet.barberbooking.R;
 import com.ahmet.barberbooking.Service.LoadingImageService;
-import com.facebook.accountkit.AccountKit;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -44,6 +42,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -417,10 +417,9 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        User user = new User();
-
         // check if Logged ?
-        if (AccountKit.getCurrentAccessToken() != null){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
             //if (salon_men.getName() != null){
                 loadUserInfo();
                // loadBanner();

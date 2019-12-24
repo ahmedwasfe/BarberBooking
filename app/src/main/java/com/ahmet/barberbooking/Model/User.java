@@ -1,5 +1,13 @@
 package com.ahmet.barberbooking.Model;
 
+/**
+ * Created by Android Studio.
+ * User: ahmet
+ * Date: 5/23/2019
+ * Time: 11:47 AM
+ */
+
+
 public class User {
 
     private String

@@ -1,4 +1,4 @@
-package com.ahmet.barberbooking;
+package com.ahmet.barberbooking.SubActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Interface.IShoppingLoadListener;
 import com.ahmet.barberbooking.Model.Salon;
 import com.ahmet.barberbooking.Model.Shopping;
+import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -98,6 +100,8 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void loadAllProducts(Salon salon) {
 
+        mDialog.show();
+
         FirebaseFirestore.getInstance().collection("AllSalon")
                 .document(salon.getSalonID())
                 .collection("Products")
@@ -110,9 +114,10 @@ public class ShoppingActivity extends AppCompatActivity implements
 
                             List<Shopping> mListShopping = new ArrayList<>();
                             for (DocumentSnapshot snapshot : task.getResult()){
-                                Shopping shopping1 = snapshot.toObject(Shopping.class);
-                                shopping1.setId(snapshot.getId());
-                                mListShopping.add(shopping1);
+                                Shopping shopping = snapshot.toObject(Shopping.class);
+                                shopping.setId(snapshot.getId());
+                                mListShopping.add(shopping);
+                                Log.i("SHOOPING",shopping.getName());
 
                             }
 

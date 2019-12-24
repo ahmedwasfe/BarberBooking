@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.ahmet.barberbooking">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -19,8 +20,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ShoppingActivity"
-            android:parentActivityName=".HomeActivity"/>
+
+        <activity
+            android:name=".SubActivity.ShoppingActivity"
+            android:parentActivityName=".HomeActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,7 +37,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".AllBookingActivity"
+            android:name=".SubActivity.AllBookingActivity"
             android:parentActivityName=".HomeActivity" />
 
         <service android:name=".Service.FCMService">
@@ -44,25 +47,14 @@
         </service>
 
         <activity
-            android:name=".CartActivity"
+            android:name=".SubActivity.CartActivity"
             android:parentActivityName=".HomeActivity" />
-        <activity android:name=".BookingActivity" />
+        <activity android:name=".SubActivity.BookingActivity" />
+        <activity android:name=".SubActivity.SettingsActivity"
+            android:parentActivityName=".HomeActivity"/>
         <activity
             android:name=".HomeActivity"
             android:theme="@style/NoActionBar" />
-
-        <meta-data
-            android:name="com.facebook.accountkit.ApplicationName"
-            android:value="@string/app_name" />
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/FACEBOOK_APP_ID" />
-        <meta-data
-            android:name="com.facebook.accountkit.ClientToken"
-            android:value="@string/ACCOUNT_KIT_CLIENT_TOKEN" />
-
-        <activity android:name="com.facebook.accountkit.ui.AccountKitActivity" />
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -70,6 +62,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"
+            tools:replace="android:value"/>
+
+        <activity android:name="com.facebook.FacebookActivity"
+            android:configChanges=
+                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".ShoppingActivity">
+    tools:context=".SubActivity.ShoppingActivity">
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
         android:id="@+id/searchable_spinner"

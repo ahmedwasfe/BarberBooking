@@ -32,15 +32,16 @@ import com.ahmet.barberbooking.Model.Token;
 import com.ahmet.barberbooking.Model.User;
 import com.ahmet.barberbooking.R;
 import com.ahmet.barberbooking.Service.FCMService;
-import com.facebook.accountkit.AccessToken;
-import com.facebook.accountkit.Account;
-import com.facebook.accountkit.AccountKit;
-import com.facebook.accountkit.AccountKitCallback;
-import com.facebook.accountkit.AccountKitError;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -158,46 +159,31 @@ public class Common {
                                         .append(" ...").toString() : name;
     }
 
-    public static void updateToken(Context mContext,String token) {
+    public static void updateToken(Context mContext, String token) {
 
-        AccessToken accessToken = AccountKit.getCurrentAccessToken();
+        FirebaseUser userAccount = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (accessToken != null){
+        if (userAccount != null) {
 
-            AccountKit.getCurrentAccount(new AccountKitCallback<Account>() {
-                @Override
-                public void onSuccess(Account account) {
+            Token mToken = new Token();
+            mToken.setToken(token);
+            mToken.setTokenType(TOKEN_TYPE.CLIENT);
+            mToken.setUserPhone(userAccount.getPhoneNumber());
 
-                    Token mToken = new Token();
-                    mToken.setToken(token);
-                    mToken.setTokenType(TOKEN_TYPE.CLIENT);
-                    mToken.setUserPhone(account.getPhoneNumber().toString());
+            FirebaseFirestore.getInstance()
+                    .collection("Tokens")
+                    .document(userAccount.getPhoneNumber())
+                    .set(mToken)
+                    .addOnCompleteListener(task -> {
 
-                    FirebaseFirestore.getInstance()
-                            .collection("Tokens")
-                            .document(account.getPhoneNumber().toString())
-                            .set(mToken)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-
-                                }
-                            });
-                }
-
-                @Override
-                public void onError(AccountKitError accountKitError) {
-
-                }
-            });
-            
+                    });
         } else {
 
             Paper.init(mContext);
             String user = Paper.book().read(Common.KEY_LOGGED);
-            if (user != null){
+            if (user != null) {
 
-                if (!TextUtils.isEmpty(user)){
+                if (!TextUtils.isEmpty(user)) {
 
                     Token mToken = new Token();
                     mToken.setToken(token);
@@ -208,11 +194,8 @@ public class Common {
                             .collection("Tokens")
                             .document(user)
                             .set(mToken)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
+                            .addOnCompleteListener(task -> {
 
-                                }
                             });
 
                 }
@@ -272,8 +255,6 @@ public class Common {
         // First we need get DocumentReferance of Barber
         DocumentReference mBarberRatingRef = FirebaseFirestore.getInstance()
                 .collection("AllSalon")
-                .document(city)
-                .collection("Branch")
                 .document(salonId)
                 .collection("Barber")
                 .document(barberId);

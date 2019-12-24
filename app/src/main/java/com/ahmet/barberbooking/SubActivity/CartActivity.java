@@ -1,4 +1,4 @@
-package com.ahmet.barberbooking;
+package com.ahmet.barberbooking.SubActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -18,6 +18,7 @@ import com.ahmet.barberbooking.Databse.DatabaseUtils;
 import com.ahmet.barberbooking.Interface.ICartItemLoadListener;
 import com.ahmet.barberbooking.Interface.ICartItemUpdateListener;
 import com.ahmet.barberbooking.Interface.ISumCartListener;
+import com.ahmet.barberbooking.R;
 
 import java.util.List;
 

@@ -4,8 +4,9 @@
     <string name="app_name">Barber Booking</string>
 
     <!-- Facebook API -->
-    <string name="FACEBOOK_APP_ID">2070377613085786</string>
-    <string name="ACCOUNT_KIT_CLIENT_TOKEN">a22c6a988d5088efe30a7af3bf9ef5c5</string>
+    <string name="facebook_app_id">533315877231595</string>
+    <string name="fb_login_protocol_scheme">fb533315877231595</string>
+
 
     <string name="open">Open</string>
     <string name="close">Close</string>
@@ -54,5 +55,7 @@
     </string>
     <string name="salon_information">Salon information</string>
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">Settings</string>
+
 
 </resources>

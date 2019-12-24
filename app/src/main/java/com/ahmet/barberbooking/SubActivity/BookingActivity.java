@@ -1,4 +1,4 @@
-package com.ahmet.barberbooking;
+package com.ahmet.barberbooking.SubActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +24,7 @@ import com.ahmet.barberbooking.Model.EventBus.BarberDoneEvent;
 import com.ahmet.barberbooking.Model.EventBus.ConfirmBookingEvent;
 import com.ahmet.barberbooking.Model.EventBus.DisplayTimeSlotEvent;
 import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
+import com.ahmet.barberbooking.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
