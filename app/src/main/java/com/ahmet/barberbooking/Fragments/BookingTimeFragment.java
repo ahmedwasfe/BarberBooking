@@ -142,7 +142,7 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
                 .setCancelable(false)
-                .setMessage("Please wait...")
+                .setMessage(R.string.please_wait)
                 .build();
 
 //        selectedDate = Calendar.getInstance();
@@ -170,59 +170,48 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
 
         // /AllSalon/Gaza/Branch/AFXjgtlJwztf7cLFumNT/Barber/utQmhc07WVjaZdr9tbRB
         mDocReferenceBarber = FirebaseFirestore.getInstance()
-                .collection("AllSalon")
+                .collection(Common.KEY_COLLECTION_AllSalon)
                 .document(Common.currentSalon.getSalonID())
-                .collection("Barber")
+                .collection(Common.KEY_COLLECTION_Barber)
                 .document(barberID);
 
         // Get informatio for this barber
         mDocReferenceBarber.get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()){
+                    if (task.isSuccessful()){
 
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if (documentSnapshot.exists()){ // If babrber available
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        if (documentSnapshot.exists()){ // If babrber available
 
-                                // Get information of booking
-                                // If not created return empty
-                                CollectionReference mReferenceDate =  FirebaseFirestore.getInstance()
-                                        .collection("AllSalon")
-                                        .document(Common.currentSalon.getSalonID())
-                                        .collection("Barber")
-                                        .document(barberID)
-                                        .collection(bookingDate);  // book date is date simpleformat with dd_MM_yyyy == 27_06_2019
+                            // Get information of booking
+                            // If not created return empty
+                            CollectionReference mReferenceDate =  FirebaseFirestore.getInstance()
+                                    .collection(Common.KEY_COLLECTION_AllSalon)
+                                    .document(Common.currentSalon.getSalonID())
+                                    .collection(Common.KEY_COLLECTION_Barber)
+                                    .document(barberID)
+                                    .collection(bookingDate);  // book date is date simpleformat with dd_MM_yyyy == 27_06_2019
 
-                                mReferenceDate.get()
-                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            mReferenceDate.get()
+                                    .addOnCompleteListener(task1 -> {
 
-                                                if (task.isSuccessful()){
+                                        if (task1.isSuccessful()){
 
-                                                    QuerySnapshot querySnapshot = task.getResult();
-                                                    if (querySnapshot.isEmpty()){  // If do not have any appoment
+                                            QuerySnapshot querySnapshot = task1.getResult();
+                                            if (querySnapshot.isEmpty()){  // If do not have any appoment
 
-                                                        iTimeSlotLoadListener.onTimeSoltLoadEmpty();
-                                                    }else {
-                                                        // If have appoiment
-                                                        List<TimeSlot> mListTimeSlot = new ArrayList<>();
-                                                        for (QueryDocumentSnapshot snapshot : task.getResult())
-                                                            mListTimeSlot.add(snapshot.toObject(TimeSlot.class));
+                                                iTimeSlotLoadListener.onTimeSoltLoadEmpty();
+                                            }else {
+                                                // If have appoiment
+                                                List<TimeSlot> mListTimeSlot = new ArrayList<>();
+                                                for (QueryDocumentSnapshot snapshot : task1.getResult())
+                                                    mListTimeSlot.add(snapshot.toObject(TimeSlot.class));
 
-                                                        iTimeSlotLoadListener.onTimeSoltLoadSuccess(mListTimeSlot);
-                                                    }
-                                                }
+                                                iTimeSlotLoadListener.onTimeSoltLoadSuccess(mListTimeSlot);
                                             }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        iTimeSlotLoadListener.onTimeSoltLoadFailed(e.getMessage());
-                                    }
-                                });
-                            }
+                                        }
+                                    }).addOnFailureListener(e -> iTimeSlotLoadListener.onTimeSoltLoadFailed(e.getMessage()));
                         }
                     }
                 });
@@ -235,7 +224,7 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         // Recycler View
         // mRecyclerTimeSolt = layoutView.findViewById(R.id.recycler_time_solt);
         mRecyclerTimeSolt.setHasFixedSize(true);
-        mRecyclerTimeSolt.setLayoutManager(new StaggeredGridLayoutManager(3, LinearLayout.VERTICAL));
+        mRecyclerTimeSolt.setLayoutManager(new StaggeredGridLayoutManager(5, LinearLayout.VERTICAL));
         mRecyclerTimeSolt.addItemDecoration(new SpacesItemDecoration(8));
 
         // HorizontalCalendarView
@@ -245,7 +234,7 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         startDate.add(Calendar.DATE, 0);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.DATE, 2);  // 2 day left
+        endDate.add(Calendar.DATE, 4);  // 2 day left
 
         HorizontalCalendar mCalendarDate = new HorizontalCalendar.Builder(layoutView, R.id.calender_time_solt)
                 .range(startDate, endDate)

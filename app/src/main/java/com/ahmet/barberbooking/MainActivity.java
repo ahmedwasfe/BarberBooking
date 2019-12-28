@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
             }else {
 
-                Toast.makeText(this, "Failed to sign in", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.failed_to_sign_in), Toast.LENGTH_SHORT).show();
                 Log.e("FAILED_TO_SIGN_IN", idpResponse.getError().getMessage());
 
             }

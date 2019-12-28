@@ -10,31 +10,26 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        android:background="@drawable/sheet_dialog"
-        android:layout_margin="10dp">
+        android:padding="@dimen/margin12"
+        android:background="@drawable/sheet_dialog">
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="@dimen/margin8"
+            android:padding="@dimen/margin4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/input_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your name"
-                android:inputType="text"
-                android:fontFamily="@font/bellerose"/>
+                android:hint="@string/enter_your_name"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,22 +37,18 @@
             android:id="@+id/layout_address"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="@dimen/margin8"
+            android:padding="@dimen/margin4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_name">
 
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/input_address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your address"
-                android:inputType="text"
-                android:fontFamily="@font/bellerose"/>
+                android:hint="@string/enter_your_city"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,16 +56,12 @@
             android:id="@+id/btn_update"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginTop="@dimen/margin16"
             android:background="@color/colorButton"
-            android:fontFamily="@font/bellerose"
             android:text="@string/update"
             android:textColor="@android:color/white"
             android:textSize="22sp"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_address" />

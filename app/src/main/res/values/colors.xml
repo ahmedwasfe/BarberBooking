@@ -8,16 +8,26 @@
 
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorGray">#AAAAAA</color>
-    <color name="colorBlue">#2167F3</color>
-    <color name="colorToolbar">#F7F5F0</color>
-
-    <!-- Main Activty -->
     <color name="colorButton">#373738</color>
+    <color name="colorGray">#AAAAAA</color>
+    <color name="colorGray1">#F7F7F7</color>
+    <color name="colorBlue">#2167F3</color>
+    <color name="colorBlue1">#0E72B8</color>
+    <color name="colorRed">#F44336</color>
+
+    <color name="colorToolbar">#F7F5F0</color>
 
     <!-- Home Layouts -->
     <color name="colorHomeBackground">#DFDFDF</color>
 
     <color name="colorRoundedDialog">#b1aea5</color>
+
+
+    <color name="colorLight">#fcfcfc</color>
+
+    <color name="colorDark">#808080</color>
+    <color name="colorBlackDark1">#303030</color>
+    <color name="colorBlackDark2">#424242</color>
+    <color name="colorBlackDark3">#212121</color>
 
 </resources>

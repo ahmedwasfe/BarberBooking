@@ -1,6 +1,5 @@
 package com.ahmet.barberbooking.SubActivity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ahmet.barberbooking.Common.Common;
@@ -28,7 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,32 +56,30 @@ public class SettingsActivity extends AppCompatActivity {
         logOut();
     }
 
-    @OnClick(R.id.txt_clear_history)
+    @OnClick(R.id.relative_clear_history)
     void clearHistory(){
 
         new AlertDialog.Builder(this)
-                .setMessage("Are you sure want to clear history")
+                .setTitle(R.string.clear_history)
+                .setMessage(R.string.are_sure_clear_history)
                 .setCancelable(false)
-                .setPositiveButton("Clear history", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                .setPositiveButton(R.string.clear_history, (dialogInterface, i) -> {
 
-                        CollectionReference collectionReference = FirebaseFirestore.getInstance()
-                                .collection("User")
-                                .document(Common.currentUser.getPhoneNumber())
-                                .collection("Booking");
-                        collectionReference.whereEqualTo("done", true);
-                        collectionReference.document().delete()
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful())
-                                            Toast.makeText(SettingsActivity.this, "Clear history Successfully", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                        ;
-                    }
-                })
+                    CollectionReference collectionReference = FirebaseFirestore.getInstance()
+                            .collection(Common.KEY_COLLECTION_User)
+                            .document(Common.currentUser.getPhoneNumber())
+                            .collection(Common.KEY_COLLECTION_Booking);
+                    collectionReference.whereEqualTo("done", true);
+                    collectionReference.document().delete()
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful())
+                                        Toast.makeText(SettingsActivity.this, getString(R.string.clear_history_success), Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                    ;
+                }).setNegativeButton(R.string.cancel, (dialog, which) -> dialog.dismiss())
                 .setCancelable(true)
                 .show();
 
@@ -120,7 +117,7 @@ public class SettingsActivity extends AppCompatActivity {
         mInputMobile.setBackground(null);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Settings");
+        getSupportActionBar().setTitle(R.string.settings);
 
         getAppVersion();
         loadUserInfo();
@@ -133,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null){
 
-            FirebaseFirestore.getInstance().collection("User")
+            FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
                     .document(Common.currentUser.getPhoneNumber())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -160,14 +157,14 @@ public class SettingsActivity extends AppCompatActivity {
         String name = mInputName.getText().toString();
         Map<String, Object> mapName = new HashMap<>();
         mapName.put("name", name);
-        FirebaseFirestore.getInstance().collection("User")
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
                 .document(Common.currentUser.getPhoneNumber())
                 .update(mapName)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()){
-                            Toast.makeText(SettingsActivity.this, "Update name successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SettingsActivity.this, getString(R.string.update_name_success), Toast.LENGTH_SHORT).show();
                             mInputName.setEnabled(false);
                             mEditName.setVisibility(View.VISIBLE);
                             mUpdateName.setVisibility(View.GONE);
@@ -181,7 +178,7 @@ public class SettingsActivity extends AppCompatActivity {
             PackageInfo packageInfo = getPackageManager()
                     .getPackageInfo(getPackageName(), 0);
             String appVersion = packageInfo.versionName;
-            mAppVersion.setText("App Version : " +  appVersion);
+            mAppVersion.setText(getString(R.string.app_version) +  appVersion);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -191,9 +188,9 @@ public class SettingsActivity extends AppCompatActivity {
 
 
         new AlertDialog.Builder(this)
-                .setMessage("Are you sure want to Log Out")
+                .setMessage(getString(R.string.are_sure_logout))
                 .setCancelable(false)
-                .setPositiveButton("Log Out", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.log_out, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 

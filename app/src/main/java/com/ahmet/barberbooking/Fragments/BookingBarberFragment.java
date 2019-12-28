@@ -138,9 +138,9 @@ public class BookingBarberFragment extends Fragment {
         if (!TextUtils.isEmpty(Common.currentSalon.getSalonID())){
 
             FirebaseFirestore.getInstance()
-                    .collection("AllSalon")
+                    .collection(Common.KEY_COLLECTION_AllSalon)
                     .document(Common.currentSalon.getSalonID())
-                    .collection("Barber")
+                    .collection(Common.KEY_COLLECTION_Barber)
             // Query query = mReferenceBarbers.orderBy("name", Query.Direction.ASCENDING);
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

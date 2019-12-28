@@ -21,8 +21,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Salon #1"
-            android:textSize="@dimen/textCardSize20"
-            android:textStyle="normal"
+            android:textSize="@dimen/textSize"
+            android:textStyle="bold"
+            android:textColor="@color/colorButton"
+            android:padding="@dimen/margin8"
             android:gravity="center_horizontal"/>
 
         <TextView
@@ -30,9 +32,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Address #1"
-            android:textSize="@dimen/margin16"
-            android:textStyle="italic"
-            android:fontFamily="@font/bellerose"
+            android:textSize="@dimen/textSize"
+            android:textStyle="normal"
+            android:textColor="@color/colorButton"
+            android:padding="@dimen/margin8"
             android:gravity="center_horizontal"/>
 
     </LinearLayout>

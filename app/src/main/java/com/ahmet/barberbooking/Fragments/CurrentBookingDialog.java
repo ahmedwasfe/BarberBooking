@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
+import com.ahmet.barberbooking.HomeActivity;
 import com.ahmet.barberbooking.SubActivity.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
@@ -83,7 +84,26 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
     @OnClick(R.id.btn_delete_booking)
     void deleteBooking(){
 
-        deleteBookingFromBarber(false);
+        androidx.appcompat.app.AlertDialog.Builder mChangeDialog =
+                new androidx.appcompat.app.AlertDialog.Builder(getActivity())
+                        .setCancelable(false)
+                        .setTitle(getString(R.string.message_welcome))
+                        .setMessage(getString(R.string.message_change_booking))
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //  True because we call we will button delete
+                                deleteBookingFromBarber(false);
+                            }
+                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        mChangeDialog.show();
+
+
     }
 
     @OnClick(R.id.btn_change_booking)
@@ -122,9 +142,9 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
 
         // /User/+970592435704/Booking/H4InjDGyf4NsN6TPENGH
         CollectionReference mUserBookingReference = FirebaseFirestore.getInstance()
-                .collection("User")
+                .collection(Common.KEY_COLLECTION_User)
                 .document(Common.currentUser.getPhoneNumber())
-                .collection("Booking");
+                .collection(Common.KEY_COLLECTION_Booking);
 
         // Get current data
         Calendar calendar = Calendar.getInstance();
@@ -228,6 +248,8 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
 
     }
 
+
+
     private void deleteBookingFromBarber(boolean isChange) {
 
         /* To delete booking
@@ -292,41 +314,38 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
             // Delete
             mUserBookingInfoRef
                     .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            /*
-                             *Aftar delete from salon_men , just delete from calendar
-                             *First , we need get save uri of event we just add
-                             */
-                            Paper.init(getActivity().getApplicationContext());
+                    .addOnSuccessListener(aVoid -> {
+                        /*
+                         *Aftar delete from salon_men , just delete from calendar
+                         *First , we need get save uri of event we just add
+                         */
+                        Paper.init(getContext());
 
-                            if (Paper.book().read(Common.EVENT_URI_CACHE) != null){
+                        if (Paper.book().read(Common.EVENT_URI_CACHE) != null){
 
-                                String event = Paper.book().read(Common.EVENT_URI_CACHE).toString();
-                                Uri eventUri = null;
+                            String event = Paper.book().read(Common.EVENT_URI_CACHE).toString();
+                            Uri eventUri = null;
 
-                                if (event != null && !TextUtils.isEmpty(event))
-                                    eventUri = Uri.parse(event);
+                            if (event != null && !TextUtils.isEmpty(event))
+                                eventUri = Uri.parse(event);
 
-                                if (eventUri != null)
-                                    getActivity().getContentResolver().delete(eventUri,null,null);
-                            }
-
-
-
-                            Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
-
-                            //Refresh
-                            loadUserBooking();
-
-                            // Check id isChange -> call from change button , we have will fired interface
-                            if (isChange)
-                                mIBookingInfoChangeListener.onBookingInfoChange();
-
-                            mDialog.dismiss();
-
+                            if (eventUri != null)
+                                getActivity().getContentResolver().delete(eventUri,null,null);
                         }
+
+
+
+                        Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
+
+                        //Refresh
+                        loadUserBooking();
+
+                        // Check id isChange -> call from change button , we have will fired interface
+                        if (isChange)
+                            mIBookingInfoChangeListener.onBookingInfoChange();
+
+                        mDialog.dismiss();
+
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {

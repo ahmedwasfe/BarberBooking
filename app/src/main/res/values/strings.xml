@@ -18,15 +18,14 @@
 
     <!-- Home Activity -->
     <string name="home">Home</string>
-    <string name="shopping">Shopping</string>
 
     <!-- Dialog Sheet -->
     <string name="update">Update</string>
+    <string name="updated">Updated</string>
 
     <!-- Home Fragment -->
     <string name="notification">notification</string>
     <string name="booking">Booking</string>
-    <string name="cart">Cart</string>
     <string name="history">History</string>
     <string name="look_book">Look Book</string>
 
@@ -53,9 +52,71 @@
          "\nBecause we will delete your old booking information"
          "\nJust confirm"
     </string>
+    <string name="message_delete_booking">
+        "Do you want to delete current booking information ?"
+         "\nBecause we will delete your old booking information"
+         "\nJust confirm"
+    </string>
     <string name="salon_information">Salon information</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="clear">Clear</string>
+    <string name="new_booking">New Booking</string>
+    <string name="profile">Profile</string>
+    <string name="name">Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="email">Email</string>
+    <string name="general">General</string>
+    <string name="clear_history">Clear History</string>
+    <string name="language">Language</string>
+    <string name="rate_the_app">Rate the app</string>
+    <string name="about">About</string>
+    <string name="app_version">App Version : "</string>
+    <string name="log_out">Log Out</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="select_barber">Select Barber</string>
+    <string name="select_salon">Select Salon</string>
+    <string name="rating_our_barber">RATING OUR BARBER</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_city">Enter your city</string>
+    <string name="your_booking">Your booking</string>
+    <string name="notifications">Notifications</string>
+    <string name="shopping">Shopping</string>
+    <string name="cart">Cart</string>
+    <string name="help">Help</string>
+    <string name="settings">Settings</string>
+    <string name="current_booking_must_not_be_null">Current Booking must not be null</string>
+    <string name="success_delete_info_booking">Success delete information booking</string>
+    <string name="booking_info_must_not_be_empty">Booking information must not be empty</string>
+    <string name="unable_to_get_last_location">Unable to get last location</string>
+    <string name="add_data_successfully">Addedd data successfully</string>
+    <string name="book_now">Book now</string>
+    <string name="please_wait">Please wait...</string>
+    <string name="ok">OK</string>
+    <string name="cancel">CANCEL</string>
+    <string name="failed_to_sign_in">Failed to sign in</string>
+    <string name="current_booking">Current Booking</string>
+    <string name="your_booking_information">Your Booking Information</string>
+    <string name="salon">Salon</string>
+    <string name="barber">Barber</string>
+    <string name="time">Time</string>
+    <string name="confirm">Confirm</string>
+    <string name="cart_empty">Cart empty</string>
+    <string name="are_sure_clear_history">Are you sure want to clear history</string>
+    <string name="clear_history_success">Clear history Successfully</string>
+    <string name="update_name_success">Update name successfully</string>
+    <string name="are_sure_logout">Are you sure want to Log Out</string>
+    <string name="please_select_salon">Please Select Salon</string>
+    <string name="invalid_url">Invalid Url</string>
+    <string name="no_app_open_url">No application can handle this request. Please install a web browser</string>
+    <string name="new_appoiment_booking">You have a new appoiment for customer hair care with </string>
+    <string name="you_have_a_new_booking_from">You have a new Booking from</string>
+    <string name="successfully">SuccessFully !</string>
+    <string name="hair_cut_booking">Hair Cut Booking</string>
+    <string name="hair_cut_from">Hair Cut From</string>
+    <string name="with"> With </string>
+    <string name="at"> at </string>
+    <string name="address">Address: </string>
 
 
 </resources>

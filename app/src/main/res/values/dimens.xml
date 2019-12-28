@@ -2,7 +2,10 @@
 <resources>
 
     <dimen name="textCardSize">18sp</dimen>
+    <dimen name="textSize">16sp</dimen>
     <dimen name="textCardSize20">20sp</dimen>
+
+
     <dimen name="textLookBook">2dp</dimen>
     <dimen name="margin8">8dp</dimen>
     <dimen name="margin4">4dp</dimen>

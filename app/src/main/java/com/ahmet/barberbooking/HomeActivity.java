@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,6 @@ import com.ahmet.barberbooking.SubActivity.CartActivity;
 import com.ahmet.barberbooking.SubActivity.SettingsActivity;
 import com.ahmet.barberbooking.SubActivity.ShoppingActivity;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.GraphRequest;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -75,8 +75,6 @@ import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -92,10 +90,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.nex3z.notificationbadge.NotificationBadge;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Map;
@@ -247,7 +243,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                     Paper.book().write(Common.KEY_LOGGED, userAccount.getPhoneNumber());
 
 
-                    FirebaseFirestore.getInstance().collection("User")
+                    FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
                             .document(userAccount.getPhoneNumber())
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -309,7 +305,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                         startActivity(new Intent(HomeActivity.this, AllBookingActivity.class));
                         break;
                     case R.id.nav_notifications:
-                        Toast.makeText(HomeActivity.this, "NOtifications", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, getString(R.string.notification), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_shopping:
                         startActivity(new Intent(HomeActivity.this, ShoppingActivity.class));
@@ -318,10 +314,11 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                         startActivity(new Intent(HomeActivity.this, CartActivity.class));
                         break;
                     case R.id.nav_help:
-                        Toast.makeText(HomeActivity.this, "Help", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, getString(R.string.help), Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.nav_settings:
                         startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+                       // Common.setFragment(new HomeFragment(), R.id.frame_layout_home, getSupportFragmentManager());
                         break;
 
                 }
@@ -347,7 +344,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setCancelable(false)
-                .setMessage("Please wait...")
+                .setMessage(R.string.please_wait)
                 .build();
     }
 
@@ -360,7 +357,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         FirebaseUser userAccount = FirebaseAuth.getInstance().getCurrentUser();
         if (userAccount != null) {
 
-            FirebaseFirestore.getInstance().collection("User")
+            FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
                     .document(userAccount.getPhoneNumber())
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -380,7 +377,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
             if (AccessToken.getCurrentAccessToken() != null){
 
-                FirebaseFirestore.getInstance().collection("User")
+                FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
                         .document(userAccount.getPhoneNumber())
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -425,7 +422,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()){
-                                    Toast.makeText(HomeActivity.this, "Addedd data successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(HomeActivity.this, getString(R.string.add_data_successfully), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -477,8 +474,8 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         View sheetView = getLayoutInflater().inflate(R.layout.layout_sheet_dialog, null);
 
         Button mBtnUpdate = sheetView.findViewById(R.id.btn_update);
-        TextInputEditText mInputName = sheetView.findViewById(R.id.input_name);
-        TextInputEditText mInputAddress = sheetView.findViewById(R.id.input_address);
+        EditText mInputName = sheetView.findViewById(R.id.input_name);
+        EditText mInputAddress = sheetView.findViewById(R.id.input_address);
 
 
         mBtnUpdate.setOnClickListener(new View.OnClickListener() {
@@ -493,7 +490,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
                 User user = new User(name, address, phoneNumber);
 
-                FirebaseFirestore.getInstance().collection("User")
+                FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
                         .document(phoneNumber)
                         .set(user)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -505,7 +502,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
                                 Common.currentUser = user;
 
-                                Toast.makeText(HomeActivity.this, "Updated", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(HomeActivity.this, getString(R.string.updated), Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -530,13 +527,13 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                         .setCancelable(false)
                         .setTitle(getString(R.string.message_welcome))
                         .setMessage(getString(R.string.message_change_booking))
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 //  True because we call we will button change
                                 deleteBookingFromBarber(true);
                             }
-                        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -556,15 +553,16 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
          * We need load Common.currentBooking because we need some data from BookingInformation
          */
 
+
         if (Common.currentBooking != null) {
 
             mDialog.show();
 
             // Get booking information in barber object
             DocumentReference mBarberBookingInfoRef = FirebaseFirestore.getInstance()
-                    .collection("AllSalon")
+                    .collection(Common.KEY_COLLECTION_AllSalon)
                     .document(Common.currentBooking.getSalonID())
-                    .collection("Barber")
+                    .collection(Common.KEY_COLLECTION_Barber)
                     .document(Common.currentBooking.getBarberID())
                     .collection(Common.convertTimestampToKey(Common.currentBooking.getTimestamp()))
                     .document(Common.currentBooking.getTimeSlot().toString());
@@ -590,7 +588,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
             });
 
         } else {
-            Toast.makeText(HomeActivity.this, "Current Booking must not be null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, getString(R.string.current_booking_must_not_be_null), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -600,7 +598,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         if (!TextUtils.isEmpty(Common.currentBookingId)) {
 
             DocumentReference mUserBookingInfoRef = FirebaseFirestore.getInstance()
-                    .collection("User")
+                    .collection(Common.KEY_COLLECTION_User)
                     .document(Common.currentUser.getPhoneNumber())
                     .collection("Booking")
                     .document(Common.currentBookingId);
@@ -630,7 +628,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                             }
 
 
-                            Toast.makeText(HomeActivity.this, "Success delete information booking ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HomeActivity.this, getString(R.string.success_delete_info_booking), Toast.LENGTH_SHORT).show();
 
                             //Refresh
                             loadUserBooking();
@@ -654,7 +652,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
             mDialog.dismiss();
 
-            Toast.makeText(HomeActivity.this, "Booking information Id must not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(HomeActivity.this, getString(R.string.booking_info_must_not_be_empty), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -662,7 +660,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
         // /User/+970592435704/Booking/H4InjDGyf4NsN6TPENGH
         CollectionReference mUserBookingReference = FirebaseFirestore.getInstance()
-                .collection("User")
+                .collection(Common.KEY_COLLECTION_User)
                 .document(Common.currentUser.getPhoneNumber())
                 .collection("Booking");
 
@@ -904,7 +902,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                                 mFusedLocationProviderClient.requestLocationUpdates(mLocationRequest, mLocationCallback, null);
                             }
                         } else {
-                            Toast.makeText(HomeActivity.this, "Unable to get last location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HomeActivity.this, getString(R.string.unable_to_get_last_location), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -917,7 +915,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
     private void showAllSalonOnMap() {
 
-        FirebaseFirestore.getInstance().collection("AllSalon")
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -948,4 +946,5 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
             return true;
         return super.onOptionsItemSelected(item);
     }
+
 }

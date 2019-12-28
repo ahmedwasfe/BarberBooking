@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.SalonAdapter;
+import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
 import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Model.Salon;
@@ -66,7 +67,7 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mReferenceAllSalon = FirebaseFirestore.getInstance().collection("AllSalon");
+        mReferenceAllSalon = FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon);
         mReferenceBranch = FirebaseFirestore.getInstance().collection("Branch");
 
         mISalonLoadListener = this;
@@ -74,7 +75,7 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
         mDialog = new SpotsDialog.Builder()
                 .setContext(getActivity())
                 .setCancelable(false)
-                .setMessage("Please wait...")
+                .setMessage(R.string.please_wait)
                 .build();
     }
 
@@ -94,13 +95,6 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
         return layoutView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
-
     private void initView() {
 
         mRecyclerSalon.setHasFixedSize(true);
@@ -115,7 +109,7 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
         mDialog.show();
 
         FirebaseFirestore.getInstance()
-                .collection("AllSalon")
+                .collection(Common.KEY_COLLECTION_AllSalon)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

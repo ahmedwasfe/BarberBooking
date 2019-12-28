@@ -47,6 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <com.facebook.login.widget.LoginButton
+        android:visibility="gone"
         android:id="@+id/facebook_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -26,7 +26,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CartActivity extends AppCompatActivity implements ICartItemLoadListener, ICartItemUpdateListener, ISumCartListener {
+public class CartActivity extends AppCompatActivity implements ICartItemLoadListener,
+        ICartItemUpdateListener, ISumCartListener {
 
     @BindView(R.id.recycler_cart)
     RecyclerView mRecyclerCart;
@@ -39,10 +40,10 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
     void clearCart(){
 
         DatabaseUtils.clearCart(mCartDatabase);
-        // Update adaoter
+        // Update adapter
         DatabaseUtils.getAllItemFromCart(mCartDatabase, this);
         mTxtTotalPrice.setText("$ 0");
-        Toast.makeText(this, "Cart empty", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.cart_empty), Toast.LENGTH_SHORT).show();
     }
 
     private CartDatabase mCartDatabase;
@@ -55,23 +56,47 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
         setContentView(R.layout.activity_cart);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Cart");
+        getSupportActionBar().setTitle(R.string.cart);
 
 
         ButterKnife.bind(this);
+
+        finalPrice = Long.valueOf(0);
+        mTxtTotalPrice.setText(new StringBuilder("$ ").append(finalPrice));
+
+        // init recyclerview and Database
+         init();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        finalPrice = Long.valueOf(0);
+        mTxtTotalPrice.setText(new StringBuilder("$ ").append(finalPrice));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        finalPrice = Long.valueOf(0);
+        mTxtTotalPrice.setText(new StringBuilder("$ ").append(finalPrice));
+    }
+
+    private void init() {
 
         mCartDatabase = CartDatabase.getInstance(this);
 
         DatabaseUtils.getAllItemFromCart(mCartDatabase, this);
 
-        // init recyclerview
+
         mRecyclerCart.setHasFixedSize(true);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(1, LinearLayout.VERTICAL);
         mRecyclerCart.setLayoutManager(staggeredGridLayoutManager);
         mRecyclerCart.addItemDecoration(new DividerItemDecoration(this, staggeredGridLayoutManager.getOrientation()));
 
-        finalPrice = Long.valueOf(0);
-        mTxtTotalPrice.setText(new StringBuilder("$ ").append(finalPrice));
     }
 
     @Override

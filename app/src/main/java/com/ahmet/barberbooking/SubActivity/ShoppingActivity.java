@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.ShoppingAdapter;
+import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Interface.IShoppingLoadListener;
 import com.ahmet.barberbooking.Model.Salon;
@@ -59,7 +60,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
 
-        getSupportActionBar().setTitle("Shopping");
+        getSupportActionBar().setTitle(R.string.shopping);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mUnbinder = ButterKnife.bind(this);
@@ -70,7 +71,7 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         loadAllSalon();
 
-        mSearchableSpinner.setTitle("Please Select Salon");
+        mSearchableSpinner.setTitle(getString(R.string.please_select_salon));
         mSearchableSpinner.setKeepScreenOn(true);
         mSearchableSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -102,9 +103,9 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         mDialog.show();
 
-        FirebaseFirestore.getInstance().collection("AllSalon")
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
                 .document(salon.getSalonID())
-                .collection("Products")
+                .collection(Common.KEY_COLLECTION_Products)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -142,6 +143,7 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
+                .setMessage(R.string.please_wait)
                 .setCancelable(false)
                 .build();
     }
@@ -150,30 +152,22 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         mDialog.show();
 
-        FirebaseFirestore.getInstance().collection("AllSalon")
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()){
+                    if (task.isSuccessful()){
 
-                            List<Salon> mListSalon = new ArrayList<>();
-                            for (DocumentSnapshot snapshot : task.getResult()){
-                                Salon salon = snapshot.toObject(Salon.class);
-                                salon.setSalonID(snapshot.getId());
-                                mListSalon.add(salon);
-                            }
-
-                            iSalonLoadListener.onLoadSalonSuccess(mListSalon);
+                        List<Salon> mListSalon = new ArrayList<>();
+                        for (DocumentSnapshot snapshot : task.getResult()){
+                            Salon salon = snapshot.toObject(Salon.class);
+                            salon.setSalonID(snapshot.getId());
+                            mListSalon.add(salon);
                         }
+
+                        iSalonLoadListener.onLoadSalonSuccess(mListSalon);
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                iSalonLoadListener.onLoadSalonFailed(e.getMessage());
-            }
-        });
+                }).addOnFailureListener(e -> iSalonLoadListener.onLoadSalonFailed(e.getMessage()));
     }
 
     @Override
@@ -216,23 +210,20 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void loadAllproductsFromShopping(){
 
-        FirebaseFirestore.getInstance().collection("Shopping")
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_Shopping)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()){
+                    if (task.isSuccessful()){
 
-                            List<Shopping> mListShopping = new ArrayList<>();
-                            for (DocumentSnapshot snapshot : task.getResult()){
-                                Shopping shopping = snapshot.toObject(Shopping.class);
-                                shopping.setId(snapshot.getId());
-                                mListShopping.add(shopping);
-                            }
-
-                            iShoppingLoadListener.onShoppingLoadSuccess(mListShopping);
+                        List<Shopping> mListShopping = new ArrayList<>();
+                        for (DocumentSnapshot snapshot : task.getResult()){
+                            Shopping shopping = snapshot.toObject(Shopping.class);
+                            shopping.setId(snapshot.getId());
+                            mListShopping.add(shopping);
                         }
+
+                        iShoppingLoadListener.onShoppingLoadSuccess(mListShopping);
                     }
                 });
     }

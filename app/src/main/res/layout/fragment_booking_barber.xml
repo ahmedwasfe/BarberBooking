@@ -11,7 +11,7 @@
         android:id="@+id/txt_title_barber"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Select Barber"
+        android:text="@string/select_barber"
         android:textColor="@color/colorWhite"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:background="@drawable/txt_select_booking"

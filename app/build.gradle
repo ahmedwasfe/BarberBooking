@@ -6,7 +6,7 @@ android {
     buildToolsVersion = '29.0.0'
     defaultConfig {
         applicationId "com.ahmet.barberbooking"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -82,6 +82,10 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
     implementation 'de.hdodenhof:circleimageview:3.0.1'
+
+    // Smart TabLayout
+    implementation 'com.ogaclejapan.smarttablayout:library:1.7.0@aar'
+    implementation 'com.ogaclejapan.smarttablayout:utils-v4:1.7.0@aar'
 
     // Calender
     implementation 'devs.mulham.horizontalcalendar:horizontalcalendar:1.3.4'

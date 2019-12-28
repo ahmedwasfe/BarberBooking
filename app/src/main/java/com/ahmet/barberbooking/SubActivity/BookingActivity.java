@@ -11,8 +11,6 @@ import dmax.dialog.SpotsDialog;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,7 +80,7 @@ public class BookingActivity extends AppCompatActivity {
     @OnClick(R.id.txt_next)
     void nextStep(){
 
-        Toast.makeText(this, "" + Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "" + Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
 
         if(Common.setp < 3 || Common.setp == 0){
 
@@ -91,7 +89,7 @@ public class BookingActivity extends AppCompatActivity {
 
             Common.setp++; // Increase
             if (Common.setp == 1){ // After choose salon
-                Toast.makeText(this, "" + Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "" + Common.currentSalon.getSalonID(), Toast.LENGTH_SHORT).show();
                 loadBarbersBySalon(Common.currentSalon.getSalonID());
 
             } else if (Common.setp == 2){   // Pick time solt
@@ -145,9 +143,9 @@ public class BookingActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(Common.currentSalon.getSalonID())){
 
             mReferenceBarbers = FirebaseFirestore.getInstance()
-                    .collection("AllSalon")
+                    .collection(Common.KEY_COLLECTION_AllSalon)
                     .document(salonID)
-                    .collection("Barber");
+                    .collection(Common.KEY_COLLECTION_Barber);
            // Query query = mReferenceBarbers.orderBy("name", Query.Direction.ASCENDING);
 
             mReferenceBarbers.get()
@@ -261,7 +259,7 @@ public class BookingActivity extends AppCompatActivity {
         mDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setCancelable(false)
-                .setMessage("Please wait...")
+                .setMessage(R.string.please_wait)
                 .build();
 
         /* Old Code
@@ -324,10 +322,10 @@ public class BookingActivity extends AppCompatActivity {
     private void setupStepView() {
 
         List<String> mListStep = new ArrayList<>();
-        mListStep.add("Salon");
-        mListStep.add("Barber");
-        mListStep.add("Time");
-        mListStep.add("Confirm");
+        mListStep.add(getString(R.string.salon));
+        mListStep.add(getString(R.string.barber));
+        mListStep.add(getString(R.string.time));
+        mListStep.add(getString(R.string.confirm));
         mStepView.setSteps(mListStep);
     }
 

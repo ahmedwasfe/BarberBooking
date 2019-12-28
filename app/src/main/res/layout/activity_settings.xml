@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin8"
-                android:text="Profile"
+                android:text="@string/profile"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -31,7 +31,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-
                 android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +62,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="@dimen/margin16"
                         android:layout_toEndOf="@id/img_name"
-                        android:text="Name"
+                        android:text="@string/name"
                         android:textColor="@color/colorButton" />
 
                     <EditText
@@ -105,6 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/relative_user_name">
@@ -131,7 +131,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="@dimen/margin16"
                         android:layout_toEndOf="@id/img_phone"
-                        android:text="Mobile Number"
+                        android:text="@string/mobile_number"
                         android:textColor="@color/colorButton" />
 
                     <EditText
@@ -166,6 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/relative_user_phone">
@@ -194,7 +195,7 @@
                         android:layout_alignParentTop="true"
                         android:layout_marginStart="@dimen/margin16"
                         android:layout_toEndOf="@id/img_email"
-                        android:text="Email"
+                        android:text="@string/email"
                         android:textColor="@color/colorButton" />
 
                     <EditText
@@ -223,12 +224,13 @@
 
             </androidx.cardview.widget.CardView>
 
-
             <androidx.cardview.widget.CardView
+                android:visibility="gone"
                 android:id="@+id/relative_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/relative_user_email">
@@ -286,14 +288,14 @@
                 android:background="@color/colorGray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/relative_password" />
+                app:layout_constraintTop_toBottomOf="@id/relative_user_email" />
 
             <TextView
                 android:id="@+id/txt_general"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin8"
-                android:text="General"
+                android:text="@string/general"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/first_view" />
@@ -303,6 +305,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_general">
@@ -332,7 +335,7 @@
                         android:layout_marginStart="@dimen/margin16"
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@id/img_clear_history"
-                        android:text="Clear History"
+                        android:text="@string/clear_history"
                         android:textColor="@color/colorButton" />
 
                 </RelativeLayout>
@@ -344,6 +347,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/relative_clear_history">
@@ -373,7 +377,7 @@
                         android:layout_marginStart="@dimen/margin16"
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@id/img_language"
-                        android:text="Language"
+                        android:text="@string/language"
                         android:textColor="@color/colorButton" />
 
                     <TextView
@@ -391,15 +395,67 @@
 
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/relative_dark_mode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/relative_language">
+
+                <RelativeLayout
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin8"
+                    android:padding="@dimen/margin16"
+                    >
+
+                    <ImageView
+                        android:id="@+id/img_dark_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/margin8"
+                        android:src="@drawable/ic_dark_mode" />
+
+                    <TextView
+                        android:id="@+id/txt_dark_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="@dimen/margin16"
+                        android:layout_marginTop="10dp"
+                        android:layout_toEndOf="@id/img_dark_mode"
+                        android:text="@string/dark_mode"
+                        android:textColor="@color/colorButton" />
+
+                    <Switch
+                        android:id="@+id/input_dark_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/txt_dark_mode"
+                        android:textColor="@color/colorButton"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/relative_rate_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/relative_language">
+                app:layout_constraintTop_toBottomOf="@id/relative_dark_mode">
 
                 <RelativeLayout
 
@@ -426,7 +482,7 @@
                         android:layout_marginStart="@dimen/margin16"
                         android:layout_marginTop="10dp"
                         android:layout_toEndOf="@id/img_rate_app"
-                        android:text="Rate the app"
+                        android:text="@string/rate_the_app"
                         android:textColor="@color/colorButton" />
 
                 </RelativeLayout>
@@ -450,7 +506,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin8"
-                android:text="About"
+                android:text="@string/about"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/secound_view" />
@@ -459,7 +515,7 @@
                 android:id="@+id/txt_app_version"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="App Version"
+                android:text="@string/app_version"
                 android:textSize="20dp"
                 android:layout_margin="@dimen/margin16"
                 android:padding="8dp"
@@ -471,11 +527,10 @@
                 android:id="@+id/txt_log_out"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log Out"
+                android:text="@string/log_out"
                 android:textSize="20dp"
                 android:layout_margin="@dimen/margin16"
                 android:padding="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txt_app_version" />
 

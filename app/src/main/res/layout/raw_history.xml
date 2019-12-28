@@ -7,7 +7,7 @@
     android:layout_margin="@dimen/margin8">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:padding="@dimen/margin8"
+        android:padding="@dimen/margin12"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,10 +17,10 @@
             android:layout_height="wrap_content"
             android:text="14/3/2019"
             android:textSize="25sp"
-            android:textColor="@color/colorBlack"
-            android:fontFamily="@font/bellerose"
-            android:background="#ebebeb"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorPrimary"
             android:padding="8dp"
+            android:layout_margin="@dimen/margin4"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
@@ -31,54 +31,57 @@
             android:layout_height="wrap_content"
             android:text="Salon Name"
             android:textStyle="bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorButton"
             android:textAllCaps="true"
-            android:fontFamily="@font/bellerose"
             android:padding="@dimen/margin4"
-            android:layout_marginTop="@dimen/margin8"
+            android:layout_marginTop="@dimen/margin16"
+            android:layout_marginStart="@dimen/margin16"
             app:layout_constraintTop_toBottomOf="@id/txt_booking_date_history"
             app:layout_constraintStart_toStartOf="parent"/>
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/img_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_my_location"
             app:layout_constraintTop_toBottomOf="@id/txt_salon_name_history"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/margin8" />
+            android:layout_marginTop="@dimen/margin8"
+            android:layout_marginStart="@dimen/margin8"/>
         <TextView
             android:id="@+id/txt_salon_address_history"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Salon Address"
             android:textSize="14sp"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorButton"
             android:textAllCaps="true"
-            android:fontFamily="@font/bellerose"
-            android:padding="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="@dimen/margin8"
+            android:padding="4dp"
+            android:layout_marginStart="@dimen/margin16"
+            android:layout_marginTop="@dimen/margin12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_salon_name_history"
             app:layout_constraintStart_toEndOf="@id/img_address"/>
 
         <TextView
             android:id="@+id/txt_booking_information"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Booking Information"
+            android:text="@string/booking_information"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textAllCaps="true"
-            android:fontFamily="@font/bellerose"
-            android:layout_margin="@dimen/margin16"
+            android:textColor="@color/colorButton"
+            android:padding="@dimen/margin8"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_salon_address_history"
             app:layout_constraintStart_toStartOf="parent" />
 
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/img_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -94,15 +97,15 @@
             android:textSize="14sp"
             android:textColor="@color/colorBlack"
             android:textAllCaps="true"
-            android:fontFamily="@font/bellerose"
-            android:padding="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="@dimen/margin8"
+            android:padding="4dp"
+            android:layout_marginStart="@dimen/margin16"
+            android:layout_marginTop="@dimen/margin12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_booking_information"
             app:layout_constraintStart_toEndOf="@id/img_time"/>
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/img_barber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -118,10 +121,9 @@
             android:textSize="14sp"
             android:textColor="@color/colorBlack"
             android:textAllCaps="true"
-            android:fontFamily="@font/bellerose"
-            android:padding="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="@dimen/margin16"
+            android:padding="4dp"
+            android:layout_marginStart="@dimen/margin16"
+            android:layout_marginTop="@dimen/margin12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_booking_time_history"
             app:layout_constraintStart_toEndOf="@id/img_barber"/>

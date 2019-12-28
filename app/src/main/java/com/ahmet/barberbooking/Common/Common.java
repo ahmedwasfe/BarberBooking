@@ -22,7 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.ahmet.barberbooking.Fragments.HomeFragment;
 import com.ahmet.barberbooking.HomeActivity;
 import com.ahmet.barberbooking.Model.Barber;
 import com.ahmet.barberbooking.Model.BookingInformation;
@@ -77,6 +80,16 @@ public class Common {
     public static final String EVENT_URI_CACHE = "SAVE_URI_EVENT";
 
     public static final Object DISABLE_TAG = "DISABLE";
+
+    // Public Tag Firebase Collections
+    public static final String KEY_COLLECTION_User = "User";
+    public static final String KEY_COLLECTION_AllSalon = "AllSalon";
+    public static final String KEY_COLLECTION_Barber = "Barber";
+    public static final String KEY_COLLECTION_Booking = "Booking";
+    public static final String KEY_COLLECTION_Products = "Products";
+    public static final String KEY_COLLECTION_Shopping = "Shopping";
+    public static final String KEY_COLLECTION_Notifications = "Notifications";
+    public static final String KEY_COLLECTION_Tokens = "Tokens";
 
     public static User currentUser;
     public static Salon currentSalon;
@@ -349,6 +362,14 @@ public class Common {
             }
         });
 
+    }
+
+    public static void setFragment(Fragment fragment, int id, FragmentManager fragmentManager) {
+
+        fragmentManager.beginTransaction()
+                .replace(id, fragment)
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .commit();
     }
 
 
