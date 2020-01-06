@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Barber Booking</string>
+
+
+    <!-- Facebook API -->
+    <string name="facebook_app_id">533315877231595</string>
+    <string name="fb_login_protocol_scheme">fb533315877231595</string>
+
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <!-- Main Activity -->
+    <string name="just_skip">ou continuez avec Facebook</string>
+    <string name="mobile_login">Continuer avec le numéro de mobile</string>
+    <string name="no_login">Continuer avec le numéro de mobile</string>
+
+    <!-- Home Activity -->
+    <string name="home">Le principal</string>
+
+    <!-- Dialog Sheet -->
+    <string name="update">Mise à jour</string>
+    <string name="updated">Mis à jour</string>
+
+    <!-- Home Fragment -->
+    <string name="notification">notification</string>
+    <string name="booking">Réservation</string>
+    <string name="history">Histoire</string>
+    <string name="look_book">Look Book</string>
+
+
+    <!-- Booking Activity -->
+    <string name="previous">Précédente</string>
+    <string name="next">Suivante</string>
+    <string name="thank_for_booking">Merci d\'avoir réservé nos services !</string>
+    <string name="booking_information">Informations de réservation</string>
+    <string name="website_salon">https://www.facebook.com/Ahmet.Mandil</string>
+    <string name="phone_salon">+970 59-243-5704</string>
+    <string name="confirm_booking">Confirm Booking</string>
+
+    <string name="address_bullet">\u2022 Adresse: </string>
+    <string name="time_bullet">\u2022 Temps: </string>
+    <string name="stylelist_bullet">\u2022 Coiffeur: </string>
+    <string name="bullet">\u2022</string>
+    <string name="change">Changement</string>
+    <string name="delete">Supprimer</string>
+
+    <string name="message_welcome">Hey!</string>
+    <string name="message_change_booking">
+        "Voulez-vous modifier les informations de réservation?"
+         "\nParce que nous supprimerons vos anciennes informations de réservation"
+         "\nConfirmez simplement"
+    </string>
+    <string name="message_delete_booking">
+        "Voulez-vous supprimer les informations de réservation actuelles?"
+         "\nParce que nous supprimerons vos anciennes informations de réservation"
+         "\nConfirmez simplement"
+    </string>
+    <string name="salon_information">Informations sur le salon</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">Réglages</string>
+    <string name="clear">Claire</string>
+    <string name="new_booking">Nouvelle réservation</string>
+    <string name="profile">Profil</string>
+    <string name="name">Nom</string>
+    <string name="mobile_number">Numéro de portable</string>
+    <string name="email">Email</string>
+    <string name="general">Générale</string>
+    <string name="clear_history">Histoire claire</string>
+    <string name="language">Langue</string>
+    <string name="rate_the_app">Évaluer l\'application</string>
+    <string name="about">Sur</string>
+    <string name="app_version">Version de l\'application : "</string>
+    <string name="log_out">Se déconnecter</string>
+    <string name="dark_mode">Mode sombre</string>
+    <string name="select_barber">Sélectionnez Barber</string>
+    <string name="select_salon">Sélectionnez Salon</string>
+    <string name="rating_our_barber">NOTER NOTRE BARBIER</string>
+    <string name="enter_your_name">Entrez votre nom</string>
+    <string name="enter_your_city">Entrez votre ville</string>
+    <string name="your_booking">Votre réservation</string>
+    <string name="notifications">Notifications</string>
+    <string name="shopping">Achats</string>
+    <string name="cart">Panier d\'achat</string>
+    <string name="help">Aidez-moi</string>
+    <string name="settings">Réglages</string>
+    <string name="current_booking_must_not_be_null">La réservation en cours ne doit pas être nulle</string>
+    <string name="success_delete_info_booking">Succès supprimer la réservation d\'informations</string>
+    <string name="booking_info_must_not_be_empty">Les informations de réservation ne doivent pas être vides</string>
+    <string name="unable_to_get_last_location">Impossible d\'obtenir le dernier emplacement</string>
+    <string name="add_data_successfully">Ajout de données réussi</string>
+    <string name="book_now">Reserve maintenant</string>
+    <string name="please_wait">S\'il vous plaît, attendez...</string>
+    <string name="ok">D\'accord</string>
+    <string name="cancel">Annuler</string>
+    <string name="failed_to_sign_in">Échec de la connexion</string>
+    <string name="current_booking">Réservation en cours</string>
+    <string name="your_booking_information">Vos informations de réservation</string>
+    <string name="salon">Salon</string>
+    <string name="barber">Coiffeur</string>
+    <string name="time">Temps</string>
+    <string name="confirm">Confirmer</string>
+    <string name="cart_empty">Panier vide</string>
+    <string name="are_sure_clear_history">Voulez-vous vraiment effacer l\'historique</string>
+    <string name="clear_history_success">Effacer l\'historique avec succès</string>
+    <string name="update_name_success">Mettre à jour le nom avec succès</string>
+    <string name="are_sure_logout">Voulez-vous vraiment vous déconnecter</string>
+    <string name="please_select_salon">Veuillez sélectionner un salon</string>
+    <string name="invalid_url">URL invalide</string>
+    <string name="no_app_open_url">Aucune application ne peut traiter cette demande. Veuillez installer un navigateur Web</string>
+    <string name="new_appoiment_booking">Vous avez un nouvel appoiment pour les soins capillaires des clients avec </string>
+    <string name="you_have_a_new_booking_from">Vous avez une nouvelle réservation de </string>
+    <string name="successfully">Réservé avec succès !</string>
+    <string name="hair_cut_booking">Livre pour couper les cheveux</string>
+    <string name="hair_cut_from">Cheveux coupés </string>
+    <string name="with"> Avec </string>
+    <string name="at"> à </string>
+    <string name="address">Adresse: </string>
+    <string name="english">Anglaise</string>
+    <string name="arabic">Arabe</string>
+    <string name="turkish">Turque</string>
+    <string name="french">Le français</string>
+    <string name="select_language">Schoisir la langue</string>
+
+    <array name="language_selected">
+        <item>Anglaise</item>
+        <item>arabe</item>
+        <item>Turque</item>
+        <item>Le français</item>
+    </array>
+
+    <!-- All Times -->
+    <string name="zero">"9:00 - 9:30"</string>
+    <string name="one">"9:30 - 10:00"</string>
+    <string name="tow">"10:00 - 10:30"</string>
+    <string name="three">"10:30 - 11:00"</string>
+    <string name="four">"11:00 - 11:30"</string>
+    <string name="five">"11:30 - 12:00"</string>
+    <string name="six">"12:00 - 12:30"</string>
+    <string name="seven">"12:30 - 13:00"</string>
+    <string name="eight">"13:00 - 13:30"</string>
+    <string name="nine">"13:30 - 14:00"</string>
+    <string name="ten">"14:00 - 14:30"</string>
+    <string name="eleven">"14:30 - 15:00"</string>
+    <string name="twelve">"15:00 - 15:30"</string>
+    <string name="thirteen">"15:30 - 16:00"</string>
+    <string name="fourteen">"16:00 - 16:30"</string>
+    <string name="fifteen">"16:30 - 17:00"</string>
+    <string name="sixteen">"17:00 - 17:30"</string>
+    <string name="seventeen">"17:30 - 18:00"</string>
+    <string name="eighteen">"18:00 - 18:30"</string>
+    <string name="nineteen">"18:30 - 19:00"</string>
+    <string name="closed">Closed</string>
+
+
+    <string name="available">Disponible</string>
+    <string name="full">réservé jusqu\'à</string>
+    <string name="deleted_booking">La réservation a été supprimée</string>
+    <string name="error_in_get_salon">Veuillez réessayer plus tard</string>
+    <string name="added_to_cart">Added To Cart</string>
+
+</resources>

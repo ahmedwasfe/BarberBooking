@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
@@ -53,6 +54,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import io.paperdb.Paper;
@@ -82,14 +84,22 @@ public class Common {
     public static final Object DISABLE_TAG = "DISABLE";
 
     // Public Tag Firebase Collections
-    public static final String KEY_COLLECTION_User = "User";
-    public static final String KEY_COLLECTION_AllSalon = "AllSalon";
-    public static final String KEY_COLLECTION_Barber = "Barber";
-    public static final String KEY_COLLECTION_Booking = "Booking";
-    public static final String KEY_COLLECTION_Products = "Products";
-    public static final String KEY_COLLECTION_Shopping = "Shopping";
-    public static final String KEY_COLLECTION_Notifications = "Notifications";
-    public static final String KEY_COLLECTION_Tokens = "Tokens";
+    public static final String KEY_COLLECTION_USER = "User";
+    public static final String KEY_COLLECTION_AllSALON = "AllSalon";
+    public static final String KEY_COLLECTION_BARBER = "Barber";
+    public static final String KEY_COLLECTION_BOOKING = "Booking";
+    public static final String KEY_COLLECTION_PRODUCTS = "Products";
+    public static final String KEY_COLLECTION_SHOPPING = "Shopping";
+    public static final String KEY_COLLECTION_NOTIFICATIONS = "Notifications";
+    public static final String KEY_COLLECTION_TOKENS = "Tokens";
+
+    public static final String KEY_LANGUAGE = "Language";
+    public static final String KEY_DARK_MODE = "NightMode";
+
+    public static final String KEY_LANGUAGE_EN = "en";
+    public static final String KEY_LANGUAGE_AR = "ar";
+    public static final String KEY_LANGUAGE_TR = "tr";
+    public static final String KEY_LANGUAGE_FR = "fr";
 
     public static User currentUser;
     public static Salon currentSalon;
@@ -111,52 +121,53 @@ public class Common {
 
 
 
-    public static String convertTimeSoltToString(int solt) {
+    public static String convertTimeSoltToString(Context mContext, int solt) {
+
 
         switch (solt){
 
             case 0:
-                return "9:00 - 9:30";
+                return mContext.getString(R.string.zero);
             case 1:
-                return "9:30 - 10:00";
+                return mContext.getString(R.string.one);
             case 2:
-                return "10:00 - 10:30";
+                return mContext.getString(R.string.tow);
             case 3:
-                return "10:30 - 11:00";
+                return mContext.getString(R.string.three);
             case 4:
-                return "11:00 - 11:30";
+                return mContext.getString(R.string.four);
             case 5:
-                return "11:30 - 12:00";
+                return mContext.getString(R.string.five);
             case 6:
-                return "12:00 - 12:30";
+                return mContext.getString(R.string.six);
             case 7:
-                return "12:30 - 13:00";
+                return mContext.getString(R.string.seven);
             case 8:
-                return "13:00 - 13:30";
+                return mContext.getString(R.string.eight);
             case 9:
-                return "13:30 - 14:00";
+                return mContext.getString(R.string.nine);
             case 10:
-                return "14:00 - 14:30";
+                return mContext.getString(R.string.ten);
             case 11:
-                return "14:30 - 15:00";
+                return mContext.getString(R.string.eleven);
             case 12:
-                return "15:00 - 15:30";
+                return mContext.getString(R.string.twelve);
             case 13:
-                return "15:30 - 16:00";
+                return mContext.getString(R.string.thirteen);
             case 14:
-                return "16:00 - 16:30";
+                return mContext.getString(R.string.fourteen);
             case 15:
-                return "16:30 - 17:00";
+                return mContext.getString(R.string.fifteen);
             case 16:
-                return "17:00 - 17:30";
+                return mContext.getString(R.string.sixteen);
             case 17:
-                return "17:30 - 18:00";
+                return mContext.getString(R.string.seventeen);
             case 18:
-                return "18:00 - 18:30";
+                return mContext.getString(R.string.eighteen);
             case 19:
-                return "18:30 - 19:00";
+                return mContext.getString(R.string.nineteen);
             default:
-                return "Closed";
+                return mContext.getString(R.string.closed);
         }
 
     }
@@ -167,7 +178,7 @@ public class Common {
         return simpleDateFormat.format(date);
     }
 
-    public static String formatShoppingName(String name) {
+    public static String formatName(String name) {
 
         return name.length() > 13 ? new StringBuilder(name.substring(0, 10))
                                         .append(" ...").toString() : name;
@@ -370,6 +381,31 @@ public class Common {
                 .replace(id, fragment)
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .commit();
+    }
+
+
+    public static void setLanguage(Context mContext, String languageToLoad){
+
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        mContext.getResources().updateConfiguration(config,mContext.getResources().getDisplayMetrics());
+
+    }
+
+    public static void setLanguage(Context mContext){
+
+        SaveSettings mSaveSettings = new SaveSettings(mContext);
+
+        if (mSaveSettings.getLanguageState().equals(mContext.getString(R.string.english)))
+            setLanguage(mContext, "en");
+        else if (mSaveSettings.getLanguageState().equals(mContext.getString(R.string.arabic)))
+            setLanguage(mContext, "ar");
+        else if (mSaveSettings.getLanguageState().equals(mContext.getString(R.string.turkish)))
+            setLanguage(mContext, "tr");
+        else if (mSaveSettings.getLanguageState().equals(mContext.getString(R.string.french)))
+            setLanguage(mContext,"fr");
     }
 
 

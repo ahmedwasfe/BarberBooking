@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundcolor"
     tools:context=".SubActivity.BookingActivity">
 
     <com.shuhart.stepview.StepView
@@ -15,13 +16,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:sv_animationType="All"
-        app:sv_doneCircleColor="@color/colorAccent"
-        app:sv_doneStepLineColor="@color/colorAccent"
-        app:sv_doneStepMarkColor="@color/colorWhite"
-        app:sv_doneTextColor="@color/colorAccent"
-        app:sv_selectedCircleColor="@color/colorButton"
-        app:sv_selectedStepNumberColor="@color/colorWhite"
-        app:sv_selectedTextColor="@color/colorButton"
+        app:sv_background="?attr/stepbackground"
+
+        app:sv_doneCircleColor="?attr/donecolor"
+        app:sv_doneStepLineColor="?attr/donecolor"
+        app:sv_doneStepMarkColor="?attr/donestepmarkcolor"
+        app:sv_doneTextColor="?attr/donecolor"
+
+        app:sv_selectedCircleColor="?attr/selectedcolor"
+        app:sv_selectedStepNumberColor="?attr/donestepmarkcolor"
+        app:sv_selectedTextColor="?attr/selectedcolor"
+
         app:sv_textPadding="12dp" />
 
     <com.ahmet.barberbooking.Common.NonSwipeViewPager

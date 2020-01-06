@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.BarberAdapter;
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
 import com.ahmet.barberbooking.Model.Barber;
 import com.ahmet.barberbooking.Model.EventBus.BarberDoneEvent;
@@ -60,6 +61,8 @@ public class BookingBarberFragment extends Fragment {
     };
     */
 
+    private SaveSettings mSaveSettings;
+
     // ---------------------------------------------------------------------
         // Start Event Bus
 
@@ -106,9 +109,25 @@ public class BookingBarberFragment extends Fragment {
         */
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(getActivity());
+        if (mSaveSettings.getNightModeState()== true)
+            getActivity().setTheme(R.style.DarkTheme);
+        else
+            getActivity().setTheme(R.style.AppTheme);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
 
         View layoutView = inflater.inflate(R.layout.fragment_booking_barber, container, false);
 
@@ -138,9 +157,9 @@ public class BookingBarberFragment extends Fragment {
         if (!TextUtils.isEmpty(Common.currentSalon.getSalonID())){
 
             FirebaseFirestore.getInstance()
-                    .collection(Common.KEY_COLLECTION_AllSalon)
+                    .collection(Common.KEY_COLLECTION_AllSALON)
                     .document(Common.currentSalon.getSalonID())
-                    .collection(Common.KEY_COLLECTION_Barber)
+                    .collection(Common.KEY_COLLECTION_BARBER)
             // Query query = mReferenceBarbers.orderBy("name", Query.Direction.ASCENDING);
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

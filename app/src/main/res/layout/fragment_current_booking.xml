@@ -3,13 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    android:theme="@style/AppTheme"
+    android:background="?attr/backgroundcolor"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="?attr/backgroundcolor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -21,6 +22,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/backgroundcolor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -30,6 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="16dp"
+                    android:backgroundTint="?attr/cardbackgroundcolor"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:visibility="visible">
@@ -58,6 +61,7 @@
                                 android:text="@string/your_booking_information"
                                 android:textStyle="bold"
                                 android:textSize="@dimen/textCardSize20"
+                                android:textColor="?attr/textcolor"
                                 android:padding="@dimen/margin8"
                                 android:layout_marginTop="@dimen/margin8"
                                 android:layout_marginStart="@dimen/margin4"/>
@@ -73,13 +77,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/address_bullet"/>
+                                android:text="@string/address_bullet"
+                                android:textColor="?attr/textmaincolor"/>
                             <TextView
                                 android:id="@+id/txt_address_salon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=" address salon"
                                 android:textStyle="bold"
+                                android:textColor="?attr/textcolor"
                                 android:textSize="@dimen/textSize"/>
 
                         </LinearLayout>
@@ -93,13 +99,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/time_bullet"/>
+                                android:text="@string/time_bullet"
+                                android:textColor="?attr/textmaincolor"/>
                             <TextView
                                 android:id="@+id/txt_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=" time"
                                 android:textStyle="bold"
+                                android:textColor="?attr/textcolor"
                                 android:textSize="@dimen/textSize"/>
 
                         </LinearLayout>
@@ -113,13 +121,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/stylelist_bullet"/>
+                                android:text="@string/stylelist_bullet"
+                                android:textColor="?attr/textmaincolor"/>
                             <TextView
                                 android:id="@+id/txt_salon_barber"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=" barber"
                                 android:textSize="@dimen/textSize"
+                                android:textColor="?attr/textcolor"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -133,13 +143,15 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/bullet"/>
+                                android:text="@string/bullet"
+                                android:textColor="?attr/textmaincolor"/>
                             <TextView
                                 android:id="@+id/txt_time_remain"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=" time remain"
                                 android:textSize="@dimen/textSize"
+                                android:textColor="?attr/textcolor"
                                 android:textStyle="bold" />
 
                         </LinearLayout>

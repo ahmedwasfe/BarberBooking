@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
 import com.ahmet.barberbooking.Fragments.CurrentBookingDialog;
@@ -154,6 +155,9 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
     @BindView(R.id.tool_bar_home)
     Toolbar mToolbar;
 
+    @BindView(R.id.btn_new_booking)
+    Button mBtnBookNow;
+
     private ActionBarDrawerToggle mDrawerToggle;
 
     private TextView mTextUserName;
@@ -200,16 +204,41 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         changeBookingFromUser();
     }
 
+    private SaveSettings mSaveSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(this);
+        if (mSaveSettings.getNightModeState() == true)
+            setTheme(R.style.DarkThemeNoActionBar);
+        else
+            setTheme(R.style.AppThemeNoActionBar);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(this,Common.KEY_LANGUAGE_FR);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
 
         ButterKnife.bind(this);
-
+       // Toast.makeText(this, mSaveSettings.getLanguageState(), Toast.LENGTH_SHORT).show();
         // init Drawer and Navigation
+
+//        if (mSaveSettings.getNightModeState() == true)
+//            mBtnBookNow.setBackground(getResources().getDrawable(R.drawable.btn_bg1));
+//        else
+//            mBtnBookNow.setBackground(getResources().getDrawable(R.drawable.btn_bg));
+
+
         initNavigationDrawer();
         // init
         init();
@@ -243,7 +272,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                     Paper.book().write(Common.KEY_LOGGED, userAccount.getPhoneNumber());
 
 
-                    FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
+                    FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_USER)
                             .document(userAccount.getPhoneNumber())
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -348,56 +377,56 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
                 .build();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // loadFragment(new HomeFragment());
-        checkRatingDialog();
-
-        FirebaseUser userAccount = FirebaseAuth.getInstance().getCurrentUser();
-        if (userAccount != null) {
-
-            FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
-                    .document(userAccount.getPhoneNumber())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot snapshot = task.getResult();
-                                if (snapshot.exists()) {
-                                    loadUserInfo();
-//                              loadUserBooking();
-                                    initRealtimeUserBooking();
-                                }
-                            }
-                        }
-                    });
-
-            if (AccessToken.getCurrentAccessToken() != null){
-
-                FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
-                        .document(userAccount.getPhoneNumber())
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot snapshot = task.getResult();
-                                    if (snapshot.exists()) {
-                                        loadUserInfo();
-//                              loadUserBooking();
-                                        initRealtimeUserBooking();
-                                    }
-                                }
-                            }
-                        });
-            }
-        }
-
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        // loadFragment(new HomeFragment());
+//        checkRatingDialog();
+//
+//        FirebaseUser userAccount = FirebaseAuth.getInstance().getCurrentUser();
+//        if (userAccount != null) {
+//
+//            FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_USER)
+//                    .document(userAccount.getPhoneNumber())
+//                    .get()
+//                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//
+//                            if (task.isSuccessful()) {
+//                                DocumentSnapshot snapshot = task.getResult();
+//                                if (snapshot.exists()) {
+//                                    loadUserInfo();
+////                              loadUserBooking();
+//                                    initRealtimeUserBooking();
+//                                }
+//                            }
+//                        }
+//                    });
+//
+//            if (AccessToken.getCurrentAccessToken() != null){
+//
+//                FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_USER)
+//                        .document(userAccount.getPhoneNumber())
+//                        .get()
+//                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//
+//                                if (task.isSuccessful()) {
+//                                    DocumentSnapshot snapshot = task.getResult();
+//                                    if (snapshot.exists()) {
+//                                        loadUserInfo();
+////                              loadUserBooking();
+//                                        initRealtimeUserBooking();
+//                                    }
+//                                }
+//                            }
+//                        });
+//            }
+//        }
+//
+//    }
 
 
     private void loadUserDataFromFacebook(AccessToken newAccessToken){
@@ -490,7 +519,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
                 User user = new User(name, address, phoneNumber);
 
-                FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_User)
+                FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_USER)
                         .document(phoneNumber)
                         .set(user)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -560,9 +589,9 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
             // Get booking information in barber object
             DocumentReference mBarberBookingInfoRef = FirebaseFirestore.getInstance()
-                    .collection(Common.KEY_COLLECTION_AllSalon)
+                    .collection(Common.KEY_COLLECTION_AllSALON)
                     .document(Common.currentBooking.getSalonID())
-                    .collection(Common.KEY_COLLECTION_Barber)
+                    .collection(Common.KEY_COLLECTION_BARBER)
                     .document(Common.currentBooking.getBarberID())
                     .collection(Common.convertTimestampToKey(Common.currentBooking.getTimestamp()))
                     .document(Common.currentBooking.getTimeSlot().toString());
@@ -598,7 +627,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         if (!TextUtils.isEmpty(Common.currentBookingId)) {
 
             DocumentReference mUserBookingInfoRef = FirebaseFirestore.getInstance()
-                    .collection(Common.KEY_COLLECTION_User)
+                    .collection(Common.KEY_COLLECTION_USER)
                     .document(Common.currentUser.getPhoneNumber())
                     .collection("Booking")
                     .document(Common.currentBookingId);
@@ -660,7 +689,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
         // /User/+970592435704/Booking/H4InjDGyf4NsN6TPENGH
         CollectionReference mUserBookingReference = FirebaseFirestore.getInstance()
-                .collection(Common.KEY_COLLECTION_User)
+                .collection(Common.KEY_COLLECTION_USER)
                 .document(Common.currentUser.getPhoneNumber())
                 .collection("Booking");
 
@@ -733,7 +762,31 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
         //      mTxtUserPhone.setText(Common.currentUser.getPhoneNumber());
 //
         // mToolbar.setTitle(Common.currentUser.getName());
-        mTextUserName.setText(Common.currentUser.getName());
+       // mTextUserName.setText(Common.currentUser.getName());
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+
+            FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_USER)
+                    .document(Common.currentUser.getPhoneNumber())
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+
+                            DocumentSnapshot snapshot = task.getResult();
+                            mTextUserName.setText(snapshot.getString("name"));
+                           // mInputMobile.setText(snapshot.getString("phoneNumber"));
+
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(HomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void initRealtimeUserBooking() {
@@ -915,7 +968,7 @@ public class HomeActivity extends AppCompatActivity implements IBookingInfoLoadL
 
     private void showAllSalonOnMap() {
 
-        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSALON)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

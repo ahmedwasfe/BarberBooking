@@ -4,12 +4,17 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/margin8"
-    android:layout_margin="@dimen/margin8">
+    app:cardCornerRadius="@dimen/margin8"
+    android:layout_margin="@dimen/margin12"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:backgroundTint="?attr/cardbackgroundcolor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:padding="@dimen/margin12"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/cardbackgroundcolor">
 
         <TextView
             android:id="@+id/txt_booking_date_history"
@@ -17,9 +22,8 @@
             android:layout_height="wrap_content"
             android:text="14/3/2019"
             android:textSize="25sp"
-            android:textColor="@color/colorWhite"
-            android:background="@color/colorPrimary"
-            android:padding="8dp"
+            android:textColor="?attr/textmaincolor"
+            android:padding="@dimen/margin8"
             android:layout_margin="@dimen/margin4"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="Salon Name"
             android:textStyle="bold"
-            android:textColor="@color/colorButton"
+            android:textColor="?attr/textcolor"
             android:textAllCaps="true"
             android:padding="@dimen/margin4"
             android:layout_marginTop="@dimen/margin16"
@@ -55,7 +59,7 @@
             android:layout_height="wrap_content"
             android:text="Salon Address"
             android:textSize="14sp"
-            android:textColor="@color/colorButton"
+            android:textColor="?attr/textcolor"
             android:textAllCaps="true"
             android:padding="4dp"
             android:layout_marginStart="@dimen/margin16"
@@ -72,7 +76,7 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textAllCaps="true"
-            android:textColor="@color/colorButton"
+            android:textColor="?attr/textmaincolor"
             android:padding="@dimen/margin8"
             android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +99,7 @@
             android:layout_height="wrap_content"
             android:text="10:00 at 4/3/2019"
             android:textSize="14sp"
-            android:textColor="@color/colorBlack"
+            android:textColor="?attr/textcolor"
             android:textAllCaps="true"
             android:padding="4dp"
             android:layout_marginStart="@dimen/margin16"
@@ -119,7 +123,7 @@
             android:layout_height="wrap_content"
             android:text="Barber Name"
             android:textSize="14sp"
-            android:textColor="@color/colorBlack"
+            android:textColor="?attr/textcolor"
             android:textAllCaps="true"
             android:padding="4dp"
             android:layout_marginStart="@dimen/margin16"

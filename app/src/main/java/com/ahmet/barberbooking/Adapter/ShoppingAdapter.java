@@ -50,7 +50,7 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.Shoppi
     @Override
     public void onBindViewHolder(@NonNull ShoppingHolder holder, int position) {
 
-        holder.mTxtShoppingName.setText(Common.formatShoppingName(mListShopping.get(position).getName()));
+        holder.mTxtShoppingName.setText(Common.formatName(mListShopping.get(position).getName()));
         holder.mTxtShoppingPrice.setText(new StringBuilder("$ ").append(mListShopping.get(position).getPrice()));
         Picasso.get()
                 .load(mListShopping.get(position).getImage())
@@ -72,7 +72,7 @@ public class ShoppingAdapter extends RecyclerView.Adapter<ShoppingAdapter.Shoppi
 
                 // Insert to database
                 DatabaseUtils.insertToCart(cartDatabase, cartItem);
-                Toast.makeText(mContext, "Added To Cart", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mContext.getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
             }
 
             @Override

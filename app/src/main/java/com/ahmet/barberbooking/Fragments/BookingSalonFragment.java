@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.SalonAdapter;
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
 import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Model.Salon;
@@ -53,6 +54,8 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
 
     private AlertDialog mDialog;
 
+    private SaveSettings mSaveSettings;
+
     static BookingSalonFragment instance;
 
     public static BookingSalonFragment getInstance(){
@@ -67,21 +70,37 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mReferenceAllSalon = FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon);
+        mReferenceAllSalon = FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSALON);
         mReferenceBranch = FirebaseFirestore.getInstance().collection("Branch");
 
         mISalonLoadListener = this;
 
-        mDialog = new SpotsDialog.Builder()
-                .setContext(getActivity())
-                .setCancelable(false)
-                .setMessage(R.string.please_wait)
-                .build();
+            mDialog = new SpotsDialog.Builder()
+                    .setContext(getActivity())
+                    .setCancelable(false)
+                    .setMessage(R.string.please_wait)
+                    .build();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(getActivity());
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
+
+        if (mSaveSettings.getNightModeState() == true)
+            getActivity().setTheme(R.style.DarkTheme);
+        else
+            getActivity().setTheme(R.style.AppTheme);
 
         View layoutView = inflater.inflate(R.layout.fragment_booking_salon, container, false);
 
@@ -109,7 +128,7 @@ public class BookingSalonFragment extends Fragment implements ISalonLoadListener
         mDialog.show();
 
         FirebaseFirestore.getInstance()
-                .collection(Common.KEY_COLLECTION_AllSalon)
+                .collection(Common.KEY_COLLECTION_AllSALON)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

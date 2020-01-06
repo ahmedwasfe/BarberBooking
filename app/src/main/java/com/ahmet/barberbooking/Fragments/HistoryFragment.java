@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ahmet.barberbooking.Adapter.HistoryAdapter;
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Model.BookingInformation;
 import com.ahmet.barberbooking.Model.EventBus.UserBookingLoadEvent;
 import com.ahmet.barberbooking.R;
@@ -49,6 +50,8 @@ public class HistoryFragment extends Fragment {
 
     private AlertDialog mDialog;
 
+    private SaveSettings mSaveSettings;
+
     private static HistoryFragment instance;
     public static HistoryFragment getInstance(){
         if (instance == null)
@@ -75,6 +78,22 @@ public class HistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(getActivity());
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
+
+        if (mSaveSettings.getNightModeState() == true)
+            getActivity().setTheme(R.style.DarkTheme);
+        else
+            getActivity().setTheme(R.style.AppTheme);
 
         View layoutView = inflater.inflate(R.layout.fragment_history, container, false);
 

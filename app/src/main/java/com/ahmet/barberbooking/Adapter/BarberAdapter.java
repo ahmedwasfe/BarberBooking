@@ -17,6 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Interface.IRecyclerItemSelectedListener;
 import com.ahmet.barberbooking.Model.Barber;
 import com.ahmet.barberbooking.Model.EventBus.EnableNextButton;
@@ -37,18 +38,33 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
 
 
     private Context mContext;
+
     private List<Barber> mListBarbers;
     private LayoutInflater inflater;
+
     private List<CardView> mListCard;
+
+    private SaveSettings mSaveSettings;
+
+    private int selectedPosition = -1;
+
+    private void setSelectedPosition(int position){
+        selectedPosition = position;
+        notifyDataSetChanged();
+    }
 
   //  LocalBroadcastManager mLocalBroadcastManager;
 
     public BarberAdapter(Context mContext, List<Barber> mListBarbers) {
+
         this.mContext = mContext;
+
         this.mListBarbers = mListBarbers;
+        mListCard = new ArrayList<>();
+
         inflater = LayoutInflater.from(mContext);
 
-        mListCard = new ArrayList<>();
+        mSaveSettings = new SaveSettings(mContext);
 
     //    mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
@@ -65,32 +81,33 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
     @Override
     public void onBindViewHolder(@NonNull BarberHolder holder, int position) {
 
-        FirebaseFirestore.getInstance().collection("AllSalon")
-                .document(Common.currentSalon.getSalonID())
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        if (Common.currentSalon.getSalonID() != null) {
+            FirebaseFirestore.getInstance().collection("AllSalon")
+                    .document(Common.currentSalon.getSalonID())
+                    .get()
+                    .addOnCompleteListener(task -> {
 
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
 
                             DocumentSnapshot snapshot = task.getResult();
-                           // Toast.makeText(mContext, snapshot.get("salonType").toString(), Toast.LENGTH_SHORT).show();
-                            if (snapshot.get("salonType").equals("Men")){
-                                Picasso.get().load(R.drawable.salon_men).into(holder.mImgBarber);
-                              //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
-                            }else if (snapshot.get("salonType").equals("Women")){
-                                Picasso.get().load(R.drawable.salon_women).into(holder.mImgBarber);
-                              //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
-                            }else {
-                                Picasso.get().load(R.drawable.salon_men).into(holder.mImgBarber);
-                              //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
+                            // Toast.makeText(mContext, snapshot.get("salonType").toString(), Toast.LENGTH_SHORT).show();
+                            if (snapshot.get("salonType").equals("Men")) {
+                                Picasso.get().load(R.drawable.salon_men).placeholder(R.drawable.salon_men).into(holder.mImgBarber);
+                                //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
+                            } else if (snapshot.get("salonType").equals("Women")) {
+                                Picasso.get().load(R.drawable.salon_women).placeholder(R.drawable.salon_men).into(holder.mImgBarber);
+                                //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
+                            } else {
+                                Picasso.get().load(R.drawable.salon_men).placeholder(R.drawable.salon_men).into(holder.mImgBarber);
+                                //  holder.mImgBarber.setImageResource(R.drawable.salon_men);
                             }
                         }
-                    }
-                });
+                    });
+        }else{
+            Toast.makeText(mContext, mContext.getString(R.string.error_in_get_salon), Toast.LENGTH_SHORT).show();
+        }
 
-        holder.mTxtBarberName.setText(mListBarbers.get(position).getName());
+        holder.mTxtBarberName.setText(Common.formatName(mListBarbers.get(position).getName()));
 
         if (mListBarbers.get(position).getRatingTimes() !=null)
                  holder.mRatingBarber.setRating( mListBarbers.get(position).getRating().floatValue() /
@@ -101,19 +118,32 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
         if (!mListCard.contains(holder.mCardBarber))
             mListCard.add(holder.mCardBarber);
 
+            holder.mCardBarber.setCardBackgroundColor(mContext.getResources().getColor(R.color.colorWhite));
+            holder.mTxtBarberName.setTextColor(mContext.getResources().getColor(R.color.colorButton));
+
+
         holder.setmIRecyclerItemSelectedListener(new IRecyclerItemSelectedListener() {
             @Override
             public void onItemSelectedListener(View view, int position) {
 
-                // Set backgrounf for all items not selected
-                for (CardView cardView : mListCard){
-                    cardView.setCardBackgroundColor(
-                            mContext.getResources().getColor(R.color.colorWhite));
-                }
+                // Set background for all items not selected
+                for (CardView cardView : mListCard)
+                        cardView.setCardBackgroundColor(mContext.getResources()
+                                .getColor(R.color.colorWhite));
 
-                // Set background for selected
-                holder.mCardBarber.setCardBackgroundColor(
-                        mContext.getResources().getColor(R.color.colorPrimary));
+//                if (mSaveSettings.getNightModeState() == true) {
+                    // Set background for selected
+                    holder.mCardBarber.setCardBackgroundColor(mContext.getResources()
+                            .getColor(R.color.colorPrimary));
+
+//                    holder.mTxtBarberName.setTextColor(mContext.getResources()
+//                            .getColor(R.color.colorWhite));
+//                }else{
+//                    holder.mCardBarber.setCardBackgroundColor(
+//                            mContext.getResources().getColor(R.color.colorPrimary));
+//
+//                    holder.mTxtBarberName.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
+//                }
 
                 /*
                 * Intent intent = new Intent(Common.KEY_ENABLE_BUTTON_NEXT);
@@ -134,6 +164,7 @@ public class BarberAdapter extends RecyclerView.Adapter<BarberAdapter.BarberHold
 
             }
         });
+
     }
 
     @Override

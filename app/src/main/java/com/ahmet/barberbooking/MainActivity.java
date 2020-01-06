@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Model.User;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -97,9 +98,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    private SaveSettings mSaveSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(this);
+        if (mSaveSettings.getNightModeState() == true )
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.AppTheme);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(this,Common.KEY_LANGUAGE_FR);
+
         super.onCreate(savedInstanceState);
 
        // printKeyHash();

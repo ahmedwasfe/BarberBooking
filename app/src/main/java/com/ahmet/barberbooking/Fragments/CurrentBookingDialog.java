@@ -18,7 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 
-import com.ahmet.barberbooking.HomeActivity;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.SubActivity.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
@@ -73,6 +73,8 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
 
     private AlertDialog mDialog;
 
+    private SaveSettings mSaveSettings;
+
     private static CurrentBookingDialog instance;
     public static CurrentBookingDialog getInstance(){
 
@@ -116,6 +118,17 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        mSaveSettings = new SaveSettings(getActivity());
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
+
         View layoutView = inflater.inflate(R.layout.fragment_current_booking, container, false);
 
         mUnbinder = ButterKnife.bind(this, layoutView);
@@ -142,9 +155,9 @@ public class CurrentBookingDialog extends BottomSheetDialogFragment implements
 
         // /User/+970592435704/Booking/H4InjDGyf4NsN6TPENGH
         CollectionReference mUserBookingReference = FirebaseFirestore.getInstance()
-                .collection(Common.KEY_COLLECTION_User)
+                .collection(Common.KEY_COLLECTION_USER)
                 .document(Common.currentUser.getPhoneNumber())
-                .collection(Common.KEY_COLLECTION_Booking);
+                .collection(Common.KEY_COLLECTION_BOOKING);
 
         // Get current data
         Calendar calendar = Calendar.getInstance();

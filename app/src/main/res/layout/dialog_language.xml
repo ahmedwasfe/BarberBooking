@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="250dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="8dp"
+    android:padding="10dp"
+    android:layout_gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/text_language"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorButton"
+            android:padding="10dp"
+            android:layout_margin="8dp"
+            android:gravity="start"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <RadioGroup
+            android:id="@+id/radio_language"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="8dp"
+            android:layout_margin="8dp"
+            android:gravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_language"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RadioButton
+                android:id="@+id/radio_english"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/english"
+                android:textColor="@color/colorButton"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:padding="12dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_arabic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/arabic"
+                android:textColor="@color/colorButton"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:padding="12dp"/>
+
+            <RadioButton
+                android:id="@+id/radio_turkish"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/turkish"
+                android:visibility="visible"
+                android:textColor="@color/colorButton"
+                android:textStyle="bold"
+                android:textAllCaps="false"
+                android:padding="12dp"/>
+
+        </RadioGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

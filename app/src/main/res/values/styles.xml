@@ -6,13 +6,128 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="backgroundcolor">@color/colorLight</item>
+        <item name="cardbackgroundcolor">@color/colorWhite</item>
+        <item name="viewbackgroundcolor">@color/colorGray</item>
+
+        <item name="textcolor">@color/colorButton</item>
+        <item name="textmaincolor">@color/colorPrimaryDark</item>
+
+
+        <item name="tintcolor">@color/colorBlack</item>
+        <item name="iconcolor">@color/colorButton</item>
+
+        <item name="buttoncolor">@color/colorPrimary</item>
+        <item name="buttontextcolor">@color/colorWhite</item>
+
+        <!-- Step View -->
+        <item name="donecolor">@color/colorAccent</item>
+        <item name="donestepmarkcolor">@color/colorWhite</item>
+        <item name="selectedcolor">@color/colorButton</item>
+        <item name="stepbackground">@color/colorLight</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+
     </style>
 
-    <style name="NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!-- Night / Dark Mode theme. -->
+    <style name="DarkTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorBlackDark3</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="backgroundcolor">@color/colorBlackDark1</item>
+        <item name="cardbackgroundcolor">@color/colorBlackDark2</item>
+        <item name="viewbackgroundcolor">@color/colorGray1</item>
+
+        <item name="textcolor">@color/colorWhite</item>
+        <item name="textmaincolor">@color/colorBlue1</item>
+
+        <item name="tintcolor">@color/colorWhite</item>
+        <item name="iconcolor">@color/colorWhite</item>
+
+        <item name="buttoncolor">@color/colorBlue1</item>
+        <item name="buttontextcolor">@color/colorWhite</item>
+
+        <!-- Step View -->
+        <item name="donecolor">@color/colorAccent</item>
+        <item name="donestepmarkcolor">@color/colorButton</item>
+        <item name="selectedcolor">@color/colorWhite</item>
+        <item name="stepbackground">@color/colorBlackDark2</item>
+
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
+
+
+
+    <style name="AppThemeNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="backgroundcolor">@color/colorLight</item>
+        <item name="cardbackgroundcolor">@color/colorWhite</item>
+        <item name="viewbackgroundcolor">@color/colorGray</item>
+
+        <item name="textcolor">@color/colorButton</item>
+        <item name="textmaincolor">@color/colorPrimaryDark</item>
+        <item name="texttoolbarcolor">@color/colorWhite</item>
+
+        <item name="tintcolor">@color/colorBlack</item>
+        <item name="tabcolor">@color/colorPrimary</item>
+        <item name="iconcolor">@color/colorButton</item>
+        <item name="toolbarcolor">@color/colorPrimary</item>
+
+        <item name="buttoncolor">@color/colorBlue1</item>
+        <item name="buttontextcolor">@color/colorWhite</item>
+
+
+        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
+
+    <!-- Night / Dark Mode theme. -->
+    <style name="DarkThemeNoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorBlackDark3</item>
+        <item name="colorPrimaryDark">@color/colorBlack</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="backgroundcolor">@color/colorBlackDark1</item>
+        <item name="cardbackgroundcolor">@color/colorBlackDark2</item>
+        <item name="viewbackgroundcolor">@color/colorGray1</item>
+
+        <item name="textcolor">@color/colorWhite</item>
+        <item name="textmaincolor">@color/colorBlue1</item>
+        <item name="texttoolbarcolor">@color/colorWhite</item>
+
+        <item name="tintcolor">@color/colorWhite</item>
+        <item name="tabcolor">@color/colorBlackDark1</item>
+        <item name="iconcolor">@color/colorWhite</item>
+        <item name="toolbarcolor">@color/colorBlackDark1</item>
+
+        <item name="buttoncolor">@color/colorBlue1</item>
+        <item name="buttontextcolor">@color/colorWhite</item>
+
+
+        <item name="drawerArrowStyle">@style/DrawerIconStyle</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
+
+    <style name="WindowAnimationTransition">
+
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+
+    </style>
+    
+    <style name="DrawerIconStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="android:subMenuArrow">@color/colorWhite</item>
+        <item name="color">@color/colorWhite</item>
     </style>
 
 </resources>

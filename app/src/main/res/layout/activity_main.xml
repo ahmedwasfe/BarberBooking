@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
+    android:background="?attr/backgroundcolor"
     tools:context=".MainActivity">
 
     <ImageView
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="@string/just_skip"
         android:textSize="20sp"
-        android:textColor="@color/colorButton"
+        android:textColor="?attr/textcolor"
         android:padding="@dimen/margin12"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

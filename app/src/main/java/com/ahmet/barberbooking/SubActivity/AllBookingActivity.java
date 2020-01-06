@@ -7,6 +7,8 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.ahmet.barberbooking.Adapter.ViewPagerAllBookingAdapter;
+import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Fragments.CurrentBookingFragment;
 import com.ahmet.barberbooking.Fragments.HistoryFragment;
 import com.ahmet.barberbooking.R;
@@ -28,8 +30,27 @@ public class AllBookingActivity extends AppCompatActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
 
+    private SaveSettings mSaveSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(this);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(this,Common.KEY_LANGUAGE_FR);
+
+        if (mSaveSettings.getNightModeState() == true)
+            setTheme(R.style.DarkThemeNoActionBar);
+        else
+            setTheme(R.style.AppThemeNoActionBar);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_booking);
 

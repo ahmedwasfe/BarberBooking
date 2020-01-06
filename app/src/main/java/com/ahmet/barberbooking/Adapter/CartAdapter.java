@@ -50,7 +50,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartHolder> {
     @Override
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
 
-        holder.mTxtCartNameItem.setText(Common.formatShoppingName(mListCartItem.get(position).getProductName()));
+        holder.mTxtCartNameItem.setText(Common.formatName(mListCartItem.get(position).getProductName()));
         holder.mTxtCartPriceItem.setText(new StringBuilder("$ ").append(mListCartItem.get(position).getProductPrice()));
         holder.mTxtCartQuantityItem.setText(new StringBuilder(String.valueOf(mListCartItem.get(position).getProductQuantity())));
         Picasso.get()

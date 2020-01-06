@@ -12,11 +12,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.ViewPagerAdapter;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Common.NonSwipeViewPager;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Model.Barber;
 import com.ahmet.barberbooking.Model.EventBus.BarberDoneEvent;
 import com.ahmet.barberbooking.Model.EventBus.ConfirmBookingEvent;
@@ -27,7 +27,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -52,7 +51,6 @@ public class BookingActivity extends AppCompatActivity {
     TextView mNextStep;
 
    // private LocalBroadcastManager mLocalBroadcastManager;
-
     private AlertDialog mDialog;
     private CollectionReference mReferenceBarbers;
 
@@ -143,9 +141,9 @@ public class BookingActivity extends AppCompatActivity {
         if (!TextUtils.isEmpty(Common.currentSalon.getSalonID())){
 
             mReferenceBarbers = FirebaseFirestore.getInstance()
-                    .collection(Common.KEY_COLLECTION_AllSalon)
+                    .collection(Common.KEY_COLLECTION_AllSALON)
                     .document(salonID)
-                    .collection(Common.KEY_COLLECTION_Barber);
+                    .collection(Common.KEY_COLLECTION_BARBER);
            // Query query = mReferenceBarbers.orderBy("name", Query.Direction.ASCENDING);
 
             mReferenceBarbers.get()
@@ -249,8 +247,26 @@ public class BookingActivity extends AppCompatActivity {
 
     // ---------------------------------------------------------------------
 
+    private SaveSettings mSaveSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(this);
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(this,Common.KEY_LANGUAGE_FR);
+//
+        if (mSaveSettings.getNightModeState() == true)
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
@@ -306,17 +322,17 @@ public class BookingActivity extends AppCompatActivity {
 
     private void setColorStepButton() {
 
-        if (mNextStep.isEnabled()){
-            mNextStep.setTextColor(getResources().getColor(R.color.colorPrimary));
-        }else {
-            mNextStep.setTextColor(getResources().getColor(R.color.colorGray));;
-        }
+            if (mNextStep.isEnabled())
+                mNextStep.setTextColor(getResources().getColor(R.color.colorPrimary));
+            else
+                mNextStep.setTextColor(getResources().getColor(R.color.colorGray));;
 
-        if (mPreviousStep.isEnabled()){
-            mPreviousStep.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-        }else {
-            mPreviousStep.setTextColor(getResources().getColor(R.color.colorGray));
-        }
+
+            if (mPreviousStep.isEnabled())
+                mPreviousStep.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            else
+                mPreviousStep.setTextColor(getResources().getColor(R.color.colorGray));
+
     }
 
     private void setupStepView() {

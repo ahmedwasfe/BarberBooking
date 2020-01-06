@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin8"
+    android:background="?attr/backgroundcolor"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
@@ -11,9 +12,9 @@
         android:id="@+id/calender_time_solt"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        app:textColorSelected="@color/colorWhite"
-        app:textColorNormal="@color/colorWhite"
+        android:background="@color/colorAccent"
+        app:textColorSelected="?attr/buttontextcolor"
+        app:textColorNormal="?attr/buttontextcolor"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>

@@ -4,10 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:backgroundTint="@color/colorAccent"
-    android:background="@color/colorAccent"
-    app:titleTextColor="@color/colorWhite"
-    app:subtitleTextColor="@color/colorWhite"
+    app:backgroundTint="?attr/toolbarcolor"
+    app:titleTextColor="?attr/textcolor"
+    app:subtitleTextColor="?attr/textcolor"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 </androidx.appcompat.widget.Toolbar>

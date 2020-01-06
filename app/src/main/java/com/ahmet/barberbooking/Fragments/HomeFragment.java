@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.HomeSliderAdapter;
 import com.ahmet.barberbooking.Adapter.LookBookAdapter;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.SubActivity.BookingActivity;
 import com.ahmet.barberbooking.SubActivity.CartActivity;
 import com.ahmet.barberbooking.Common.Common;
@@ -84,6 +85,8 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     private CartDatabase mCartDatabase;
 
     private AlertDialog mDialog;
+
+    private SaveSettings mSaveSettings;
 
     @BindView(R.id.linear_user_info)
     LinearLayout mLinearUserInfo;
@@ -395,6 +398,17 @@ public class HomeFragment extends Fragment implements IBannerLoadListener, ILook
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(getActivity());
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
 
         View layoutView = inflater.inflate(R.layout.fragment_home, container, false);
 

@@ -10,14 +10,12 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.TimeSlotAdapter;
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Common.SpacesItemDecoration;
 import com.ahmet.barberbooking.Interface.iTimeSlotLoadListener;
 import com.ahmet.barberbooking.Model.EventBus.DisplayTimeSlotEvent;
 import com.ahmet.barberbooking.Model.TimeSlot;
 import com.ahmet.barberbooking.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -83,6 +81,8 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         }
     };
 */
+    private SaveSettings mSaveSettings;
+
     // ---------------------------------------------------------------------
     // Start Event Bus
 
@@ -153,6 +153,22 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        mSaveSettings = new SaveSettings(getActivity());
+        if (mSaveSettings.getNightModeState() == true)
+            getActivity().setTheme(R.style.DarkTheme);
+        else
+            getActivity().setTheme(R.style.AppTheme);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
+
+
         View layoutView = inflater.inflate(R.layout.fragment_booking_time, container, false);
 
         unbinder = ButterKnife.bind(this, layoutView);
@@ -170,9 +186,9 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
 
         // /AllSalon/Gaza/Branch/AFXjgtlJwztf7cLFumNT/Barber/utQmhc07WVjaZdr9tbRB
         mDocReferenceBarber = FirebaseFirestore.getInstance()
-                .collection(Common.KEY_COLLECTION_AllSalon)
+                .collection(Common.KEY_COLLECTION_AllSALON)
                 .document(Common.currentSalon.getSalonID())
-                .collection(Common.KEY_COLLECTION_Barber)
+                .collection(Common.KEY_COLLECTION_BARBER)
                 .document(barberID);
 
         // Get informatio for this barber
@@ -187,9 +203,9 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
                             // Get information of booking
                             // If not created return empty
                             CollectionReference mReferenceDate =  FirebaseFirestore.getInstance()
-                                    .collection(Common.KEY_COLLECTION_AllSalon)
+                                    .collection(Common.KEY_COLLECTION_AllSALON)
                                     .document(Common.currentSalon.getSalonID())
-                                    .collection(Common.KEY_COLLECTION_Barber)
+                                    .collection(Common.KEY_COLLECTION_BARBER)
                                     .document(barberID)
                                     .collection(bookingDate);  // book date is date simpleformat with dd_MM_yyyy == 27_06_2019
 
@@ -224,7 +240,7 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         // Recycler View
         // mRecyclerTimeSolt = layoutView.findViewById(R.id.recycler_time_solt);
         mRecyclerTimeSolt.setHasFixedSize(true);
-        mRecyclerTimeSolt.setLayoutManager(new StaggeredGridLayoutManager(5, LinearLayout.VERTICAL));
+        mRecyclerTimeSolt.setLayoutManager(new StaggeredGridLayoutManager(3, LinearLayout.VERTICAL));
         mRecyclerTimeSolt.addItemDecoration(new SpacesItemDecoration(8));
 
         // HorizontalCalendarView
@@ -234,7 +250,7 @@ public class BookingTimeFragment extends Fragment implements iTimeSlotLoadListen
         startDate.add(Calendar.DATE, 0);
 
         Calendar endDate = Calendar.getInstance();
-        endDate.add(Calendar.DATE, 4);  // 2 day left
+        endDate.add(Calendar.DATE, 2);  // 2 day left
 
         HorizontalCalendar mCalendarDate = new HorizontalCalendar.Builder(layoutView, R.id.calender_time_solt)
                 .range(startDate, endDate)

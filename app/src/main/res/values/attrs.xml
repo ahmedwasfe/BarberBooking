@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="saja">
+
+        <attr name="backgroundcolor" format="color"/>
+        <attr name="cardbackgroundcolor" format="color"/>
+        <attr name="viewbackgroundcolor" format="color"/>
+
+
+        <attr name="textcolor" format="color"/>
+        <attr name="textmaincolor" format="color"/>
+        <attr name="texttoolbarcolor" format="color"/>
+
+        <attr name="tintcolor" format="color"/>
+        <attr name="tabcolor" format="color"/>
+        <attr name="iconcolor" format="color"/>
+        <attr name="toolbarcolor" format="color"/>
+
+
+        <attr name="buttoncolor" format="color"/>
+        <attr name="buttontextcolor" format="color"/>
+
+        <!-- Step View -->
+        <attr name="donecolor" format="color"/> colorAccent
+        <attr name="donestepmarkcolor" format="color"/> colorWhite
+        <attr name="selectedcolor" format="color"/>  colorButton
+        <attr name="stepbackground" format="color" />
+
+    </declare-styleable>
+
+</resources>

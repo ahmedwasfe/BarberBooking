@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.CartAdapter;
+import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.CartItem;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
@@ -50,8 +52,28 @@ public class CartActivity extends AppCompatActivity implements ICartItemLoadList
 
     private Long finalPrice;
 
+    private SaveSettings mSaveSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(this);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(this,Common.KEY_LANGUAGE_FR);
+
+        if (mSaveSettings.getNightModeState() == true)
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.AppTheme);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.ahmet.barberbooking.Adapter.ShoppingAdapter;
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Interface.ISalonLoadListener;
 import com.ahmet.barberbooking.Interface.IShoppingLoadListener;
 import com.ahmet.barberbooking.Model.Salon;
@@ -55,8 +56,27 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private AlertDialog mDialog;
 
+    private SaveSettings mSaveSettings;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(this);
+        if (mSaveSettings.getNightModeState() == true)
+            setTheme(R.style.DarkTheme);
+        else
+            setTheme(R.style.AppTheme);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(this, Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(this,Common.KEY_LANGUAGE_FR);
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
 
@@ -82,7 +102,7 @@ public class ShoppingActivity extends AppCompatActivity implements
 
                     Salon salon = mListSalon.get(position);
                     Toast.makeText(ShoppingActivity.this, salon.getName(), Toast.LENGTH_SHORT).show();
-                    loadAllProducts(mListSalon.get(position));
+                    loadAllProducts(salon);
 
                 }
                 else {
@@ -103,9 +123,9 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         mDialog.show();
 
-        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSALON)
                 .document(salon.getSalonID())
-                .collection(Common.KEY_COLLECTION_Products)
+                .collection(Common.KEY_COLLECTION_PRODUCTS)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -138,6 +158,8 @@ public class ShoppingActivity extends AppCompatActivity implements
         iShoppingLoadListener = this;
         iSalonLoadListener = this;
 
+        mListSalon = new ArrayList<>();
+
         mRecyclerShopping.setHasFixedSize(true);
         mRecyclerShopping.setLayoutManager(new StaggeredGridLayoutManager(2, LinearLayout.VERTICAL));
 
@@ -152,7 +174,7 @@ public class ShoppingActivity extends AppCompatActivity implements
 
         mDialog.show();
 
-        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSALON)
                 .get()
                 .addOnCompleteListener(task -> {
 
@@ -195,6 +217,7 @@ public class ShoppingActivity extends AppCompatActivity implements
         for (Salon salon : mListSalon)
             mListSalonName.add(salon.getName());
 
+
         // Create Adapter and set to Spinner
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mListSalonName);
         mSearchableSpinner.setAdapter(adapter);
@@ -210,7 +233,7 @@ public class ShoppingActivity extends AppCompatActivity implements
 
     private void loadAllproductsFromShopping(){
 
-        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_Shopping)
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_SHOPPING)
                 .get()
                 .addOnCompleteListener(task -> {
 

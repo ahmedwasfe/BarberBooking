@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
+    android:background="?attr/backgroundcolor"
     tools:context=".SubActivity.ShoppingActivity">
 
     <com.toptoche.searchablespinnerlibrary.SearchableSpinner
@@ -12,6 +13,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="18dp"
+        android:popupBackground="?attr/backgroundcolor"
+        android:backgroundTint="?attr/backgroundcolor"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Barber Booking</string>
+
+    <!-- Facebook API -->
+    <string name="facebook_app_id">533315877231595</string>
+    <string name="fb_login_protocol_scheme">fb533315877231595</string>
+
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <!-- Main Activity -->
+    <string name="just_skip">veya Facebook ile devam et</string>
+    <string name="mobile_login">Cep telefonu numarasıyla devam et</string>
+    <string name="no_login">Cep telefonu numarasıyla devam et</string>
+
+    <!-- Home Activity -->
+    <string name="home">Ev</string>
+
+    <!-- Dialog Sheet -->
+    <string name="update">Güncelleme</string>
+    <string name="updated">Güncellenmiş</string>
+
+    <!-- Home Fragment -->
+    <string name="notification">bildirim</string>
+    <string name="booking">Rezervasyon</string>
+    <string name="history">Tarih</string>
+    <string name="look_book">Look Book</string>
+
+
+    <!-- Booking Activity -->
+    <string name="previous">Önceki</string>
+    <string name="next">Sonraki</string>
+    <string name="thank_for_booking">Hizmetlerimizi ayırdığınız için teşekkür ederiz !</string>
+    <string name="booking_information">Rezervasyon bilgileri</string>
+    <string name="website_salon">https://www.facebook.com/Ahmet.Mandil</string>
+    <string name="phone_salon">+970 59-243-5704</string>
+    <string name="confirm_booking">Rezervasyonu Doğrula</string>
+
+    <string name="address_bullet">\u2022 Adres: </string>
+    <string name="time_bullet">\u2022 Zaman: </string>
+    <string name="stylelist_bullet">\u2022 Berber: </string>
+    <string name="bullet">\u2022</string>
+    <string name="change">Değişiklik</string>
+    <string name="delete">Sil</string>
+
+    <string name="message_welcome">Hey !</string>
+    <string name="message_change_booking">
+        "Rezervasyon bilgilerini değiştirmek istiyor musunuz?"
+         "\nEski rezervasyon bilgilerinizi sileceğimiz için"
+         "\nSadece onaylayın"
+    </string>
+    <string name="message_delete_booking">
+       "Mevcut rezervasyon bilgilerini silmek istiyor musunuz?"
+         "\nEski rezervasyon bilgilerinizi sileceğimiz için"
+         "\nSadece onaylayın"
+    </string>
+    <string name="salon_information">Salon bilgileri</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">Ayarlar</string>
+    <string name="clear">Geçmişi</string>
+    <string name="new_booking">Yeni Rezervasyon</string>
+    <string name="profile">Profil</string>
+    <string name="name">ad</string>
+    <string name="mobile_number">Cep numarası</string>
+    <string name="email">E-posta</string>
+    <string name="general">Genel</string>
+    <string name="clear_history">Geçmişi Temizle</string>
+    <string name="language">Dil</string>
+    <string name="rate_the_app">Uygulamayı oyla</string>
+    <string name="about">hakkında</string>
+    <string name="app_version">Uygulama sürümü : "</string>
+    <string name="log_out">Çıkış Yap</string>
+    <string name="dark_mode">Karanlık Mod</string>
+    <string name="select_barber">Kuaför Seçin</string>
+    <string name="select_salon">Salon Seçin</string>
+    <string name="rating_our_barber">Berberlerimiz</string>
+    <string name="enter_your_name">Adınızı giriniz</string>
+    <string name="enter_your_city">Şehrinizi girin</string>
+    <string name="your_booking">Rezervasyonunuz</string>
+    <string name="notifications">Bildirimler</string>
+    <string name="shopping">Alışveriş yapmak</string>
+    <string name="cart">Alışveriş sepeti</string>
+    <string name="help">Yardım</string>
+    <string name="settings">Ayarlar</string>
+    <string name="current_booking_must_not_be_null">Mevcut Rezervasyon boş olmamalıdır</string>
+    <string name="success_delete_info_booking">Bilgi rezervasyonunu başarıyla sil</string>
+    <string name="booking_info_must_not_be_empty">Rezervasyon bilgileri boş olmamalıdır</string>
+    <string name="unable_to_get_last_location">Son konum alınamıyor</string>
+    <string name="add_data_successfully">Veriler başarıyla eklendi</string>
+    <string name="book_now">Hemen yer ayır</string>
+    <string name="please_wait">Lütfen bekle...</string>
+    <string name="ok">Tamam</string>
+    <string name="cancel">İPTAL ETMEK</string>
+    <string name="failed_to_sign_in">Oturum açılamadı</string>
+    <string name="current_booking">Mevcut Rezervasyon</string>
+    <string name="your_booking_information">Rezervasyon Bilgileriniz</string>
+    <string name="salon">Salon</string>
+    <string name="barber">Berber</string>
+    <string name="time">Zaman</string>
+    <string name="confirm">Onaylamak</string>
+    <string name="cart_empty">Sepetiniz Boş</string>
+    <string name="are_sure_clear_history">Geçmişi silmek istediğinizden emin misiniz?</string>
+    <string name="clear_history_success">Geçmişi başarıyla temizle</string>
+    <string name="update_name_success">Adı başarıyla güncelleyin</string>
+    <string name="are_sure_logout">Oturumu kapatmak istediğinizden emin misiniz?</string>
+    <string name="please_select_salon">Lütfen Salon Seçin</string>
+    <string name="invalid_url">Geçersiz URL</string>
+    <string name="no_app_open_url">Hiçbir uygulama bu isteği karşılayamaz. Lütfen bir web tarayıcısı kurun</string>
+    <string name="new_appoiment_booking">Müşteri saç bakımı için yeni bir teklifiniz var </string>
+    <string name="you_have_a_new_booking_from">Adlı kişiden yeni bir Rezervasyonunuz var </string>
+    <string name="successfully">Başarılı bir şekilde rezervasyon yaptırdı!</string>
+    <string name="hair_cut_booking">Saç kesmek için kitap</string>
+    <string name="hair_cut_from">Saç Kesimi</string>
+    <string name="with"> İle </string>
+    <string name="at"> en </string>
+    <string name="address">Adres: </string>
+    <string name="english">ingilizce</string>
+    <string name="arabic">Arapça</string>
+    <string name="turkish">Türkçe</string>
+    <string name="french">Fransız</string>
+    <string name="select_language">Dili seçin</string>
+
+    <array name="language_selected">
+        <item>ingilizce</item>
+        <item>Arapça</item>
+        <item>Türkçe</item>
+        <item>Fransız</item>
+    </array>
+
+    <!-- All Times -->
+    <string name="zero">"9:00 - 9:30"</string>
+    <string name="one">"9:30 - 10:00"</string>
+    <string name="tow">"10:00 - 10:30"</string>
+    <string name="three">"10:30 - 11:00"</string>
+    <string name="four">"11:00 - 11:30"</string>
+    <string name="five">"11:30 - 12:00"</string>
+    <string name="six">"12:00 - 12:30"</string>
+    <string name="seven">"12:30 - 13:00"</string>
+    <string name="eight">"13:00 - 13:30"</string>
+    <string name="nine">"13:30 - 14:00"</string>
+    <string name="ten">"14:00 - 14:30"</string>
+    <string name="eleven">"14:30 - 15:00"</string>
+    <string name="twelve">"15:00 - 15:30"</string>
+    <string name="thirteen">"15:30 - 16:00"</string>
+    <string name="fourteen">"16:00 - 16:30"</string>
+    <string name="fifteen">"16:30 - 17:00"</string>
+    <string name="sixteen">"17:00 - 17:30"</string>
+    <string name="seventeen">"17:30 - 18:00"</string>
+    <string name="eighteen">"18:00 - 18:30"</string>
+    <string name="nineteen">"18:30 - 19:00"</string>
+    <string name="closed">Closed</string>
+
+
+    <string name="available">Mevcut</string>
+    <string name="full">Ayırtıldı</string>
+    <string name="deleted_booking">Rezervasyon silindi</string>
+    <string name="error_in_get_salon">Lütfen daha sonra tekrar deneyiniz</string>
+    <string name="added_to_cart">Added To Cart</string>
+
+</resources>

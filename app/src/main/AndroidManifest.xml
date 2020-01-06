@@ -41,7 +41,7 @@
             android:name=".SubActivity.AllBookingActivity"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar"/>
+            android:theme="@style/AppThemeNoActionBar"/>
 
         <service android:name=".Service.FCMService">
             <intent-filter>
@@ -63,7 +63,7 @@
 
         <activity
             android:name=".HomeActivity"
-            android:theme="@style/NoActionBar"
+            android:theme="@style/AppThemeNoActionBar"
             android:screenOrientation="portrait"/>
 
         <activity android:name=".MainActivity"

@@ -23,6 +23,9 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSoltHolder> {
 
     private Context mContext;
@@ -70,7 +73,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
     @Override
     public void onBindViewHolder(@NonNull TimeSoltHolder holder, int position) {
 
-        holder.mTxtTimeSolt.setText(new StringBuilder(Common.convertTimeSoltToString(position)).toString()  );
+        holder.mTxtTimeSolt.setText(new StringBuilder(Common.convertTimeSoltToString(mContext, position)).toString()  );
 
 
         if (mListTimeSlot.size() == 0){  // If all position available , just show list
@@ -81,12 +84,13 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
             holder.mCardTimeSolt.setCardBackgroundColor(
                     mContext.getResources().getColor(R.color.colorWhite));
 
-            holder.mTxtTimeSoltDescription.setText("Available");
+            holder.mTxtTimeSoltDescription.setText(mContext.getString(R.string.available));
             holder.mTxtTimeSoltDescription.setTextColor(
                     mContext.getResources().getColor(R.color.colorBlack));
 
             holder.mTxtTimeSolt.setTextColor(
                     mContext.getResources().getColor(R.color.colorBlack));
+
             holder.mCardTimeSolt.setEnabled(true);
 
 
@@ -108,7 +112,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
                     holder.mCardTimeSolt.setCardBackgroundColor(
                             mContext.getResources().getColor(R.color.colorPrimary));
 
-                    holder.mTxtTimeSoltDescription.setText("Full");
+                    holder.mTxtTimeSoltDescription.setText(mContext.getString(R.string.full));
                     holder.mTxtTimeSoltDescription.setTextColor(
                             mContext.getResources().getColor(R.color.colorWhite));
 
@@ -181,7 +185,11 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
 
     static class TimeSoltHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView mTxtTimeSolt, mTxtTimeSoltDescription;
+        @BindView(R.id.txt_time_solt)
+        TextView mTxtTimeSolt;
+        @BindView(R.id.txt_time_solt_description)
+        TextView mTxtTimeSoltDescription;
+        @BindView(R.id.card_time_solt)
         CardView mCardTimeSolt;
 
         IRecyclerItemSelectedListener mIRecyclerItemSelectedListener;
@@ -189,9 +197,8 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSo
         public TimeSoltHolder(@NonNull View itemView) {
             super(itemView);
 
-            mTxtTimeSolt = itemView.findViewById(R.id.txt_time_solt);
-            mTxtTimeSoltDescription = itemView.findViewById(R.id.txt_time_solt_description);
-            mCardTimeSolt = itemView.findViewById(R.id.card_time_solt);
+            ButterKnife.bind(this, itemView);
+
 
             itemView.setOnClickListener(this);
         }

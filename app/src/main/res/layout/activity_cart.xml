@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundcolor"
     tools:context=".SubActivity.CartActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -13,37 +14,46 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/relative_total_price"/>
+        app:layout_constraintBottom_toTopOf="@id/card_total_price"/>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/relative_total_price"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_total_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorButton"
-        android:padding="10dp"
+        android:backgroundTint="?attr/textcolor"
+        app:cardCornerRadius="@dimen/margin8"
+        android:layout_margin="@dimen/margin8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/txt_total_price"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="$0"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:padding="@dimen/margin8">
 
-        <Button
-            android:id="@+id/btn_clear_cart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/clear"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/txt_total_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="?attr/backgroundcolor"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/btn_clear_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/clear"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

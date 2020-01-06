@@ -6,6 +6,7 @@
     android:id="@+id/card_barber"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
     android:padding="@dimen/margin8"
     app:cardCornerRadius="@dimen/margin8"
     android:layout_margin="@dimen/margin4">

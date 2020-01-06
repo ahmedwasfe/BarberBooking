@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Barber Booking</string>
+
+
+    <!-- Facebook API -->
+    <string name="facebook_app_id">533315877231595</string>
+    <string name="fb_login_protocol_scheme">fb533315877231595</string>
+
+
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <!-- Main Activity -->
+    <string name="just_skip">الإستمرار بحساب Facebook</string>
+    <string name="mobile_login">الإستمرار برقم الهاتف المحمول</string>
+    <string name="no_login">الإستمرار برقم الهاتف المحمول</string>
+
+    <!-- Home Activity -->
+    <string name="home">الرئيسية</string>
+
+    <!-- Dialog Sheet -->
+    <string name="update">تعديل</string>
+    <string name="updated">تم التعديل بنجاح !</string>
+
+    <!-- Home Fragment -->
+    <string name="notification">الإشعارات</string>
+    <string name="booking">الحجز</string>
+    <string name="history">سجل الحجوزات</string>
+    <string name="look_book">Look Book</string>
+
+
+    <!-- Booking Activity -->
+    <string name="previous">السابق</string>
+    <string name="next">التالي</string>
+    <string name="thank_for_booking">شكرا لك على حجز خدماتنا!</string>
+    <string name="booking_information">معلومات الحجز</string>
+    <string name="website_salon">https://www.facebook.com/Ahmet.Mandil</string>
+    <string name="phone_salon">+970 59-243-5704</string>
+    <string name="confirm_booking">تأكيد الحجز</string>
+
+    <string name="address_bullet">\u2022 العنوان: </string>
+    <string name="time_bullet">\u2022 الوقت: </string>
+    <string name="stylelist_bullet">\u2022 العامل: </string>
+    <string name="bullet">\u2022</string>
+    <string name="change">تعديل الحجز</string>
+    <string name="delete">حذف الحجز</string>
+
+    <string name="message_welcome">مرحبا!</string>
+    <string name="message_change_booking">
+        "هل تريد تغيير معلومات الحجز؟"
+         "\n لأننا سنحذف معلومات الحجز القديمة"
+         "\n تأكيد فقط"
+    </string>
+    <string name="message_delete_booking">
+        "هل تريد حذف معلومات الحجز الحالية؟"
+         "\n لأننا سنحذف معلومات الحجز القديمة"
+         "\n تأكيد فقط"
+    </string>
+    <string name="salon_information">معلومات الصالون</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_settings">الإعدادات</string>
+    <string name="clear">مسح</string>
+    <string name="new_booking">حجز جديد</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="name">الإسم</string>
+    <string name="mobile_number">رقم الهاتف</string>
+    <string name="email">الإيميل</string>
+    <string name="general">عام</string>
+    <string name="clear_history">مسح سجل الحجوزات</string>
+    <string name="language">اللغة</string>
+    <string name="rate_the_app">تقييم التطبيق</string>
+    <string name="about">عن التطبيق</string>
+    <string name="app_version">إصدار التطبيق : "</string>
+    <string name="log_out">تسجيل الخروج</string>
+    <string name="dark_mode">الوضع الليلي</string>
+    <string name="select_barber">إختار العامل</string>
+    <string name="select_salon">إختار الصالون</string>
+    <string name="rating_our_barber">تقييم العامل لدينا</string>
+    <string name="enter_your_name">أدخل إسمك</string>
+    <string name="enter_your_city">أدخل المدينة</string>
+    <string name="your_booking">الحجوزات</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="shopping">التسوق</string>
+    <string name="cart">عربة التسوق</string>
+    <string name="help">مساعدة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="current_booking_must_not_be_null">يجب ألا يكون الحجز الحالي بلا قيمة</string>
+    <string name="success_delete_info_booking">تم حذق معلومات الحجز بنجاح</string>
+    <string name="booking_info_must_not_be_empty">يجب ألا تكون معلومات الحجز فارغة</string>
+    <string name="unable_to_get_last_location">غير قادر على الحصول على الموقع الأخير</string>
+    <string name="add_data_successfully">تمت إضافة البيانات بنجاح</string>
+    <string name="book_now">إحجز الآن</string>
+    <string name="please_wait">الرجاء الإنتظار...</string>
+    <string name="ok">حسناً</string>
+    <string name="cancel">إلغاء</string>
+    <string name="failed_to_sign_in">فشل في تسجيل الدخول</string>
+    <string name="current_booking">الحجوزات الحالية</string>
+    <string name="your_booking_information">معلومات حجزك</string>
+    <string name="salon">الصالون</string>
+    <string name="barber">العامل</string>
+    <string name="time">الموعد</string>
+    <string name="confirm">تأكيد</string>
+    <string name="cart_empty">السلة فارغة</string>
+    <string name="are_sure_clear_history">هل تريد بالتأكيد مسح سجل الحجز</string>
+    <string name="clear_history_success">تم مسح سجل الحجز بنجاح</string>
+    <string name="update_name_success">تم تحديث الاسم بنجاح</string>
+    <string name="are_sure_logout">هل تريد بالتأكيد تسجيل الخروج</string>
+    <string name="please_select_salon">يرجى اختيار صالون</string>
+    <string name="invalid_url">الرابط غير صالح</string>
+    <string name="no_app_open_url">لا يوجد تطبيق يمكنه التعامل مع هذا الطلب. يرجى تثبيت متصفح الويب</string>
+    <string name="new_appoiment_booking">لديك وسيلة جديدة للعناية بالشعر مع العملاء </string>
+    <string name="you_have_a_new_booking_from">لديك حجز جديد من </string>
+    <string name="successfully">تم الحجز بنجاح !</string>
+    <string name="hair_cut_booking">حجز لقص الشعر</string>
+    <string name="hair_cut_from">قص الشعر من </string>
+    <string name="with"> مع </string>
+    <string name="at"> في </string>
+    <string name="address">العنوان: </string>
+    <string name="english">الإنجليزية</string>
+    <string name="arabic">العربية</string>
+    <string name="turkish">التركية</string>
+    <string name="french">الفرنسية</string>
+    <string name="select_language">إختار اللغة</string>
+
+    <array name="language_selected">
+        <item>الإنجليزية</item>
+        <item>العربية</item>
+        <item>التركية</item>
+        <item>الفرنسية</item>
+    </array>
+
+
+    <!-- All Times -->
+    <string name="zero">"٩:٠٠ - ٩:٣٠"</string>
+    <string name="one">"٩:٣٠ - ١٠:٠٠"</string>
+    <string name="tow">"١٠:٠٠ - ١٠:٣٠"</string>
+    <string name="three">"١٠:٣٠ - ١١:٠٠"</string>
+    <string name="four">"١١:٠٠ - ١١:٣٠"</string>
+    <string name="five">"١١:٣٠ - ١٢:٠٠"</string>
+    <string name="six">"١٢:٠٠ - ١٢:٣٠"</string>
+    <string name="seven">"١٢:٣٠ - ١٣:٠٠"</string>
+    <string name="eight">"١٣:٠٠ - ١٣:٣٠"</string>
+    <string name="nine">"١٣:٣٠ - ١٤:٠٠"</string>
+    <string name="ten">"١٤:٠٠ - ١٤:٣٠"</string>
+    <string name="eleven">"١٤:٣٠ - ١٥:٠٠"</string>
+    <string name="twelve">"١٥:٠٠ - ١٥:٣٠"</string>
+    <string name="thirteen">"١٥:٣٠ - ١٦:٠٠"</string>
+    <string name="fourteen">"١٦:٠٠ _ ١٦:٣٠"</string>
+    <string name="fifteen">"١٦:٣٠ - ١٧:٠٠"</string>
+    <string name="sixteen">"١٧:٠٠ - ١٧:٣٠"</string>
+    <string name="seventeen">"١٧:٣٠ - ١٨:٠٠"</string>
+    <string name="eighteen">"١٨:٠٠ - ١٨:٣٠"</string>
+    <string name="nineteen">"١٨:٣٠ - ١٩:٠٠"</string>
+    <string name="closed">مغلق</string>
+
+
+    <string name="available">متاح</string>
+    <string name="full">محجوز</string>
+    <string name="deleted_booking">تم حذف الحجز</string>
+    <string name="error_in_get_salon">الرجاء المحاولة لاحقاُ</string>
+    <string name="added_to_cart">تم الإضافة إلى عربة التسوق</string>
+
+</resources>

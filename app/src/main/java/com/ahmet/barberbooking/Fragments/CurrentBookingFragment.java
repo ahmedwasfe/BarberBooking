@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.SubActivity.BookingActivity;
 import com.ahmet.barberbooking.Common.Common;
 import com.ahmet.barberbooking.Interface.IBookingInfoChangeListener;
@@ -72,6 +73,8 @@ public class CurrentBookingFragment extends Fragment implements
 
     private AlertDialog mDialog;
 
+    private SaveSettings mSaveSettings;
+
     private static CurrentBookingFragment instance;
     public static CurrentBookingFragment getInstance(){
 
@@ -95,6 +98,22 @@ public class CurrentBookingFragment extends Fragment implements
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        mSaveSettings = new SaveSettings(getActivity());
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
+
+        if (mSaveSettings.getNightModeState() == true)
+            getActivity().setTheme(R.style.DarkTheme);
+        else
+            getActivity().setTheme(R.style.AppTheme);
 
         View layoutView = inflater.inflate(R.layout.fragment_current_booking, container, false);
 
@@ -315,7 +334,7 @@ public class CurrentBookingFragment extends Fragment implements
 
 
 
-                            Toast.makeText(getActivity(), "Success delete information booking ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.deleted_booking), Toast.LENGTH_SHORT).show();
 
                             //Refresh
                             loadUserBooking();
@@ -350,15 +369,15 @@ public class CurrentBookingFragment extends Fragment implements
         Common.currentBooking = bookingInfo;
         Common.currentBookingId = documentId;
 
-        mTxtAddressSalon.setText(" " + bookingInfo.getSalonAddress());
+        mTxtAddressSalon.setText(" " + bookingInfo.getSalonAddress() + " ");
         mTxtTime.setText(" " + bookingInfo.getTime());
-        mTxtSalonBarber.setText(" " + bookingInfo.getBarberName());
+        mTxtSalonBarber.setText(" " + bookingInfo.getBarberName() + " ");
 
         String timeRemain = DateUtils.getRelativeTimeSpanString(
                 Long.valueOf(bookingInfo.getTimestamp().toDate().getTime()),
                 Calendar.getInstance().getTimeInMillis(), 0).toString();
 
-        mTxtTimeRemain.setText(" " + timeRemain);
+        mTxtTimeRemain.setText(" " + timeRemain +" ");
 
         mCardBookingInfo.setVisibility(View.VISIBLE);
 //

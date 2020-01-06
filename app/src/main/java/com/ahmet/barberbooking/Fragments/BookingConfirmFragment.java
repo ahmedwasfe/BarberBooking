@@ -20,13 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmet.barberbooking.Common.Common;
+import com.ahmet.barberbooking.Common.SaveSettings;
 import com.ahmet.barberbooking.Databse.CartDatabase;
 import com.ahmet.barberbooking.Databse.CartItem;
 import com.ahmet.barberbooking.Databse.DatabaseUtils;
 import com.ahmet.barberbooking.Interface.ICartItemLoadListener;
 import com.ahmet.barberbooking.Model.BookingInformation;
 import com.ahmet.barberbooking.Model.EventBus.ConfirmBookingEvent;
-import com.ahmet.barberbooking.Model.FCMResponse;
 import com.ahmet.barberbooking.Model.FCMSendData;
 import com.ahmet.barberbooking.Model.Notification;
 import com.ahmet.barberbooking.Model.Token;
@@ -43,14 +43,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -72,7 +69,6 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
@@ -136,13 +132,15 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
 
     }
 
+    private SaveSettings mSaveSettings;
+
     private void addToUserBooking(BookingInformation bookingInfo) {
 
         // First create new Collection
         CollectionReference mUserBookingReference = FirebaseFirestore.getInstance()
-                .collection(Common.KEY_COLLECTION_User)
+                .collection(Common.KEY_COLLECTION_USER)
                 .document(Common.currentUser.getPhoneNumber())
-                .collection(Common.KEY_COLLECTION_Booking);
+                .collection(Common.KEY_COLLECTION_BOOKING);
 
         // Get current data
         Calendar calendar = Calendar.getInstance();
@@ -178,11 +176,11 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
 
                                     // Submit Notification to 'Notifications' collection of Barber
                                     FirebaseFirestore.getInstance()
-                                            .collection(Common.KEY_COLLECTION_AllSalon)
+                                            .collection(Common.KEY_COLLECTION_AllSALON)
                                             .document(Common.currentSalon.getSalonID())
-                                            .collection(Common.KEY_COLLECTION_Barber)
+                                            .collection(Common.KEY_COLLECTION_BARBER)
                                             .document(Common.currentBarber.getBarberID())
-                                            .collection(Common.KEY_COLLECTION_Notifications) // If it not available , it will be crate automaticlly
+                                            .collection(Common.KEY_COLLECTION_NOTIFICATIONS) // If it not available , it will be crate automaticlly
                                             .document(notification.getUuid()) // Create Uniqe key
                                             .set(notification)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -191,7 +189,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
 
                                                     // First get Token base on Barber
                                                     FirebaseFirestore.getInstance()
-                                                            .collection(Common.KEY_COLLECTION_Tokens)
+                                                            .collection(Common.KEY_COLLECTION_TOKENS)
                                                             .whereEqualTo("user", Common.currentBarber.getUsername())
                                                             .limit(1)
                                                             .get()
@@ -223,7 +221,8 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
                                                                                 mDialog.dismiss();
 
                                                                                 addToCalendar(Common.bookingDate,
-                                                                                        Common.convertTimeSoltToString(Common.currentTimeSlot));
+                                                                                        Common.convertTimeSoltToString(getActivity(),
+                                                                                                Common.currentTimeSlot));
 
                                                                                 resetStaticData();
                                                                                 getActivity().finish();;
@@ -235,7 +234,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
                                                                                     Log.d("NOTIFICATION_ERROR", throwable.getMessage());
 
                                                                                     addToCalendar(Common.bookingDate,
-                                                                                            Common.convertTimeSoltToString(Common.currentTimeSlot));
+                                                                                            Common.convertTimeSoltToString(getActivity(), Common.currentTimeSlot));
 
                                                                                     resetStaticData();
                                                                                     getActivity().finish();;
@@ -274,7 +273,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         // Process Timestamp
         // I will use Timestamp to filter all booking with date is greater today
         // For only display all future booking
-        String startTime  = Common.convertTimeSoltToString(Common.currentTimeSlot);
+        String startTime  = Common.convertTimeSoltToString(getActivity(), Common.currentTimeSlot);
         // Split ex : 9:00 - 10:00
         String[] convertTime = startTime.split("-");
         // Get start time get : 9:00
@@ -441,8 +440,8 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
     private void loadDateBooking() {
 
         mTxtBarberName.setText(Common.currentBarber.getName());
-        mTxtTimeBooking.setText(new StringBuilder(Common.convertTimeSoltToString(Common.currentTimeSlot))
-                                .append(getString(R.string.at))
+        mTxtTimeBooking.setText(new StringBuilder(Common.convertTimeSoltToString(getActivity(), Common.currentTimeSlot))
+                                .append(" " + getString(R.string.at) + " ")
                                 .append(mSimpleDateFormat.format(Common.bookingDate.getTime())));
         mTxtSalonName.setText(Common.currentSalon.getName());
         mTxtSalonAddress.setText(Common.currentSalon.getAddress());
@@ -451,7 +450,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         mTxtSalonOpenHours.setText(Common.currentSalon.getOpenHour());
         mTxtSalonWebsite.setText(Common.currentSalon.getWebsite());
 
-        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSalon)
+        FirebaseFirestore.getInstance().collection(Common.KEY_COLLECTION_AllSALON)
                 .document(Common.currentSalon.getSalonID())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -509,6 +508,21 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        mSaveSettings = new SaveSettings(getActivity());
+        if (mSaveSettings.getNightModeState() == true)
+            getActivity().setTheme(R.style.DarkTheme);
+        else
+            getActivity().setTheme(R.style.AppTheme);
+
+        if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_EN))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_EN);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_AR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_AR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_TR))
+            Common.setLanguage(getActivity(), Common.KEY_LANGUAGE_TR);
+        else if (mSaveSettings.getLanguageState().equals(Common.KEY_LANGUAGE_FR))
+            Common.setLanguage(getActivity(),Common.KEY_LANGUAGE_FR);
+
         View layoutView = inflater.inflate(R.layout.fragment_booking_confirm, container, false);
 
         mUnbinder = ButterKnife.bind(this, layoutView);
@@ -532,7 +546,7 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         // Process Timestamp
         // I will use Timestamp to filter all booking with date is greater today
         // For only display all future booking
-        String startTime  = Common.convertTimeSoltToString(Common.currentTimeSlot);
+        String startTime  = Common.convertTimeSoltToString(getActivity(), Common.currentTimeSlot);
         // Split ex : 9:00 - 10:00
         String[] convertTime = startTime.split("-");
         // Get start time get : 9:00
@@ -568,8 +582,8 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
         bookingInfo.setSalonAddress(Common.currentSalon.getAddress());
         bookingInfo.setSalonName(Common.currentSalon.getName());
 
-        bookingInfo.setTime(new StringBuilder(Common.convertTimeSoltToString(Common.currentTimeSlot))
-                .append(getString(R.string.at))
+        bookingInfo.setTime(new StringBuilder(Common.convertTimeSoltToString(getActivity(), Common.currentTimeSlot))
+                .append(" " + getString(R.string.at) + " ")
                 .append(mSimpleDateFormat.format(bookingDateWithHourHouse.getTime())).toString());
 
         bookingInfo.setTimeSlot(Long.valueOf(Common.currentTimeSlot));
@@ -578,9 +592,9 @@ public class BookingConfirmFragment extends Fragment implements ICartItemLoadLis
 
         // submit to barbber document
         DocumentReference mBookingReference =  FirebaseFirestore.getInstance()
-                .collection(Common.KEY_COLLECTION_AllSalon)
+                .collection(Common.KEY_COLLECTION_AllSALON)
                 .document(Common.currentSalon.getSalonID())
-                .collection(Common.KEY_COLLECTION_Barber)
+                .collection(Common.KEY_COLLECTION_BARBER)
                 .document(Common.currentBarber.getBarberID())
                 .collection(Common.mSimpleDateFormat.format(Common.bookingDate.getTime()))
                 .document(String.valueOf(Common.currentTimeSlot));

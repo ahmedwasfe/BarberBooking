@@ -92,8 +92,8 @@
     <string name="add_data_successfully">Addedd data successfully</string>
     <string name="book_now">Book now</string>
     <string name="please_wait">Please wait...</string>
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
     <string name="failed_to_sign_in">Failed to sign in</string>
     <string name="current_booking">Current Booking</string>
     <string name="your_booking_information">Your Booking Information</string>
@@ -111,12 +111,57 @@
     <string name="no_app_open_url">No application can handle this request. Please install a web browser</string>
     <string name="new_appoiment_booking">You have a new appoiment for customer hair care with </string>
     <string name="you_have_a_new_booking_from">You have a new Booking from</string>
-    <string name="successfully">SuccessFully !</string>
-    <string name="hair_cut_booking">Hair Cut Booking</string>
-    <string name="hair_cut_from">Hair Cut From</string>
+    <string name="successfully">Booked successfully !</string>
+    <string name="hair_cut_booking">Book to cut hair</string>
+    <string name="hair_cut_from">Hair Cut From </string>
     <string name="with"> With </string>
     <string name="at"> at </string>
     <string name="address">Address: </string>
+
+
+    <string name="english">English</string>
+    <string name="arabic">Arabic</string>
+    <string name="turkish">Turkish</string>
+    <string name="french">French</string>
+    <string name="select_language">Select Language</string>
+
+    <!-- array for select language -->
+    <array name="language_selected">
+        <item>English</item>
+        <item>Arabic</item>
+        <item>Turkish</item>
+        <item>French</item>
+    </array>
+
+    <!-- All Times -->
+    <string name="zero">"9:00 - 9:30"</string>
+    <string name="one">"9:30 - 10:00"</string>
+    <string name="tow">"10:00 - 10:30"</string>
+    <string name="three">"10:30 - 11:00"</string>
+    <string name="four">"11:00 - 11:30"</string>
+    <string name="five">"11:30 - 12:00"</string>
+    <string name="six">"12:00 - 12:30"</string>
+    <string name="seven">"12:30 - 13:00"</string>
+    <string name="eight">"13:00 - 13:30"</string>
+    <string name="nine">"13:30 - 14:00"</string>
+    <string name="ten">"14:00 - 14:30"</string>
+    <string name="eleven">"14:30 - 15:00"</string>
+    <string name="twelve">"15:00 - 15:30"</string>
+    <string name="thirteen">"15:30 - 16:00"</string>
+    <string name="fourteen">"16:00 - 16:30"</string>
+    <string name="fifteen">"16:30 - 17:00"</string>
+    <string name="sixteen">"17:00 - 17:30"</string>
+    <string name="seventeen">"17:30 - 18:00"</string>
+    <string name="eighteen">"18:00 - 18:30"</string>
+    <string name="nineteen">"18:30 - 19:00"</string>
+    <string name="closed">Closed</string>
+
+
+    <string name="available">Available</string>
+    <string name="full">Booked Up</string>
+    <string name="deleted_booking">Reservation was deleted</string>
+    <string name="error_in_get_salon">Please try again later!</string>
+    <string name="added_to_cart">Added To Cart</string>
 
 
 </resources>
